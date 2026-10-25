@@ -1,0 +1,6 @@
+Use case: background-extraction
+Asset type: transparent game UI chrome atlas correction.
+Edit target: Image 1 is the six-frame UI atlas to repair. Preserve exactly its six frames, their positions, 2-column x 3-row layout, relative sizes, blue-metal brass material, empty dark-navy glass interiors and original 1024 x 1536 canvas.
+Change ONLY the unwanted backdrop: REMOVE every part of the smoky blue/brown/black cloudy glow, vignette or painted background OUTSIDE the six frames. All pixels outside the six separate frame silhouettes must become truly alpha=0 transparent. Keep each of the six framed glass interiors visible, including the dark translucent navy fill inside. Keep the metal edges fully opaque and the tiny bright cyan inner rim. There must be no ambient light cloud or halo joining any two frames. No blur, no outer shadow, no new decorative elements.
+The six objects are top-left wide HUD bar, top-right round button, middle-left wide dialogue box, middle-right large results panel, bottom-left resource capsule, bottom-right square pause shell. Keep all six completely blank inside with no symbols, letters or numbers.
+Do not redraw the frames, change their shape, move or resize them. Do not draw a checkerboard. Actual transparency outside all six objects is the entire requested edit.

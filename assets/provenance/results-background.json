@@ -1,0 +1,25 @@
+{
+  "stem": "results-background",
+  "raw": "C:\\Users\\Administrator\\.codex\\generated_images\\01a169bf-b470-7f53-a490-15da1151f145\\exec-f3be75a6-2148-41a9-8aec-3557ee334fae.png",
+  "workspace": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\backgrounds\\results-background.png",
+  "dimensions": [
+    1672,
+    941
+  ],
+  "alpha": {
+    "channel": false,
+    "opaque": true
+  },
+  "grid": null,
+  "qa": "Visually verified dark central score area, edge desk lamp/data casket, archive shelves and harbor window. No text/UI/characters. No postprocessing; raw output copied byte for byte.",
+  "tool": "image_gen",
+  "date": "2026-10-24",
+  "mode": "built-in",
+  "refs": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\concepts\\gameplay-sideview-visual-target.png"
+  ],
+  "reference_role": "style reference",
+  "prompts": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\prompts\\results-background.txt"
+  ]
+}

@@ -1,0 +1,11 @@
+Use case: stylized-concept
+Asset type: ONE production prop sprite atlas for a 2D side-view platform puzzle game, genuine transparent PNG.
+Reference image: the approved game screen defines the exact navy, cyan, warm ivory, small gold metal details, hand-illustrated outlines and soft shading. Match its art language. No game UI or screenshot composition in the output.
+Create a strict 3-column by 2-row atlas on a 3:2 canvas, ideally 1536x1024. Six identical square invisible cells, NO grid lines, NO labels or text. Each prop centered in its own cell with at least 15% transparent padding, no overlaps and no cast ground shadows. All items complete, crisp and usable on a horizontal platform in a side-view game.
+Top-left: collectible luminous cyan data cube, outlined crystal cube with a little abstract whale/data glyph, same as the approved screenshot, clearly glowing but with generous padding.
+Top-middle: breakable data node, a short navy and ivory glass data canister containing cyan blocks, metallic base, readable intact object.
+Top-right: limited-command token, a small faceted cyan-blue crystal with subtle gold rim and a plain speech-bubble motif, not letters.
+Bottom-left: resume decoy, one folded ivory resume sheet with a gold/orange clip and tiny decorative lines that are not readable words, slight magical paper curl, warm orange edge glow.
+Bottom-middle: public-broadcast switch, a compact navy floor terminal with a mechanical toggle and red beacon on top, ivory/brass trim. A red indicator only, no writing.
+Bottom-right: return beacon, a small navy and gold pedestal with glowing cyan vertical light and a simple upward chevron motif, base fits a platform.
+Camera is orthographic SIDE elevation with a little decorative volume, no isometric overhead floor tiles. Coherent illustration style, clean silhouettes, no characters, no real logos, no borders, no scene, no labels, no watermark. Truly transparent surrounding background and empty cells, preserve alpha; no white or checkerboard background.

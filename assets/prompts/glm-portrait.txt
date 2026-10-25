@@ -1,0 +1,7 @@
+Use case: stylized-concept
+Asset type: transparent square character portrait for game dialogue and party selection in 鲸鱼魔盗团.
+Input images: Image 1 shows the exact finalized GLM identity and costume from the game's black-haired academic girl action atlas. Image 2 is the approved game overall rendering style. Image 3 is Claude's portrait, a portrait scale, crop and shading reference only. Do not copy its orange hair or brown outfit.
+Primary request: ONE FRONT-FACING head-and-upper-torso bust of GLM, youthful adult female anime chibi, thoughtful attentive expression, amber-brown eyes, very long black hair with a faint cool blue sheen, black square graduation mortarboard with gold tassel and small gold floral ornament, white ruffled academic blouse and black-white gown, black neck ribbon. Same face, identity, cap ornament and dress as the action atlas. A small dark book or blue-screen terminal held at the lower edge.
+Composition: one portrait on a square 1024 x 1024 genuine transparent canvas. Entire cap, gold tassel, top of head, side hair, shoulders fit comfortably inside the canvas with 10 percent transparent safe margin. Show upper torso. Same polished hand-painted anime chibi style, dark clean outlines, dimensional cel shading, refined cream fabric ruffles and controlled gold highlights. Clear silhouette for a small UI portrait.
+Text: none.
+Avoid: picture frames, circular borders, UI rings, plaques, labels, letters, logos, numbers, extra characters, scenery, floor, cast shadow, painted white background, checkerboard.

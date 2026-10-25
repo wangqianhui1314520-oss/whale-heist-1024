@@ -1,0 +1,59 @@
+{
+  "asset": "deepseek-portrait",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "generatedDate": "2026-10-24",
+  "promptPath": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\prompts\\deepseek-portrait.txt",
+  "references": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\concepts\\gameplay-sideview-visual-target.png",
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\atlases\\deepseek-actions.png"
+  ],
+  "rawPath": "C:\\Users\\Administrator\\.codex\\generated_images\\01a169be-8449-7543-93d9-e3c3c89b1190\\exec-40f2ac96-abf0-4e8c-a9e3-20c7c405a38e.png",
+  "targetPath": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\deepseek-portrait.png",
+  "dimensions": {
+    "width": 1254,
+    "height": 1254
+  },
+  "imageMode": "RGBA",
+  "transparency": {
+    "hasAlpha": true,
+    "fullyTransparentPixels": 753916,
+    "partiallyTransparentPixels": 817534,
+    "opaquePixels": 1066,
+    "fullyTransparentFraction": 0.479433,
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "actualAlphaPassed": true
+  },
+  "layout": {
+    "columns": 1,
+    "rows": 1
+  },
+  "frames": [
+    {
+      "state": "default",
+      "src": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.5
+      ]
+    }
+  ],
+  "sha256": "b00f1915d4c941c9866c1a9e923a9ecaae6ddc2df6420f7ed575f95038a30e9b",
+  "postProcessing": "Copied exact generated PNG; no raster editing or resizing. Pillow used for read-only dimension and alpha inspection.",
+  "visualQA": {
+    "inspected": true,
+    "observations": [
+      "Front-facing bust matches blue-haired whale-maid identity; all hair and headband visible.",
+      "Side hair has less than requested 12-percent padding; no visible clipping."
+    ],
+    "criticalIssues": false
+  }
+}

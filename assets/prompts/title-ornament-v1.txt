@@ -1,0 +1,5 @@
+Use case: ui-mockup
+Asset type: transparent decorative game UI asset
+Primary request: Wide title ornament for the deep-sea fantasy game, with a small white whale yin-yang emblem in thin brass compass rings, cyan wave ribbons, star points and symmetrical filigree. It sits behind the title “鲸鱼魔盗团” and contains no text itself.
+Style/medium: polished anime game key art, crisp brass and cyan linework.
+Constraints: genuine transparent alpha, clean anti-aliased edges, no characters, no scene background, no controls, no watermark.

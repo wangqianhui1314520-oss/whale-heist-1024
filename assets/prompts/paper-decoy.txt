@@ -1,0 +1,7 @@
+Use case: stylized-concept
+Asset type: ONE four-frame animation sprite atlas for the side-view platform game "鲸鱼魔盗团".
+Reference image defines clean hand-illustrated navy outlines, cyan sea energy, warm gold metal and soft layered anime game shading. Produce only the requested effect; no game scene or UI.
+Layout: a strict 2-column x 2-row invisible grid on a square high-resolution canvas, ideally 1024x1024. Four equal square cells. Animation order is top-left, top-right, bottom-left, bottom-right. Each complete frame stays inside its cell with at least 12% transparent padding. Identical local center and scale between frames; no labels, no grid, no letters.
+All surroundings genuinely transparent, preserve true PNG alpha. Do not draw white or checkerboard backgrounds. No characters, floors, weapons, platforms, captions, logos or watermarks.
+Effect detail:
+Warm orange magic summoning an ivory paper resume decoy, no readable writing. Frame 1 three curled ivory paper fragments; frame 2 a small central curled page ringed by thin orange-gold swirls; frame 3 the page opens while a few ivory sheets orbit; frame 4 the orange glow and sheets fade into specks. Decorative tiny line marks only. Maintain coherent scale and center, no book, no hands.

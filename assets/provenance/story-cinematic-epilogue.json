@@ -1,0 +1,25 @@
+{
+  "stem": "story-cinematic-epilogue",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "date": "2026-10-25",
+  "raw_output_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a16df1-3611-77a0-8abc-3d4da96f36ed\\exec-59d8a62f-4ae7-46fc-af80-9249c174fecd.png",
+  "prompts": [
+    "assets/prompts/story-cinematic-epilogue.txt"
+  ],
+  "references": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\deepseek-portrait.png",
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\grok-portrait.png",
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\claude-portrait.png",
+    "D:\\Vibe coding\\1024切磆大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\glm-portrait.png"
+  ],
+  "reference_role": "character identity references",
+  "style": "cinematic",
+  "beat": "epilogue",
+  "post_processing": "None; byte-identical copy of original generated PNG.",
+  "sha256": "e28d98025488272ac769c1b71c23f6f1a743e84ee264227e54722f198db1a277",
+  "dimensions": [
+    1672,
+    941
+  ]
+}

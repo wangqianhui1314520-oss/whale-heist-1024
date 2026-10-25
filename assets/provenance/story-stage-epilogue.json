@@ -1,0 +1,22 @@
+{
+  "stem": "story-stage-epilogue",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "date": "2026-10-25",
+  "raw_output_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a16df1-3611-77a0-8abc-3d4da96f36ed\\exec-2e627b62-3b2f-46b6-990c-e642fc02750e.png",
+  "prompts": [
+    "assets/prompts/story-stage-epilogue.txt"
+  ],
+  "references": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\backgrounds\\gameplay-backdrop.png"
+  ],
+  "reference_role": "environment style reference",
+  "style": "stage",
+  "beat": "epilogue",
+  "post_processing": "None; byte-identical copy of original generated PNG.",
+  "sha256": "76077610ab1467ab6222a6f5b10de28d7530d1df57adec05e51dfd9b911a0fc2",
+  "dimensions": [
+    1672,
+    941
+  ]
+}

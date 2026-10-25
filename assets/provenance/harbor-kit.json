@@ -1,0 +1,78 @@
+{
+  "stem": "harbor-kit",
+  "raw": "C:\\Users\\Administrator\\.codex\\generated_images\\01a169bf-b470-7f53-a490-15da1151f145\\exec-fe235e51-f053-49e6-9d10-486b4d630061.png",
+  "workspace": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\atlases\\harbor-kit.png",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "alpha": {
+    "channel": true,
+    "extrema": [
+      0,
+      254
+    ],
+    "transparent_pixels": 930023,
+    "total_pixels": 1572864
+  },
+  "grid": {
+    "columns": 3,
+    "rows": 2,
+    "uniform": true,
+    "source_rectangles": [
+      {
+        "id": "wall-background",
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 512
+      },
+      {
+        "id": "water-channel",
+        "x": 512,
+        "y": 0,
+        "w": 512,
+        "h": 512
+      },
+      {
+        "id": "mothership",
+        "x": 1024,
+        "y": 0,
+        "w": 512,
+        "h": 512
+      },
+      {
+        "id": "alarm-sensor",
+        "x": 0,
+        "y": 512,
+        "w": 512,
+        "h": 512
+      },
+      {
+        "id": "hidden-trap",
+        "x": 512,
+        "y": 512,
+        "w": 512,
+        "h": 512
+      },
+      {
+        "id": "server-rack",
+        "x": 1024,
+        "y": 512,
+        "w": 512,
+        "h": 512
+      }
+    ]
+  },
+  "qa": "Six complete isolated reusable harbor parts visually verified, true alpha outside objects. Wall/water keep opaque pixels within their own tile; tile repetition seam is not guaranteed. No postprocessing; raw output copied byte for byte.",
+  "tool": "image_gen",
+  "date": "2026-10-24",
+  "mode": "built-in",
+  "refs": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\concepts\\gameplay-sideview-visual-target.png"
+  ],
+  "reference_role": "style reference",
+  "prompts": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\prompts\\harbor-kit.txt"
+  ]
+}

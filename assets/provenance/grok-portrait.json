@@ -1,0 +1,59 @@
+{
+  "asset": "grok-portrait",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "generatedDate": "2026-10-24",
+  "promptPath": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\prompts\\grok-portrait.txt",
+  "references": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\concepts\\gameplay-sideview-visual-target.png",
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\atlases\\grok-actions.png"
+  ],
+  "rawPath": "C:\\Users\\Administrator\\.codex\\generated_images\\01a169be-8449-7543-93d9-e3c3c89b1190\\exec-4c1af1aa-aa14-4ce3-a5b6-2f954b5e023c.png",
+  "targetPath": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\grok-portrait.png",
+  "dimensions": {
+    "width": 1254,
+    "height": 1254
+  },
+  "imageMode": "RGBA",
+  "transparency": {
+    "hasAlpha": true,
+    "fullyTransparentPixels": 616394,
+    "partiallyTransparentPixels": 955522,
+    "opaquePixels": 600,
+    "fullyTransparentFraction": 0.391979,
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "actualAlphaPassed": true
+  },
+  "layout": {
+    "columns": 1,
+    "rows": 1
+  },
+  "frames": [
+    {
+      "state": "default",
+      "src": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.5
+      ]
+    }
+  ],
+  "sha256": "ba7f0d67ca1604859d68d18ee4726b94e9d794057801e2685a15bbecbacf1057",
+  "postProcessing": "Copied exact generated PNG; no raster editing or resizing. Pillow used for read-only dimension and alpha inspection.",
+  "visualQA": {
+    "inspected": true,
+    "observations": [
+      "Front-facing smiling blonde bust matches black/burgundy Grok atlas.",
+      "Wide hair has narrow side padding; whole silhouette remains visible."
+    ],
+    "criticalIssues": false
+  }
+}

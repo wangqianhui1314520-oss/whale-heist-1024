@@ -1,0 +1,4 @@
+Use case: illustration-story.
+Asset type: 16:9 in-game story animation background.
+Primary request: A cinematic keyframe for the opening chapter of an underwater heist game: an elegant blue whale-themed submarine harbor at night, a glowing paper window barrier in the foreground, a small beacon route reflected in dark water, deep blue and cyan palette with warm brass lamps, hand-painted anime fantasy game art, negative space on the left for dialogue UI, visual focus on the paper window at right.
+Constraints: no readable text, logos, watermark, UI, or identifiable faces.

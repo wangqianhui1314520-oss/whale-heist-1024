@@ -1,0 +1,83 @@
+{
+  "stem": "masonry-kit",
+  "raw": "C:\\Users\\Administrator\\.codex\\generated_images\\01a169bf-b470-7f53-a490-15da1151f145\\exec-72433486-5200-46e3-b790-e3b05f055b86.png",
+  "workspace": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\atlases\\masonry-kit.png",
+  "prompts": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\prompts\\masonry-kit.txt",
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\prompts\\masonry-kit-repair.txt"
+  ],
+  "refs": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\concepts\\gameplay-sideview-visual-target.png",
+    "C:\\Users\\Administrator\\.codex\\generated_images\\01a169bf-b470-7f53-a490-15da1151f145\\exec-6a1a0c0a-cefc-468e-adc4-63229d477d49.png"
+  ],
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "alpha": {
+    "channel": true,
+    "extrema": [
+      0,
+      254
+    ],
+    "transparent_pixels": 967549,
+    "total_pixels": 1572864
+  },
+  "grid": {
+    "columns": 3,
+    "rows": 2,
+    "uniform": false,
+    "source_rectangles": [
+      {
+        "id": "platform-middle",
+        "x": 0,
+        "y": 0,
+        "w": 640,
+        "h": 448
+      },
+      {
+        "id": "platform-left-cap",
+        "x": 640,
+        "y": 0,
+        "w": 400,
+        "h": 448
+      },
+      {
+        "id": "platform-right-cap",
+        "x": 1040,
+        "y": 0,
+        "w": 496,
+        "h": 448
+      },
+      {
+        "id": "platform-thin",
+        "x": 0,
+        "y": 448,
+        "w": 620,
+        "h": 576
+      },
+      {
+        "id": "paper-barrier-intact",
+        "x": 620,
+        "y": 448,
+        "w": 420,
+        "h": 576
+      },
+      {
+        "id": "paper-barrier-broken",
+        "x": 1040,
+        "y": 448,
+        "w": 496,
+        "h": 576
+      }
+    ]
+  },
+  "qa": "Six isolated complete parts visually verified. Single targeted repair retained. Grid is visibly unequal; use recorded source rectangles, not uniform cells. No postprocessing; raw output copied byte for byte.",
+  "discarded_variants": [
+    "C:\\Users\\Administrator\\.codex\\generated_images\\01a169bf-b470-7f53-a490-15da1151f145\\exec-6a1a0c0a-cefc-468e-adc4-63229d477d49.png"
+  ],
+  "tool": "image_gen",
+  "date": "2026-10-24",
+  "mode": "built-in",
+  "reference_role": "style reference"
+}

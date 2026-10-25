@@ -1,0 +1,11 @@
+Use case: stylized-concept
+Asset type: final game visual direction board / master key art for a polished web game frontend
+Primary request: Create one wide 16:9 production visual target that presents the complete final look of the game “Whale Heist Crew” as a cohesive premium anime-fantasy underwater action puzzle game.
+Input images: existing final-ui-visual-direction-2026-10-25.png and gameplay-sideview-visual-target.png as style and continuity references
+Scene/backdrop: underwater harbor and deep-sea machinery city with whale airship, lanterns, pipes, banners, ladders and platforms
+Subject: blue-haired whale-maid protagonist, orange-haired decoy specialist, dark-haired scan specialist, blond axe-breaker, security drones, data cubes, water dash, paper decoy, scanning grid
+Style/medium: polished anime game key art, premium 2D/2.5D frontend visual system, crisp authored UI materials
+Composition/framing: one believable finished game presentation image; side-view gameplay center, top HUD, right command panel, dialogue card, crew strip, touch controls, title-menu inset and result card
+Lighting/mood: cinematic underwater lighting, cyan bloom, brass rim light, readable deep navy panels
+Constraints: minimal abstract text areas only; enough negative space for real HTML overlays; preserve existing whale airship and underwater setting; no readable copy is required
+Avoid: browser chrome, watermarks, fake product branding, gore, photorealism, top-down view, perspective distortion, extra characters, unrelated collage styling

@@ -1,0 +1,4 @@
+Use case: illustration-story.
+Asset type: 16:9 in-game story animation keyframe.
+Primary request: The blue-haired captain and three AI crew members reunite at a glowing remote beacon beside a whale-shaped submarine, carrying sealed archive cases and preparing a sixty-second evacuation through an underwater night harbor; hand-painted anime fantasy game art, crew and beacon on the right, open dark blue water and negative space on the left for dialogue.
+Constraints: no readable text, logos, watermark, UI, photorealism, or guns.

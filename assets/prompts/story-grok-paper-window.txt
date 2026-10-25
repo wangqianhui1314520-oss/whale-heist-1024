@@ -1,0 +1,4 @@
+Use case: illustration-story.
+Asset type: 16:9 in-game story animation keyframe.
+Primary request: Grok, a cute orange-haired AI crew member in a blue underwater heist uniform, smashing a glowing paper-window barrier with a stylized energy axe inside an underwater archive dock; paper shards and cyan impact light, dynamic action pose, hand-painted anime fantasy game art, action on the right and darker negative space on the left for dialogue.
+Constraints: no readable text, logos, watermark, UI, photorealism, or guns.

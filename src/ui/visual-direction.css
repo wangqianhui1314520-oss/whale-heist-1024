@@ -1,0 +1,525 @@
+/* Visual direction pass 2026-10-25
+ * Converts the existing authored art library into a small, reusable motion
+ * system. The title screen gets the same hierarchy as the reference: one
+ * dominant CTA, a quiet telemetry layer, and a crew rail that reads like a
+ * game component instead of a text-only menu.
+ */
+:root {
+  --visual-cyan: #7de8ff;
+  --visual-cyan-dim: #3f8ba9;
+  --visual-gold: #f1cf8a;
+  --visual-ink: #061321;
+}
+
+/* Navigation leads with authored badges, with labels retained in the DOM for
+ * tooltips, keyboard users, and screen readers. The badge sheet is the same
+ * raster UI atlas already used by the HUD, so these controls do not invent a
+ * second procedural icon language. */
+.art-mark { display:inline-block; position:relative; width:1.65em; height:1.65em; min-width:22px; min-height:22px; flex:0 0 auto; border-radius:50%; background-image:url('../../assets/ui/hud-icon-badges.png'); background-repeat:no-repeat; background-size:600% 100%; background-position:var(--art-mark-position, 0%) center; filter:drop-shadow(0 0 5px #56dfff66); }
+.art-mark--map,.art-mark--home { --art-mark-position:100%; }
+.art-mark--pause { --art-mark-position:0%; }
+.art-mark--settings,.art-mark--checkpoint { --art-mark-position:80%; }
+.art-mark--book,.art-mark--archive { --art-mark-position:60%; }
+.art-mark--objective,.art-mark--guide { --art-mark-position:20%; }
+.art-mark--play,.art-mark--retry { --art-mark-position:40%; }
+.action-label { min-width:0; }
+.title-secondary .action-label { display:none; }
+.title-secondary .art-mark { width:2.15em; height:2.15em; }
+.pause-grid .action-label { display:none; }
+.pause-grid .art-mark { width:2.45em; height:2.45em; }
+.pause-grid .game-button { gap:.2em; min-height:4.2cqw; padding:.45cqw .75cqw; }
+.hud-map-button, .objective-toggle { gap:.35em; }
+.hud-map-button .art-mark, .objective-toggle .art-mark { width:1.65em; height:1.65em; }
+.objective-toggle .action-label { display:none; }
+.objective-toggle .art-mark { --art-mark-position:100%; }
+.hud-map-button .action-label { display:none; }
+
+/* Result boards use the same authored icon strip for the four score axes.
+ * Labels stay short and explicit, while the mark carries the first visual
+ * read on a dense completion screen. */
+.result-metrics>span, .score-lines>span { align-items:center; justify-items:center; }
+.result-metrics>span { grid-template-columns:auto; }
+.result-metrics>span small, .score-lines>span small { font-size:.58cqw; color:#86adbf; }
+.metric-art { display:block; width:1.55cqw; height:1.55cqw; min-width:18px; min-height:18px; border-radius:50%; background-image:url('../../assets/ui/hud-icon-badges.png'); background-repeat:no-repeat; background-size:600% 100%; background-position:var(--metric-position, 0%) center; filter:drop-shadow(0 0 4px #56dfff55); }
+.metric-art-time, .metric-art-objective { --metric-position:100%; }
+.metric-art-alert, .metric-art-stealth { --metric-position:20%; }
+.metric-art-retry, .metric-art-explore { --metric-position:40%; }
+.metric-art-crew, .metric-art-book { --metric-position:60%; }
+.score-lines { align-items:center; }
+.score-lines>span { display:grid; grid-template-columns:auto auto; gap:.18cqw .3cqw; }
+.score-lines>span .metric-art { grid-row:1 / span 2; }
+.score-lines>span small { grid-column:2; }
+.v3-results .v3-panel-footer .art-mark, .v3-campaign .v3-panel-footer .art-mark { width:1.6em; height:1.6em; }
+.v3-results .v3-panel-footer .action-label, .v3-campaign .v3-panel-footer .action-label { display:none; }
+.v3-results .v3-panel-footer .game-button, .v3-campaign .v3-panel-footer .game-button { gap:.2em; }
+.v3-tabs>button { display:inline-flex; align-items:center; gap:.4em; }
+.v3-tabs>button .art-mark { width:1.35em; height:1.35em; min-width:20px; min-height:20px; }
+.v3-tabs>button .action-label { display:none; }
+.archive-card-art { position:relative; height:6.4cqw; margin:-1.3cqw -1.3cqw .8cqw; overflow:hidden; background-image:var(--archive-art); background-size:cover; background-position:center; }
+.archive-card-art::after { content:""; position:absolute; inset:0; background:#07182766; }
+.archive-card-state { position:absolute; right:.7cqw; bottom:.35cqw; z-index:1; display:grid; place-items:center; width:1.6cqw; height:1.6cqw; min-width:20px; min-height:20px; border:1px solid #87dcf4aa; border-radius:50%; color:#b8f2ff; background:#061f32cc; font-size:1cqw; }
+.archive-card.is-locked .archive-card-state { color:#8ba0aa; border-color:#6b7f8b88; }
+.archive-story-card h3 { margin-top:.2cqw; }
+.archive-template-card { padding-top:1.1cqw; }
+.archive-template-mark { float:right; }
+.archive-template-mark .art-mark { width:2.1cqw; height:2.1cqw; }
+@media (max-width:800px), (max-height:480px) {
+  .pause-grid .action-label { display:inline; }
+  .pause-grid .art-mark { width:1.55em; height:1.55em; min-width:20px; min-height:20px; }
+  .title-secondary .action-label { display:inline; }
+  .title-secondary .art-mark { width:1.25em; height:1.25em; min-width:20px; min-height:20px; }
+  .v3-tabs>button .action-label { display:inline; }
+  .result-metrics>span small, .score-lines>span small { font-size:8px; }
+  .metric-art { width:20px; height:20px; }
+  .archive-card-art { height:68px; margin:-10px -10px 7px; }
+  .archive-card-state { font-size:14px; }
+}
+
+/* Chapter cards use narrative keyframes as real art instead of a repeated
+ * gameplay backdrop. The HTML title and status remain live and selectable. */
+.chapter-card-art { background-image:var(--chapter-art, url('../../assets/backgrounds/gameplay-backdrop.png')) !important; background-position:center; background-size:cover; overflow:hidden; }
+.chapter-card-art::after { content:""; position:absolute; inset:0; background:#05182766; pointer-events:none; }
+.chapter-card-art>span,.chapter-card-art>i { z-index:1; }
+
+.menu-root:has(.v3-title-brand) { overflow: hidden; }
+.menu-root:has(.v3-title-brand)::after { content:none; display:none; }
+.menu-root:has(.v3-title-brand)::before { background:#04162930; }
+.v3-menu-backdrop { animation: menu-drift 24s ease-in-out infinite alternate, visual-breathe 8s ease-in-out infinite alternate; }
+.title-dock-overlay { opacity: .84; mix-blend-mode: screen; filter: drop-shadow(0 -8px 22px #061b2d99) saturate(1.12); }
+.title-hero-ship { animation: crew-float 6s ease-in-out infinite, visual-hero-glow 5s ease-in-out infinite alternate; }
+
+.v3-title-brand {
+  width: min(48%, 600px); padding: 1.45cqw 2.1cqw 1.7cqw;
+  border-left: 2px solid #8de5fa5c;
+  background:#061b2ac9 url('../../assets/ui/panel-large.png') center/100% 100% no-repeat;
+  box-shadow: -26px 0 72px #03101dcc, inset 0 0 36px #6bdcff08;
+}
+.v3-title-brand .title-overline { letter-spacing: .24cqw; font-size: .65cqw; }
+.v3-title-brand h1 { color:#f5fbff; -webkit-text-fill-color:#f5fbff; background:none; background-clip:border-box; -webkit-background-clip:border-box; }
+.v3-title-brand .title-overline span { color: var(--visual-gold); }
+.v3-title-brand .title-status { gap: .55cqw; }
+.v3-title-brand .title-status small { display: block; color: #8eb7c9; font-size: .58cqw; letter-spacing: .08cqw; }
+.v3-title-brand .title-status-dot { width: .55cqw; height: .55cqw; box-shadow: 0 0 0 .2cqw #051827, 0 0 16px var(--visual-cyan); animation: visual-status-pulse 1.8s ease-in-out infinite; }
+.v3-title-brand .title-status-dot.is-complete { background: var(--visual-gold); box-shadow: 0 0 0 .2cqw #051827, 0 0 16px var(--visual-gold); }
+.v3-title-brand .title-actions .game-button.primary { position: relative; overflow: hidden; }
+.v3-title-brand .title-actions .game-button.primary::after { content: ""; position: absolute; inset: 0; background: transparent; transform: translateX(-120%); animation: visual-sheen 4.8s ease-in-out infinite; pointer-events: none; }
+
+
+
+
+
+
+
+
+
+.title-crew-rail { position: absolute; z-index: 4; left: 5.5%; bottom: 5%; width: min(37%, 540px); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .55cqw; padding: .7cqw; border: 1px solid #74bcd24c; border-radius: .75cqw; background:#092338dc url('../../assets/ui/panel-card.png') center/100% 100% no-repeat; box-shadow: 0 16px 38px #0009, inset 0 0 22px #65d5f30d; backdrop-filter: blur(8px); }
+.title-crew-rail-head { grid-column: 1 / -1; display: flex; justify-content: space-between; color: #9ccddd; font-size: .58cqw; letter-spacing: .16cqw; }
+.title-crew-rail-head small { color: #73c0ce; letter-spacing: .04cqw; }
+.title-crew-chip { position: relative; display: flex; align-items: center; gap: .35cqw; min-width: 0; padding: .35cqw; border: 1px solid #47758c77; border-radius: .45cqw; background: #0a2538b8; animation: visual-chip-in .55s both; animation-delay: calc(var(--crew-index) * 90ms); }
+.title-crew-chip.is-lead { border-color: #d0ae686e; background:#4a3a1e66 url('../../assets/ui/panel-card.png') center/100% 100% no-repeat; }
+.title-crew-chip img { width: 2.45cqw; height: 2.45cqw; min-width: 2.45cqw; border-radius: 50%; object-fit: cover; border: 1px solid #6fcde2aa; background: #092338; box-shadow: 0 0 0 2px #051827, 0 4px 10px #0008; }
+.title-crew-chip.is-lead img { border-color: var(--visual-gold); }
+.title-crew-chip span { min-width: 0; display: grid; }
+.title-crew-chip b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #e8f7ff; font-size: .7cqw; font-weight: 600; }
+.title-crew-chip small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #8eb5c7; font-size: .48cqw; }
+.title-crew-chip i { width: .32cqw; height: .32cqw; margin-left: auto; flex: 0 0 auto; border-radius: 50%; background: #79e5ff; box-shadow: 0 0 8px #79e5ff; }
+.title-crew-chip.is-lead i { background: var(--visual-gold); box-shadow: 0 0 8px var(--visual-gold); }
+.title-frame-readout { position: absolute; z-index: 4; right: 3.5%; top: 5%; display: grid; grid-template-columns: auto auto; gap: .3cqw .55cqw; align-items: center; color: #83b4c7; font-size: .52cqw; letter-spacing: .16cqw; opacity: .8; }
+.title-frame-readout b { color: #87e8c4; font-size: .6cqw; }
+.title-frame-readout i { width: .4cqw; height: .4cqw; border-radius: 50%; background: #87e8c4; box-shadow: 0 0 9px #87e8c4; animation: visual-status-pulse 1.5s ease-in-out infinite; }
+.title-frame-readout small { grid-column: 1 / -1; color: #648da3; letter-spacing: .08cqw; }
+
+/* Shared authored shells: these are used by panels and resource cards where
+ * a generated PNG shell is available, while HTML stays accessible/selectable. */
+.v3-panel, .menu-panel { background-image:url('../../assets/ui/panel-large.png'); background-size:100% 100%; }
+.command-options>button, .v3-chapter-card, .contract-card { background-image:url('../../assets/ui/panel-card.png'); background-size:100% 100%; }
+.mission-hud { background-image:url('../../assets/ui/hud-pill.png'); background-size:100% 100%; }
+.hud-resource-strip .hud-badge { background-image:url('../../assets/ui/hud-square.png'); background-size:100% 100%; }
+
+
+@keyframes visual-breathe { to { filter: saturate(1.16) brightness(1.04); } }
+@keyframes visual-hero-glow { to { filter: drop-shadow(0 18px 30px #001323e8) drop-shadow(0 0 28px #72dfff55) saturate(1.1); } }
+@keyframes visual-status-pulse { 50% { opacity: .48; transform: scale(.76); } }
+
+
+@keyframes visual-chip-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 800px), (max-height: 480px) {
+  .title-crew-rail { left: 4%; bottom: 4%; width: 49%; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 6px; }
+  .title-crew-rail-head { font-size: 7px; }
+  .title-crew-chip { padding: 4px; gap: 4px; }
+  .title-crew-chip img { width: 25px; height: 25px; min-width: 25px; }
+  .title-crew-chip b { font-size: 9px; }
+  .title-crew-chip small { font-size: 7px; }
+  .title-crew-chip i { width: 5px; height: 5px; }
+  .title-frame-readout { right: 4%; top: 3%; font-size: 7px; }
+  .title-frame-readout b { font-size: 8px; }
+  .title-frame-readout small { font-size: 6px; }
+  .v3-title-brand .title-status small { font-size: 7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-root:has(.v3-title-brand)::after, .v3-menu-backdrop, .title-hero-ship, .title-signal-grid i, .title-crew-chip, .title-frame-readout i, .v3-title-brand .title-status-dot, .v3-title-brand .title-actions .game-button.primary::after { animation: none; }
+}
+
+/* Command deck art pass: use the authored chrome as a frame and keep the
+ * controls as real HTML so the command flow remains keyboard and touch safe. */
+.v3-command-panel {
+  background-image:url('../../assets/ui/panel-large.png');
+  background-size:100% 100%;
+  border-color: #7ee8fa;
+  box-shadow: 0 18px 60px #000d, 0 0 0 1px #9cecff36, inset 0 0 34px #55d9ff12;
+}
+.command-step-rail { display:flex; align-items:center; gap:.45cqw; padding:.25cqw .2cqw .55cqw; color:#6b9bad; font-size:.57cqw; letter-spacing:.08em; }
+.command-step-rail span { display:flex; align-items:center; gap:.25cqw; white-space:nowrap; }
+.command-step-rail i { display:grid; place-items:center; width:1.35cqw; height:1.35cqw; min-width:18px; min-height:18px; border:1px solid #47748d; border-radius:50%; color:#83b7cb; font-style:normal; font-size:.55cqw; }
+.command-step-rail span.is-active, .command-step-rail span.is-complete { color:#e6d29c; }
+.command-step-rail span.is-active i { border-color:#f1d18b; color:#13283b; background:#f1d18b; box-shadow:0 0 10px #f1d18b77; }
+.command-step-rail span.is-complete i { border-color:#82e5d2; color:#072c3d; background:#82e5d2; }
+.command-step-rail b { flex:1; height:1px; min-width:14px; background:#56859b; }
+.command-target-control { align-items:center; gap:1cqw; padding:.25cqw .35cqw; border:1px solid #548ba0; border-radius:.55cqw; background:#0a2940 url('../../assets/ui/panel-card.png') center/100% 100% no-repeat; }
+.command-target-visual { display:flex; align-items:center; gap:.4cqw; min-width:11cqw; }
+.command-target-ring { position:relative; display:grid; place-items:center; width:3.1cqw; height:3.1cqw; min-width:36px; min-height:36px; border-radius:50%; background:url('../../assets/ui/ring.png') center/cover; filter:drop-shadow(0 0 8px #5bdfff66); }
+.command-target-ring img { width:72%; height:72%; object-fit:contain; border-radius:50%; }
+.command-target-pulse{display:none}
+.command-target-visual>span:last-child { display:grid; gap:.1cqw; min-width:0; }
+.command-target-visual small { color:#719fb3; font-size:.5cqw; }
+.command-target-visual b { max-width:8cqw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#dff6ff; font-size:.68cqw; font-weight:500; }
+.command-target-control>label { min-width:0; }
+.command-target-control select { background-image:url('../../assets/ui/hud-pill.png'); background-size:100% 100%; border-color:#73cee8; box-shadow:inset 0 0 10px #4bd4fa18; }
+.v3-command-panel .command-preview-card { background-image:url('../../assets/ui/panel-card.png'); background-size:100% 100%; border-color:#70cee3; box-shadow:inset 0 0 18px #48d7f418; }
+.v3-command-panel .command-preview-card strong { color:#f4e4b0; }
+.v3-command-panel .command-options>button { position:relative; overflow:hidden; display:grid; grid-template-columns:auto 1fr; column-gap:.55cqw; align-items:start; background-image:url('../../assets/ui/panel-card.png'); background-size:100% 100%; }
+.v3-command-panel .command-options>button .command-option-heading,
+.v3-command-panel .command-options>button p,
+.v3-command-panel .command-options>button>strong { grid-column:2; }
+.command-option-art { position:relative; display:grid; place-items:center; grid-column:1; grid-row:1 / span 3; width:3.5cqw; height:3.5cqw; min-width:42px; min-height:42px; border-radius:50%; background:url('../../assets/ui/ring.png') center/cover; color:#8cecff; filter:drop-shadow(0 0 8px #55dfff55); }
+.command-option-art .ui-icon { position:relative; z-index:2; width:1.45cqw; height:1.45cqw; filter:drop-shadow(0 0 5px currentColor); }
+.command-fx-atlas { position:absolute; inset:0; border-radius:50%; opacity:.52; background-image:var(--command-fx-url); background-size:200% 200%; background-position:0 0; background-repeat:no-repeat; mix-blend-mode:screen; transform:scale(1.25); }
+.v3-command-panel .command-options>button:hover .command-fx-atlas,
+.v3-command-panel .command-options>button[aria-pressed=true] .command-fx-atlas { animation:command-fx-frame .5s steps(1,end) both; }
+.v3-command-panel .command-options>button[aria-pressed=true] .command-option-art { color:#f4d38e; box-shadow:0 0 0 2px #f4d38e66, 0 0 18px #f4c66b66; }
+.command-receipt { display:flex; align-items:center; gap:.45cqw; }
+.command-receipt-avatar { display:grid; place-items:center; width:1.8cqw; height:1.8cqw; min-width:24px; min-height:24px; border-radius:50%; border:1px solid #edce8c; background:#09263b; overflow:hidden; }
+.command-receipt-avatar img { width:100%; height:100%; object-fit:contain; }
+.command-receipt>span:nth-child(2) { white-space:nowrap; }
+.v3-command-panel .command-forecast-toggle { display:flex!important; }
+.v3-command-panel .command-submit>.game-button { background-image:url('../../assets/ui/button-rail.png'); background-size:100% 100%; border:0; border-radius:0; color:#08253a; text-shadow:0 1px 3px #fff8; filter:saturate(1.12); }
+.v3-command-panel .command-submit>.game-button:not(:disabled) { animation:command-button-breathe 2.6s ease-in-out infinite; }
+.v3-command-panel .command-submit>span { padding:.32cqw .55cqw; border-radius:.35cqw; background:url('../../assets/ui/hud-pill.png') center/cover; color:#e7d39c; }
+.v3-command-panel.has-forecast .command-forecast { animation:command-forecast-in .2s ease-out both; }
+.v3-command-panel .command-advanced-wrap .command-more { background-image:url('../../assets/ui/hud-square.png'); background-size:100% 100%; }
+@keyframes command-target-pulse { 50% { transform:scale(1.18); opacity:.2; } }
+@keyframes command-fx-frame { 0% { background-position:0 0; } 25% { background-position:100% 0; } 50% { background-position:0 100%; } 75%,100% { background-position:100% 100%; } }
+@keyframes command-button-breathe { 50% { filter:brightness(1.08) saturate(1.18); } }
+@keyframes command-forecast-in { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .command-target-pulse, .v3-command-panel .command-submit>.game-button:not(:disabled), .v3-command-panel .command-options>button:hover .command-fx-atlas, .v3-command-panel .command-options>button[aria-pressed=true] .command-fx-atlas { animation:none; }
+}
+@media (max-width:800px), (max-height:480px) {
+  .command-step-rail { font-size:8px; gap:4px; padding:3px 2px 5px; }
+  .command-step-rail i { width:18px; height:18px; font-size:8px; }
+  .command-target-visual { min-width:105px; }
+  .command-target-ring { width:34px; height:34px; }
+  .command-target-visual small { font-size:7px; }
+  .command-target-visual b { max-width:66px; font-size:9px; }
+  .command-option-art { width:38px; height:38px; }
+  .command-option-art .ui-icon { width:17px; height:17px; }
+  .command-receipt-avatar { width:24px; height:24px; }
+}
+
+/* Target thumbnails and result boards keep the same authored sprite language as
+ * the scene renderer. The target remains a CSS sprite crop so labels stay live
+ * HTML and can update as the player changes rooms. */
+.command-target-art { display:block; width:72%; height:72%; border-radius:50%; background-image:var(--target-art-url, url('../../assets/ui/whale-emblem.png')); background-size:var(--target-art-size, cover); background-position:var(--target-art-position, center); background-repeat:no-repeat; filter:drop-shadow(0 0 8px #8cecff66); }
+.v3-results { width:72%; }
+.result-visual-hero { position:relative; min-height:12cqw; display:flex; align-items:center; gap:1.2cqw; padding:1cqw; overflow:hidden; border:1px solid #6fa9bd77; border-radius:.8cqw; background:#071a2cf2; }
+.result-visual-backdrop { position:absolute; inset:0; background-image:var(--result-bg); background-size:cover; background-position:center; opacity:.88; }
+.result-crew-art { position:relative; z-index:1; width:20cqw; max-height:13cqw; object-fit:contain; object-position:left bottom; filter:drop-shadow(0 8px 16px #000b); align-self:end; }
+.result-visual-copy { position:relative; z-index:1; display:grid; gap:.25cqw; color:#b5d4e2; }
+.result-visual-copy span { font-size:.75cqw; letter-spacing:.12em; color:#8ac3d8; }
+.result-visual-copy strong { font:600 3.4cqw Georgia,serif; color:#f4d597; text-shadow:0 2px 14px #000; }
+.result-visual-copy strong small { font:500 1cqw sans-serif; color:#a8c6d6; }
+.result-visual-copy p { margin:0; font-size:.8cqw; color:#d4e5eb; }
+.grade-seal { position:relative; z-index:2; display:grid; place-items:center; width:5.7cqw; height:5.7cqw; min-width:62px; min-height:62px; border:1px solid #f7df9a; border-radius:50%; background:#4c3c22cc url('../../assets/ui/ring.png') center/100% 100% no-repeat; color:#ffe7a8; font:600 3.2cqw Georgia,serif; box-shadow:0 0 0 5px #edc97c1b,0 0 24px #e8bd6566; }
+.result-crew-strip { display:flex; gap:.55cqw; margin-top:1cqw; }
+.result-crew-strip span { display:flex; align-items:center; gap:.3cqw; padding:.25cqw .45cqw; border:1px solid #4d7b9177; border-radius:999px; background:#082338cc; color:#b9d9e5; font-size:.65cqw; }
+.result-crew-strip img { width:1.5cqw; height:1.5cqw; min-width:22px; min-height:22px; border-radius:50%; object-fit:cover; border:1px solid #82dbea; }
+.v3-campaign { width:78%; }
+.v3-campaign-backdrop { position:absolute; inset:0; background:#041a2caa url('../../assets/backgrounds/results-background.png') center/cover; animation:visual-breathe 8s ease-in-out infinite alternate; }
+.campaign-visual-hero { position:relative; min-height:15cqw; display:flex; align-items:center; gap:1.5cqw; padding:1cqw 1.5cqw; overflow:hidden; border-bottom:1px solid #6ca9bc55; }
+.campaign-visual-hero>img { position:absolute; right:-2%; bottom:-15%; width:46%; max-height:18cqw; object-fit:contain; filter:drop-shadow(0 14px 22px #000d); animation:crew-float 6s ease-in-out infinite; }
+.campaign-visual-hero>div:last-child { position:relative; z-index:1; display:grid; gap:.3cqw; }
+.campaign-visual-hero>div:last-child>span { color:#92bfd0; font-size:.8cqw; }
+.campaign-visual-hero>div:last-child>strong { color:#f5d99b; font:600 3.4cqw Georgia,serif; }
+.campaign-visual-hero>div:last-child>strong small { color:#aac7d2; font:500 1cqw sans-serif; }
+.campaign-visual-hero>div:last-child>p { margin:0; color:#c3dde6; font-size:.85cqw; }
+.campaign-grade { width:6.4cqw; height:6.4cqw; font-size:3.5cqw; }
+.campaign-chapter-rail { display:grid; grid-template-columns:repeat(5,1fr); gap:.55cqw; margin-top:1cqw; }
+.campaign-chapter-rail span { display:grid; grid-template-columns:auto 1fr; align-items:center; gap:.25cqw .45cqw; padding:.35cqw 0; color:#7198ad; }
+.campaign-chapter-rail span.is-complete { color:#b8e8dc; }
+.campaign-chapter-rail span::before { content:''; grid-column:1 / -1; display:block; height:2.7cqw; background:center/cover no-repeat url('../../assets/story/prologue-paper-window.png'); }
+.campaign-chapter-rail span:nth-child(2)::before { background-image:url('../../assets/story/grok-paper-window.png'); }
+.campaign-chapter-rail span:nth-child(3)::before { background-image:url('../../assets/story/broadcast-reveal.png'); }
+.campaign-chapter-rail span:nth-child(4)::before { background-image:url('../../assets/story/evacuation-beacon.png'); }
+.campaign-chapter-rail span:nth-child(5)::before { background-image:url('../../assets/story/investigation-epilogue.png'); }
+.campaign-chapter-rail i { font:600 1.4cqw Georgia,serif; color:#cfba82; font-style:normal; }
+.campaign-chapter-rail b { font-size:.62cqw; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+@media (max-width:800px), (max-height:480px) {
+  .v3-results,.v3-campaign { width:90%; }
+  .result-visual-hero { min-height:145px; padding:8px; gap:8px; }
+  .result-crew-art { width:34%; max-height:125px; }
+  .result-visual-copy span { font-size:8px; }
+  .result-visual-copy strong { font-size:30px; }
+  .result-visual-copy strong small { font-size:10px; }
+  .result-visual-copy p { font-size:9px; }
+  .grade-seal { width:58px; height:58px; font-size:30px; }
+  .result-crew-strip { gap:4px; flex-wrap:wrap; }
+  .result-crew-strip span { font-size:8px; padding:3px 5px; }
+  .result-crew-strip img { width:22px; height:22px; }
+  .campaign-visual-hero { min-height:145px; padding:8px; }
+  .campaign-visual-hero>img { width:58%; max-height:150px; }
+  .campaign-visual-hero>div:last-child>span { font-size:8px; }
+  .campaign-visual-hero>div:last-child>strong { font-size:28px; }
+  .campaign-visual-hero>div:last-child>strong small { font-size:10px; }
+  .campaign-visual-hero>div:last-child>p { font-size:9px; max-width:180px; }
+  .campaign-chapter-rail { gap:4px; }
+  .campaign-chapter-rail span { padding:5px 4px; }
+  .campaign-chapter-rail i { font-size:15px; }
+  .campaign-chapter-rail b { font-size:7px; }
+}
+@media (prefers-reduced-motion: reduce) { .v3-campaign-backdrop,.campaign-visual-hero>img { animation:none; } }
+
+/* Raster quality pass. Chrome is sliced only at the container boundary;
+ * authored scenes and portraits carry the interior. Nine-slice edges preserve
+ * the painted corner fittings when a panel changes aspect ratio. */
+.v3-panel,.menu-panel {
+  background:#071b2df2!important;
+  border:clamp(10px,1.2cqw,18px) solid transparent;
+  border-image-source:url('../../assets/ui/panel-card.png');
+  border-image-slice:40 55 65 45 fill;
+  border-image-width:clamp(10px,1.2cqw,18px);
+  border-image-repeat:stretch;
+  border-radius:0; box-shadow:0 16px 48px #0008;
+}
+.v3-panel::after,.menu-panel::after,.panel-ornament,
+.menu-root:has(.v3-title-brand)::after,.title-signal-grid,
+.story-orbit,.command-target-pulse { display:none!important; }
+.menu-root:has(.v3-title-brand)::before { background:#04162930; }
+.v3-title-brand,.v3-title-crew {
+  background:transparent!important; border:0; border-image:none;
+  box-shadow:none; border-radius:0;
+}
+.v3-title-brand .title-status { border:0; background:transparent; padding:.2cqw; }
+.v3-title-brand .title-status small { display:none; }
+.title-crew-rail { background:#051a2cba; border:0; box-shadow:none; padding:.45cqw; }
+.title-crew-chip,.title-crew-chip.is-lead { background:transparent; border:0; box-shadow:none; }
+.title-status-dot,.title-crew-chip i,.title-frame-readout i,.hud-alert .alert-dot { display:none; }
+.title-frame-readout { display:none; }
+.v3-title-brand .title-actions .game-button.primary::after { content:none; display:none; }
+
+/* The source button has a painted rail in its upper 53%. Crop its generous
+ * glow padding in the background rather than flattening the rail itself. */
+.game-button,.v3-title-brand .title-actions .game-button.primary,
+.v3-command-panel .command-submit>.game-button {
+  border:0; border-radius:0;
+  background:transparent url('../../assets/ui/button-rail.png') center top/100% 190% no-repeat!important;
+  box-shadow:none; color:#e3f7ff; text-shadow:0 2px 4px #031321;
+}
+.game-button.primary,.v3-command-panel .command-submit>.game-button {
+  color:#ffe1a2; filter:saturate(1.1) brightness(1.08);
+}
+.game-button.text-button,.game-button.setting-button,.game-button.key-binding {
+  background:transparent!important; box-shadow:none; color:#add5e5;
+}
+.v3-title-brand .title-secondary .game-button,
+.pause-grid .game-button,.v3-results .v3-panel-footer .game-button,
+.v3-campaign .v3-panel-footer .game-button {
+  color:#d5edfa; gap:.3em;
+}
+.title-secondary .action-label,.pause-grid .action-label,
+.v3-results .v3-panel-footer .action-label,.v3-campaign .v3-panel-footer .action-label {
+  display:inline; font-size:max(10px,.75cqw); line-height:1.4;
+}
+.v3-title-brand .title-secondary .game-button {
+  background:transparent!important; min-height:5cqw;
+}
+.v3-title-brand .title-secondary .game-button:hover { filter:brightness(1.18); }
+
+/* Small resources have narrow authored trays. A single square frame around
+ * every number used to hide the icons and make the HUD feel boxed in. */
+.mission-hud {
+  background:#061b2de8!important; border:6px solid transparent;
+  border-image:url('../../assets/ui/panel-card.png') 40 55 65 45 fill / 6px stretch;
+  box-shadow:none; border-radius:0;
+}
+.ui-root .bottom-hud { background:#041827a8!important; border:0; box-shadow:none; }
+.hud-resource-strip .hud-badge,.ai-token-meter {
+  background:transparent url('../../assets/ui/hud-pill.png') center 40%/108% 159% no-repeat!important;
+  border:0; border-radius:0; box-shadow:none; padding:.22cqw .55cqw;
+}
+.hud-pause,.icon-button {
+  border:0; border-radius:0; background:transparent url('../../assets/ui/hud-square.png') center/100% 100% no-repeat;
+  box-shadow:none;
+}
+.ui-root .objective-panel,.interaction-hint,.evacuation-banner,
+.tutorial-card,.story-dialogue,.story-history {
+  background:#061c2eea!important;
+  border:8px solid transparent; border-radius:0; box-shadow:none;
+  border-image:url('../../assets/ui/panel-card.png') 40 55 65 45 fill / 8px stretch;
+}
+.ui-root .objective-panel { border-left-width:8px; }
+.ui-root .objective-toggle,.hud-map-button {
+  background:transparent url('../../assets/ui/hud-pill.png') center 40%/108% 159% no-repeat;
+  border:0; border-radius:0; box-shadow:none;
+}
+.ui-root .objective-toggle::before { content:none; display:none; }
+.interaction-hint .keycap {
+  background:transparent url('../../assets/ui/hud-square.png') center/100% 100% no-repeat;
+  color:#e5f8ff; border:0; border-radius:0; box-shadow:none;
+}
+.interaction-hint,.evacuation-banner.is-warning,.evacuation-banner.is-critical,
+.evacuation-banner.is-prep { box-shadow:none; }
+
+/* Data bars reveal authored water texture; JS still supplies the exact width.
+ * Danger is a colour grade of that same art, not a separately drawn shape. */
+.health-rail,.loading-rail,.evacuation-progress,.story-progress,.tutorial-rail {
+  background:#041423 url('../../assets/ui/button-rail.png') center top/100% 190% no-repeat;
+  border:0; border-radius:0; box-shadow:none; overflow:hidden; padding:0;
+}
+.health-rail i,.loading-rail i,.evacuation-progress i,.story-progress>i,.tutorial-rail>i,
+.evacuation-banner.is-warning .evacuation-progress i,
+.evacuation-banner.is-prep .evacuation-progress i,
+.evacuation-banner.is-critical .evacuation-progress i {
+  display:block; height:100%; border:0; border-radius:0; box-shadow:none;
+  background:#7bdced url('../../assets/fx/water-dash-atlas.png') 0 0/200% 200% no-repeat;
+}
+.health-rail i.is-low,.evacuation-banner.is-critical .evacuation-progress i {
+  filter:hue-rotate(155deg) saturate(1.3);
+}
+.interact-hold {
+  background:url('../../assets/fx/water-dash-atlas.png') 0 0/200% 200% no-repeat;
+  box-shadow:none;
+}
+.crew-portrait,.crew-button.is-selected .crew-portrait,
+.ui-root .bottom-hud .crew-portrait {
+  border:0; box-shadow:none;
+  background:#092638 url('../../assets/ui/ring.png') center/100% 100% no-repeat;
+  padding:7%;
+}
+.crew-button.is-selected .crew-portrait { filter:brightness(1.2) saturate(1.15); }
+.crew-portrait img { border-radius:50%; }
+.crew-key,.crew-ready,.cargo-slot,.qualifiers {
+  background:transparent url('../../assets/ui/hud-square.png') center/100% 100% no-repeat;
+  border:0; border-radius:0; box-shadow:none;
+}
+.cargo-slot.is-filled { background-color:transparent; box-shadow:none; }
+.touch-controls button,.touch-controls button:active {
+  background:transparent url('../../assets/ui/ring.png') center/100% 100% no-repeat;
+  border:0; border-radius:0; box-shadow:none;
+}
+.touch-controls button:active { filter:brightness(1.25); }
+.touch-controls button:hover { box-shadow:none; }
+
+/* Lists remain quiet inside their one painted outer frame. Key art is left
+ * unobstructed, and long records are not wrapped in another large gold box. */
+.v3-chapter-card,.archive-card,.record-entry,.room-node,.analysis-clue {
+  background:#061c2d90!important; border:0; box-shadow:none; border-radius:.35cqw;
+}
+.chapter-card-art::after { background:#03182718; }
+.v3-chapter-card:hover,.archive-card:hover,.room-node:hover {
+  box-shadow:none; filter:brightness(1.1);
+}
+.record-entry { padding:.8cqw 1cqw; }
+.room-node { overflow:hidden; padding-left:8.6cqw; min-height:6cqw; }
+.room-node::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:7.4cqw;
+  background:url('../../assets/backgrounds/gameplay-backdrop.png') center/cover no-repeat;
+  opacity:.72;
+}
+.room-node:nth-child(2)::before { background-image:url('../../assets/story/prologue-paper-window.png'); }
+.room-node:nth-child(3)::before { background-image:url('../../assets/story/broadcast-reveal.png'); }
+.room-node:nth-child(4)::before { background-image:url('../../assets/story/evacuation-beacon.png'); }
+.room-node.is-current::before { opacity:1; }
+.room-node:not(:last-child)::after { content:none; display:none; }
+.room-node.is-current { background:#103c52b8!important; box-shadow:none; }
+.room-node h3 { line-height:1.5; margin:.2cqw 0 .3cqw; }
+.map-overview aside { border:0; padding-left:0; }
+.map-overview aside>p { line-height:1.65; color:#87a9ba; }
+.map-legend { margin-top:.9cqw; }
+.analysis-meter {
+  border:0; background:none; padding:.7cqw 0; gap:1cqw; flex-wrap:wrap;
+}
+.analysis-meter>strong { display:inline-flex; align-items:center; gap:.4em; }
+.analysis-meter>strong>.ui-icon { width:26px; height:26px; }
+.analysis-clue { align-items:flex-start; gap:.8cqw; padding:1cqw; }
+.analysis-clue::before { display:none; }
+.analysis-clue>.clue-art { flex:0 0 2.8cqw; width:2.8cqw; height:2.8cqw; }
+.analysis-clue p { line-height:1.65; max-width:55ch; }
+.briefing-chart {
+  border:0; background:transparent url('../../assets/story/evacuation-beacon.png') center/cover no-repeat!important;
+}
+.briefing-chart img { width:9cqw; height:9cqw; }
+.briefing-chart>span { padding:.45em .7em; background:#031321b8; }
+.chart-route { display:none; }
+.command-target-control,.command-preview-card,.command-receipt,
+.v3-command-panel .command-preview-card,
+.v3-command-panel .command-options>button,
+.v3-command-panel .command-options>button[aria-pressed=true] {
+  border:0; border-radius:.35cqw; background:#061c2eb8!important; box-shadow:none;
+}
+.v3-command-panel .command-options>button[aria-pressed=true] {
+  background:#17394bd9!important; filter:brightness(1.08);
+}
+.command-step-rail i {
+  border:0; border-radius:0;
+  background:transparent url('../../assets/ui/ring.png') center/100% 100% no-repeat;
+}
+.command-step-rail span.is-active i,.command-step-rail span.is-complete i {
+  color:#ffe4a4; background:transparent url('../../assets/ui/ring.png') center/100% 100% no-repeat; box-shadow:none;
+}
+.command-step-rail b { background:url('../../assets/ui/button-rail.png') center top/100% 190% no-repeat; height:3px; }
+.command-option-art { box-shadow:none!important; }
+.command-receipt-avatar { border:0; box-shadow:none; background:url('../../assets/ui/ring.png') center/cover no-repeat; }
+.v3-command-panel .command-submit>span { background:transparent; }
+.grade-seal { border:0; border-radius:0; background:transparent url('../../assets/ui/ring.png') center/100% 100% no-repeat; box-shadow:none; }
+.archive-card-state { border:0; background:url('../../assets/ui/ring.png') center/100% 100% no-repeat; }
+
+/* Story effects use the authored four-frame sheets rather than ellipses,
+ * skewed blocks or a CSS scan line. Existing story cues still own timing. */
+.story-fx-layer i { border:0; box-shadow:none; border-radius:0; filter:none; transform:none; }
+.story-fx-page,.story-fx-water,.story-fx-impact,.story-fx-scan {
+  left:10%; top:8%; right:auto; bottom:auto; width:38%; height:68%;
+  background-position:0 0; background-size:200% 200%; background-repeat:no-repeat;
+}
+.story-fx-page { background-image:url('../../assets/fx/paper-decoy-atlas.png'); }
+.story-fx-water { background-image:url('../../assets/fx/water-dash-atlas.png'); }
+.story-fx-impact { background-image:url('../../assets/fx/axe-impact-atlas.png'); }
+.story-fx-scan { background-image:url('../../assets/fx/scan-grid-atlas.png'); }
+.story-stage[data-fx~=page] .story-fx-page,.story-stage[data-fx~=decoy] .story-fx-page,
+.story-stage[data-fx~=water] .story-fx-water,.story-stage[data-fx~=impact] .story-fx-impact,
+.story-stage[data-fx~=scan] .story-fx-scan {
+  animation:story-art-frames .85s steps(1,end) both;
+}
+.story-fx-beacon,.story-fx-alert,.story-fx-record { display:none; }
+@keyframes story-art-frames {
+  0% { opacity:0; background-position:0 0; }
+  12% { opacity:.8; background-position:0 0; }
+  32% { opacity:.8; background-position:100% 0; }
+  55% { opacity:.7; background-position:0 100%; }
+  78% { opacity:.5; background-position:100% 100%; }
+  100% { opacity:0; background-position:100% 100%; }
+}
+@media (max-width:800px),(max-height:480px) {
+  .v3-panel,.menu-panel { border-width:10px; border-image-width:10px; }
+  .mission-hud { border-width:3px; border-image-width:3px; }
+  .v3-title-brand .title-secondary .game-button { min-height:50px; }
+  .room-node { padding-left:78px; min-height:66px; }
+  .room-node::before { width:67px; }
+  .analysis-clue { gap:9px; padding:10px; }
+  .analysis-clue>.clue-art { flex-basis:30px; width:30px; height:30px; }
+  .title-secondary .action-label,.pause-grid .action-label,
+  .v3-results .v3-panel-footer .action-label,.v3-campaign .v3-panel-footer .action-label { font-size:10px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .story-stage .story-fx-layer { display:none; }
+}

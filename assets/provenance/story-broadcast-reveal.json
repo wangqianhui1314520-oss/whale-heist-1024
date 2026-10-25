@@ -1,0 +1,22 @@
+{
+  "stem": "story-broadcast-reveal",
+  "raw": "C:/Users/Administrator/.codex/generated_images/01a16df1-3611-77a0-8abc-3d4da96f36ed/exec-9d849181-eb92-4bd5-a637-e8d87a5fe92c.png",
+  "workspace": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\story\\broadcast-reveal.png",
+  "dimensions": [
+    1672,
+    941
+  ],
+  "alpha": {
+    "channel": false,
+    "opaque": true
+  },
+  "tool": "image_gen",
+  "date": "2026-10-25",
+  "mode": "built-in",
+  "prompts": [
+    "D:/Vibe coding/1024切磋大会/游戏-鲸鱼魔盗团/assets/prompts/story-broadcast-reveal.txt"
+  ],
+  "usage": "story keyframe",
+  "sha256": "dde33367c510c6e778a4bdf28b7ec6292181a2fb9febf50aa38c216df1ceac5b",
+  "bytes": 2646821
+}

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#061725">
+  <title>全部剧情放映 · 鲸鱼魔盗团</title>
+  <link rel="icon" href="assets/ui/whale-emblem.png">
+  <link rel="stylesheet" href="src/ui/story-theater.css">
+</head>
+<body>
+  <header class="masthead"><a class="brand" href="./"><img src="assets/ui/whale-emblem.png" alt="">鲸鱼魔盗团</a><span>STORY THEATER</span><a href="./">返回游戏 ↗</a></header>
+  <main>
+    <section class="intro"><div><p class="eyebrow">从深海广播，到全员返航</p><h1>全部剧情，直接放映。</h1><p id="summary">正在展开全部剧情…</p></div><div class="intro-links"><a class="quiet-button" href="#art-gallery">查看三种风格图片 ↓</a><a class="quiet-button" href="#screenplay">阅读全部台词 ↓</a></div></section>
+    <div class="style-selector" role="group" aria-label="剧情演出风格"><button type="button" data-style="cinematic" aria-pressed="true">电影卡片</button><button type="button" data-style="stage" aria-pressed="false">实景小剧场</button><button type="button" data-style="comic" aria-pressed="false">分镜动态漫画</button><p id="style-description">电影关键帧 · 镜头平移与特写</p></div>
+    <section class="theater" aria-label="全部剧情播放器">
+      <div class="screen style-cinematic" id="screen">
+        <div class="scene-meta"><span id="scene-heading"></span><span id="line-count"></span></div>
+        <div class="scene-visual">
+        <div class="scene-art" id="scene-art"></div><div class="screen-shade"></div>
+        <canvas id="stage-canvas" class="stage-canvas" width="1280" height="720" aria-label="正式角色与技能演出" hidden></canvas>
+        <div class="stage-fallback" id="stage-fallback" hidden></div>
+        <img class="actor" id="actor" alt="">
+        </div>
+        <div class="subtitle"><span id="speaker"></span><p id="dialogue" aria-live="polite"></p><div class="choice-preview" id="choice-preview"></div></div>
+        <div class="progress"><i id="progress"></i></div>
+      </div>
+      <div class="transport"><button id="previous" type="button">← 上一句</button><button class="primary" id="play" type="button">暂停连播</button><button id="next" type="button">下一句 →</button><label class="branch-label" for="branch-select">剧情分支</label><select id="branch-select" aria-label="剧情分支"></select><span id="play-status"></span><button id="restart" type="button">从头播放</button></div>
+      <div id="comic-strip" class="comic-strip" hidden><div><span>本段完整三格分镜</span><span id="comic-phase"></span></div><img id="comic-strip-image" alt="当前剧情完整三格分镜"></div>
+    </section>
+    <nav id="scene-nav" class="scene-nav" aria-label="全部剧情章节"></nav>
+    <section id="art-gallery" class="art-gallery"><div class="section-title"><div><p class="eyebrow">THREE VISUAL DIRECTIONS</p><h2>七组镜头，三种演出</h2></div><p>点击图片查看原画，也可直接播放对应剧情。</p></div><div id="gallery-list"></div></section>
+    <section id="screenplay" class="screenplay"><div class="section-title"><div><p class="eyebrow">COMPLETE SCREENPLAY</p><h2>完整台词与剧情分支</h2></div><p>所有段落已展开，可直接阅读或点播。</p></div><div id="script-list"></div></section>
+    <footer>剧情与游戏共用同一份脚本。分支预览展示不同条件；行动回执与结算数值读取当前存档。本页只读，不改动航程。</footer>
+  </main>
+  <dialog id="art-preview" class="art-preview"><div class="preview-heading"><h2 id="preview-title"></h2><button id="preview-close" type="button" aria-label="关闭原画">关闭 ×</button></div><img id="preview-image" alt=""><div class="preview-actions"><button id="preview-play" class="primary" type="button">播放这段剧情 →</button><p id="preview-description"></p></div></dialog>
+  <script type="module" src="src/ui/story-theater.mjs"></script>
+</body>
+</html>

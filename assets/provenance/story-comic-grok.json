@@ -1,0 +1,25 @@
+{
+  "stem": "story-comic-grok",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "date": "2026-10-25",
+  "raw_output_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a16df1-3611-77a0-8abc-3d4da96f36ed\\exec-40a3fe08-92bf-4194-8560-5129b8791647.png",
+  "prompts": [
+    "assets/prompts/story-comic-grok.txt"
+  ],
+  "references": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\deepseek-portrait.png",
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\grok-portrait.png",
+    "D:\\Vibe coding\\1024切磆大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\claude-portrait.png",
+    "D:\\Vibe coding\\1024切磆大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\glm-portrait.png"
+  ],
+  "reference_role": "character identity references",
+  "style": "comic",
+  "beat": "grok",
+  "post_processing": "None; byte-identical copy of original generated PNG.",
+  "sha256": "cdc4eecdd1bb5eebebd626a19941128edc64c2e29b8845a8138c5a1926e52397",
+  "dimensions": [
+    1672,
+    940
+  ]
+}

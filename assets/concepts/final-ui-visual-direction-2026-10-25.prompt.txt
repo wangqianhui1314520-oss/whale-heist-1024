@@ -1,0 +1,5 @@
+Use case: ui-mockup
+Asset type: high-fidelity game UI concept screenshot, 16:9 landscape
+Primary request: final visual direction for Whale Heist, combining a deep-sea poster main menu with a compact target-centered command card.
+Text: 鲸鱼魔盗团; 继续行动; 航图; 档案; 设置; 目标; 整片开路; 只开此处; 执行.
+Constraints: icon-first UI, one CTA, two short option cards, no dense copy, no browser chrome.

@@ -1,0 +1,173 @@
+{
+  "asset": "claude-actions",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "date": "2026-10-24",
+  "refs": [
+    "D:/Vibe coding/1024切磋大会/游戏-鲸鱼魔盗团/assets/concepts/gameplay-sideview-visual-target.png",
+    "D:/Vibe coding/1024切磋大会/游戏-鲸鱼魔盗团/assets/references/ai-personas-reference.jpg"
+  ],
+  "raw_output_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a169bf-2fdf-7903-ada2-0b9f1e422eb1\\exec-b198c65c-3bae-4340-ac70-e7621d63c106.png",
+  "workspace_output_path": "D:/Vibe coding/1024切磋大会/游戏-鲸鱼魔盗团/assets/atlases/claude-actions.png",
+  "prompt_path": "D:/Vibe coding/1024切磋大会/游戏-鲸鱼魔盗团/assets/prompts/claude-actions.txt",
+  "width": 793,
+  "height": 1983,
+  "mode_rgba": "RGBA",
+  "alpha": true,
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "grid": {
+    "columns": 2,
+    "rows": 5,
+    "frame_width": 396.5,
+    "frame_height": 396.6,
+    "frames": [
+      {
+        "id": "idle_left",
+        "x": 0,
+        "y": 0,
+        "width": 396.5,
+        "height": 396.6
+      },
+      {
+        "id": "idle_right",
+        "x": 396.5,
+        "y": 0,
+        "width": 396.5,
+        "height": 396.6
+      },
+      {
+        "id": "walk_left",
+        "x": 0,
+        "y": 396.6,
+        "width": 396.5,
+        "height": 396.6
+      },
+      {
+        "id": "walk_right",
+        "x": 396.5,
+        "y": 396.6,
+        "width": 396.5,
+        "height": 396.6
+      },
+      {
+        "id": "jump_left",
+        "x": 0,
+        "y": 793.2,
+        "width": 396.5,
+        "height": 396.6
+      },
+      {
+        "id": "jump_right",
+        "x": 396.5,
+        "y": 793.2,
+        "width": 396.5,
+        "height": 396.6
+      },
+      {
+        "id": "fall_left",
+        "x": 0,
+        "y": 1189.8000000000002,
+        "width": 396.5,
+        "height": 396.6
+      },
+      {
+        "id": "fall_right",
+        "x": 396.5,
+        "y": 1189.8000000000002,
+        "width": 396.5,
+        "height": 396.6
+      },
+      {
+        "id": "skill_left",
+        "x": 0,
+        "y": 1586.4,
+        "width": 396.5,
+        "height": 396.6
+      },
+      {
+        "id": "skill_right",
+        "x": 396.5,
+        "y": 1586.4,
+        "width": 396.5,
+        "height": 396.6
+      }
+    ],
+    "note": "The model approximated the requested equal grid. Use recommended_source_rects to encompass each full sprite; cuts fall within the transparent gaps measured by read-only alpha inspection. Native image not altered."
+  },
+  "review": "Visually checked all ten poses: correct character, directional columns, no missing limb or visible canvas clipping. Original image preserved at native dimensions.",
+  "recommended_source_rects": [
+    {
+      "id": "idle_left",
+      "x": 0,
+      "y": 0,
+      "width": 396.5,
+      "height": 410
+    },
+    {
+      "id": "idle_right",
+      "x": 396.5,
+      "y": 0,
+      "width": 396.5,
+      "height": 410
+    },
+    {
+      "id": "walk_left",
+      "x": 0,
+      "y": 410,
+      "width": 396.5,
+      "height": 364
+    },
+    {
+      "id": "walk_right",
+      "x": 396.5,
+      "y": 410,
+      "width": 396.5,
+      "height": 364
+    },
+    {
+      "id": "jump_left",
+      "x": 0,
+      "y": 774,
+      "width": 396.5,
+      "height": 396
+    },
+    {
+      "id": "jump_right",
+      "x": 396.5,
+      "y": 774,
+      "width": 396.5,
+      "height": 396
+    },
+    {
+      "id": "fall_left",
+      "x": 0,
+      "y": 1170,
+      "width": 396.5,
+      "height": 405
+    },
+    {
+      "id": "fall_right",
+      "x": 396.5,
+      "y": 1170,
+      "width": 396.5,
+      "height": 405
+    },
+    {
+      "id": "skill_left",
+      "x": 0,
+      "y": 1575,
+      "width": 396.5,
+      "height": 408
+    },
+    {
+      "id": "skill_right",
+      "x": 396.5,
+      "y": 1575,
+      "width": 396.5,
+      "height": 408
+    }
+  ]
+}

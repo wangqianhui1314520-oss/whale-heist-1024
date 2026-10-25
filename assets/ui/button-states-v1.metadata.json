@@ -1,0 +1,13 @@
+{
+  "width": 1774,
+  "height": 887,
+  "alpha": {
+    "has_channel": true,
+    "extrema": [
+      0,
+      255
+    ],
+    "fully_transparent_pixels": 818265,
+    "total_pixels": 1573538
+  }
+}

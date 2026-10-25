@@ -1,0 +1,5 @@
+Use case: stylized-concept
+Asset type: reusable transparent foreground game asset
+Primary request: A large cute whale-shaped brass-and-navy submarine airship moored at a deep-sea fantasy city dock, with a small crew of four original chibi fantasy AI characters standing on the upper deck. The boat dominates the right half of a 16:9 game menu composition, three-quarter view facing left. Blue-haired captain points forward, white-haired analyst holds a glowing tablet, red-haired engineer carries a tool bag, dark-haired scout uses a spyglass.
+Style/medium: premium anime game key art, polished cel-shaded illustration with crisp inked edges and painterly highlights.
+Constraints: transparent background, no text, no logo, no watermark, no recognizable franchise characters.

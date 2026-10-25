@@ -1,0 +1,11 @@
+Use case: stylized-concept. Create a REPAIRED production sprite atlas using input 1 only as material/style reference. Output real alpha-transparent PNG. Remove all backdrops, gradients, colored haze, environmental shadows and any mockup presentation. All unused pixels including the center of the broken barrier must be alpha 0. Crisp opaque objects only.
+Canvas must be 1536 x 1024, exactly SIX EQUAL cells: 3 columns x 2 rows, each cell 512 x 512. Each complete object must be wholly inside a safe 380 x 380 square centered in its cell. This strict equal layout matters more than decorative detail. No part may enter adjacent cell. No labels or grid lines.
+Cell centers are (256,256), (768,256), (1280,256), (256,768), (768,768), (1280,768).
+Top row all platforms have same width 380 maximum, same thin ivory horizontal top line at y=200, dark navy blue stone and aged brass below, orthographic SIDE ELEVATION.
+Top left: platform middle segment, flat matching left and right joining sides.
+Top middle: left cap segment, finished round left edge and flat right joining edge.
+Top right: right cap segment, flat left joining edge and finished round right edge.
+Bottom left: thin 380px-wide floating ivory platform with navy support lip, whole sprite centered inside own cell.
+Bottom middle: full intact freestanding tall parchment barrier in brass/navy frame, 300px wide and 380px high, no marks or writing.
+Bottom right: matching same-size frame but paper smashed with a huge empty alpha-transparent opening and ragged parchment remnants held at edges.
+Reference style: sophisticated hand painted anime platform game, navy blue underwater server temple, warm ivory stone, brass corner metal, clean dark outlines. No perspective depth on walkable tops. No scene, floor, characters, text, checkerboard, or additional objects. Transparent background is required.

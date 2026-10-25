@@ -1,0 +1,38 @@
+{
+  "id": "paper-decoy",
+  "tool": "image_gen",
+  "generated_at": "2026-10-24",
+  "raw_output_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a1694f-22b1-72b2-8554-9022bc3cb031\\exec-7c06ccb9-32b9-428a-98aa-78d18067fb99.png",
+  "output_path": "assets/fx/paper-decoy-atlas.png",
+  "prompt_path": "assets/prompts/paper-decoy.txt",
+  "reference_paths": [
+    "assets/concepts/gameplay-sideview-visual-target.png"
+  ],
+  "grid": {
+    "columns": 2,
+    "rows": 2,
+    "order": [
+      "01",
+      "02",
+      "03",
+      "04"
+    ]
+  },
+  "status": "verified",
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "alpha": {
+    "has_channel": true,
+    "extrema": [
+      0,
+      254
+    ],
+    "fully_transparent_pixels": 669555,
+    "total_pixels": 1572516
+  },
+  "sha256": "1469d0d3518462bc174f8ba4555bd6867824f6fdc067f098b2c163bb1a119664",
+  "review": "已目视核对各物件或四个特效阶段的顺序、轮廓与透明边缘；PNG与原始输出字节一致。",
+  "post_processing": "无栅格修改；Pillow仅只读检查。"
+}

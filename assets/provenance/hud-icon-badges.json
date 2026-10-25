@@ -1,0 +1,36 @@
+{
+  "asset": "ui-hud-icon-badges",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "generatedDate": "2026-10-25",
+  "promptPath": "assets/prompts/hud-icon-badges.txt",
+  "rawPath": "C:/Users/Administrator/.codex/generated_images/01a1694f-22b1-72b2-8554-9022bc3cb031/exec-948519ab-8815-4b45-b30f-06404ede1806.png",
+  "targetPath": "assets/ui/hud-icon-badges.png",
+  "dimensions": {
+    "width": 2172,
+    "height": 724
+  },
+  "imageMode": "RGBA",
+  "transparency": {
+    "hasAlpha": true,
+    "alphaExtrema": [
+      0,
+      255
+    ]
+  },
+  "layout": {
+    "columns": 6,
+    "rows": 1,
+    "framePolicy": "CSS background-position, six equal visual regions"
+  },
+  "sha256": "b6e7c7491e5321fa47c8ee5cfe986360a7b71bb3ce437cdbeaf74bb6c26f2081",
+  "postProcessing": "Copied generated PNG; no raster editing or resizing. Used as CSS sprite sheet for compact HTML HUD badges.",
+  "visualQA": {
+    "inspected": true,
+    "observations": [
+      "Six distinct no-text icons read clearly on transparent background.",
+      "Cyan and brass contrast matches game UI."
+    ],
+    "criticalIssues": false
+  }
+}

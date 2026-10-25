@@ -1,0 +1,22 @@
+{
+  "stem": "story-grok-paper-window",
+  "raw": "C:/Users/Administrator/.codex/generated_images/01a16df1-3611-77a0-8abc-3d4da96f36ed/exec-fe0ea43f-019d-4b2a-b898-7fd865a2dd50.png",
+  "workspace": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\story\\grok-paper-window.png",
+  "dimensions": [
+    1672,
+    941
+  ],
+  "alpha": {
+    "channel": false,
+    "opaque": true
+  },
+  "tool": "image_gen",
+  "date": "2026-10-25",
+  "mode": "built-in",
+  "prompts": [
+    "D:/Vibe coding/1024切磋大会/游戏-鲸鱼魔盗团/assets/prompts/story-grok-paper-window.txt"
+  ],
+  "usage": "story keyframe",
+  "sha256": "385b56813cbdfa1a791617fd3777d6c9b6a1eccea5ea0ffd5ea2dee8bb1784f7",
+  "bytes": 2647457
+}

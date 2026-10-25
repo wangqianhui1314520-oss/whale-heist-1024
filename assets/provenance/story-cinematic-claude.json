@@ -1,0 +1,20 @@
+{
+  "stem": "story-cinematic-claude",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "date": "2026-10-25",
+  "raw_output_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a16df1-3611-77a0-8abc-3d4da96f36ed\\exec-9247295e-d131-4947-85b8-1945c5adcee3.png",
+  "prompts": [
+    "assets/prompts/story-cinematic-claude.txt"
+  ],
+  "references": [],
+  "reference_role": "character identity references",
+  "style": "cinematic",
+  "beat": "claude",
+  "post_processing": "None; byte-identical copy of original generated PNG.",
+  "sha256": "a043caa6610b92ad5b7a336d0a2dc9dc32fdc2f61dc49c38d1414fd0dc350c94",
+  "dimensions": [
+    1672,
+    940
+  ]
+}

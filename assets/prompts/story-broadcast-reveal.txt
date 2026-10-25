@@ -1,0 +1,4 @@
+Use case: illustration-story.
+Asset type: 16:9 in-game story animation keyframe.
+Primary request: A blue-haired captain and a small AI crew inside an underwater archive control room, a public broadcast screen glowing with recorded mission receipts and warning lights, a cinematic reveal that their operation is visible to the outside world, hand-painted anime fantasy game art, characters and console on the right with negative space on the left for dialogue.
+Constraints: no readable text, logos, watermark, UI, photorealism, or guns.

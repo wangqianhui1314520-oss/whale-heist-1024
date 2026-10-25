@@ -1,0 +1,22 @@
+{
+  "stem": "story-evacuation-beacon",
+  "raw": "C:/Users/Administrator/.codex/generated_images/01a16df1-3611-77a0-8abc-3d4da96f36ed/exec-a3c4a65b-f8f2-4252-9c64-89ab11e84d58.png",
+  "workspace": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\story\\evacuation-beacon.png",
+  "dimensions": [
+    1672,
+    941
+  ],
+  "alpha": {
+    "channel": false,
+    "opaque": true
+  },
+  "tool": "image_gen",
+  "date": "2026-10-25",
+  "mode": "built-in",
+  "prompts": [
+    "D:/Vibe coding/1024切磋大会/游戏-鲸鱼魔盗团/assets/prompts/story-evacuation-beacon.txt"
+  ],
+  "usage": "story keyframe",
+  "sha256": "97eb69a7d04b81f3265d6306b51cb433da96a1b31368a3c516134b7bd389ddcd",
+  "bytes": 2707282
+}

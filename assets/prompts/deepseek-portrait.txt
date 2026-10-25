@@ -1,0 +1,6 @@
+Use case: stylized-concept
+Asset type: transparent game HUD portrait, one front-facing chibi bust, square 1024x1024.
+Input images: Image 1 is the final approved game style. Image 2 is the exact DeepSeek character sprite atlas whose face, hair, clothing and proportions must match.
+Primary request: ONE centered front-facing head-and-shoulders bust portrait of DeepSeek, the blue-haired whale maid protagonist. Fully visible head including curled hair antenna, white ruffled maid headband, cyan bow, long wavy navy-blue hair with cyan ends, enormous blue eyes, small mouth, navy maid dress and white lace collar, gold-blue oval brooch. Cheerful determined expression, looking at player. About 2.3-head chibi proportions. Keep the character's face and costume identical to the atlas.
+Composition: head occupies about 65 percent of canvas height; bust ends naturally at lower chest with clean soft curved silhouette; 12 percent transparent space above hair, at sides and under bust. No hard rectangle crop through hair. Whole portrait fits canvas. Crisp detailed outlined hand-painted anime style with navy, cyan and white highlights, matching the approved screenshot.
+Actual alpha transparent background. No circle, frame, badge, border, UI, text, logos, watercolor backdrop, shadows, props or duplicate characters.

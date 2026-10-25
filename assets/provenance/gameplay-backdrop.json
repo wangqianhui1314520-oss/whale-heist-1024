@@ -1,0 +1,25 @@
+{
+  "stem": "gameplay-backdrop",
+  "raw": "C:\\Users\\Administrator\\.codex\\generated_images\\01a169bf-b470-7f53-a490-15da1151f145\\exec-b163a4eb-ebed-458c-98d2-98e4c4b9835a.png",
+  "workspace": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\backgrounds\\gameplay-backdrop.png",
+  "dimensions": [
+    1672,
+    941
+  ],
+  "alpha": {
+    "channel": false,
+    "opaque": true
+  },
+  "grid": null,
+  "qa": "Visually verified wide side-elevation stage backdrop without characters, UI, foreground platforms, doors, ladder, boat or interactive props. Dark navy pillar bases are background architecture; overlay independent collision geometry and brighter ivory platform assets. No postprocessing; raw output copied byte for byte.",
+  "tool": "image_gen",
+  "date": "2026-10-24",
+  "mode": "built-in",
+  "refs": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\concepts\\gameplay-sideview-visual-target.png"
+  ],
+  "reference_role": "style reference",
+  "prompts": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\prompts\\gameplay-backdrop.txt"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "tool": "image_gen",
+  "mode": "built-in",
+  "date": "2026-10-25",
+  "raw_output_path": "C:/Users/Administrator/.codex/generated_images/01a17084-fe91-7f83-bd6d-d338c4309fa9/exec-3da7342c-d678-48a7-ab7c-e2ff5a76d9ad.png",
+  "prompts": [
+    "assets/prompts/button-states-v1.txt"
+  ],
+  "dimensions": [
+    1774,
+    887
+  ],
+  "sha256": "87f27711da29a3c9509cb4a84acc81efa443f376ac47cf4bc288a88696d780e0",
+  "regions": {
+    "normal": [
+      26,
+      118,
+      837,
+      242
+    ],
+    "focus": [
+      912,
+      118,
+      837,
+      242
+    ],
+    "pressed": [
+      26,
+      529,
+      837,
+      242
+    ],
+    "disabled": [
+      912,
+      529,
+      837,
+      242
+    ]
+  },
+  "post_processing": "Unmodified generated PNG; CSS samples four measured state rectangles.",
+  "visual_qa": {
+    "inspected": true,
+    "states": [
+      "cyan",
+      "gold",
+      "pressed",
+      "disabled"
+    ]
+  }
+}

@@ -1,0 +1,4522 @@
+{
+  "schema_version": "1.0.0",
+  "project": "鲸鱼魔盗团",
+  "date": "2026-10-25",
+  "perspective": "fixed_camera_sideview_platformer",
+  "logical_viewport": [
+    1280,
+    720
+  ],
+  "images": {
+    "deepseek-actions": {
+      "file": "atlases/deepseek-actions.png",
+      "width": 793,
+      "height": 1983,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 815535,
+        "total_pixels": 1572519
+      },
+      "bytes": 1959690,
+      "sha256": "d5fff2d9187829b1d9e70029224bb440ed5686bbc9698cb31e53c90ddf1ee5e0",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/deepseek-actions.json"
+    },
+    "deepseek-portrait": {
+      "file": "portraits/deepseek-portrait.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 753916,
+        "total_pixels": 1572516
+      },
+      "bytes": 1668503,
+      "sha256": "b00f1915d4c941c9866c1a9e923a9ecaae6ddc2df6420f7ed575f95038a30e9b",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/deepseek-portrait.json"
+    },
+    "grok-actions": {
+      "file": "atlases/grok-actions.png",
+      "width": 793,
+      "height": 1983,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 860521,
+        "total_pixels": 1572519
+      },
+      "bytes": 1938894,
+      "sha256": "ace1b13f984f49f7e92b2f5bf91c63ca99385d2a7c308a69a408ca5dcfdd610d",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/grok-actions.json"
+    },
+    "grok-portrait": {
+      "file": "portraits/grok-portrait.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 616394,
+        "total_pixels": 1572516
+      },
+      "bytes": 2021068,
+      "sha256": "ba7f0d67ca1604859d68d18ee4726b94e9d794057801e2685a15bbecbacf1057",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/grok-portrait.json"
+    },
+    "claude-actions": {
+      "file": "atlases/claude-actions.png",
+      "width": 793,
+      "height": 1983,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 860821,
+        "total_pixels": 1572519
+      },
+      "bytes": 1992239,
+      "sha256": "dc31fadb82b56c4664242d9cf1e392744b3df9277ebc3e73fcc199306499b74d",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/claude-actions.json"
+    },
+    "claude-portrait": {
+      "file": "portraits/claude-portrait.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 568806,
+        "total_pixels": 1572516
+      },
+      "bytes": 2002326,
+      "sha256": "b8f2daff2570b55585c31a8530241d189ab12f6a704c44b045a13a14ae2e4b95",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/claude-portrait.json"
+    },
+    "glm-actions": {
+      "file": "atlases/glm-actions.png",
+      "width": 793,
+      "height": 1983,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 829471,
+        "total_pixels": 1572519
+      },
+      "bytes": 1975179,
+      "sha256": "a89612e27b61e86134daa17d933faf297b4d04ac0ad115a8ef42af71c3d7b339",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/glm-actions.json"
+    },
+    "glm-portrait": {
+      "file": "portraits/glm-portrait.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 523390,
+        "total_pixels": 1572516
+      },
+      "bytes": 2113413,
+      "sha256": "9391b934bb680f8ef9a6bb894114f0bf55816da0ad144eec5c5990cc1d0ecc34",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/glm-portrait.json"
+    },
+    "guard": {
+      "file": "enemies/guard.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 1143205,
+        "total_pixels": 1572516
+      },
+      "bytes": 883611,
+      "sha256": "a09c9525f6a1f841ffc5c37c4733b7fd9cdf77f0554ffc4b3deb9d91092dcb72",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/guard.json"
+    },
+    "investigator": {
+      "file": "enemies/investigator.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 1112254,
+        "total_pixels": 1572516
+      },
+      "bytes": 1078144,
+      "sha256": "5c49166449b237564ac6f878a60a7de34f1900ebfcf9f9b22e1a5b3ca53ebf0f",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/investigator.json"
+    },
+    "props-kit": {
+      "file": "atlases/props-kit.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          254
+        ],
+        "fully_transparent_pixels": 894875,
+        "total_pixels": 1572864
+      },
+      "bytes": 1976871,
+      "sha256": "6bf7453ea03b583cbee8cde62577d04d8b7765ffe606f14e4e350728207896d0",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/props-kit.json"
+    },
+    "masonry-kit": {
+      "file": "atlases/masonry-kit.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          254
+        ],
+        "fully_transparent_pixels": 967549,
+        "total_pixels": 1572864
+      },
+      "bytes": 1943231,
+      "sha256": "3731f65d4e7496618d0b906e209fac328f606c95d52a0bcbb1f467fb0abe5781",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/masonry-kit.json"
+    },
+    "mechanisms-kit": {
+      "file": "atlases/mechanisms-kit.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          254
+        ],
+        "fully_transparent_pixels": 981945,
+        "total_pixels": 1572864
+      },
+      "bytes": 1889927,
+      "sha256": "73fb9ed600ee672556b4ade829f76730ae7665b09abb620f24e2d1c406a17bd6",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/mechanisms-kit.json"
+    },
+    "harbor-kit": {
+      "file": "atlases/harbor-kit.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          254
+        ],
+        "fully_transparent_pixels": 930023,
+        "total_pixels": 1572864
+      },
+      "bytes": 1966441,
+      "sha256": "f353cb86c6318ca06358f4e61a5edea5561075c9ebbda3507b7a30dd64e0b3ca",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/harbor-kit.json"
+    },
+    "water-dash-atlas": {
+      "file": "fx/water-dash-atlas.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          254
+        ],
+        "fully_transparent_pixels": 974946,
+        "total_pixels": 1572516
+      },
+      "bytes": 1123462,
+      "sha256": "708970a837991d13b9135e5d52a09a59876b5ed0d2f7f6fa4744d021e54ef0a7",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/water-dash.json"
+    },
+    "axe-impact-atlas": {
+      "file": "fx/axe-impact-atlas.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 1010158,
+        "total_pixels": 1572516
+      },
+      "bytes": 1240462,
+      "sha256": "95d1705f248a409b7bed77920cb46e1319f94887dd3fd11658e72b968ad4189b",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/axe-impact.json"
+    },
+    "paper-decoy-atlas": {
+      "file": "fx/paper-decoy-atlas.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          254
+        ],
+        "fully_transparent_pixels": 669555,
+        "total_pixels": 1572516
+      },
+      "bytes": 1416259,
+      "sha256": "1469d0d3518462bc174f8ba4555bd6867824f6fdc067f098b2c163bb1a119664",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/paper-decoy.json"
+    },
+    "scan-grid-atlas": {
+      "file": "fx/scan-grid-atlas.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          252
+        ],
+        "fully_transparent_pixels": 975141,
+        "total_pixels": 1572516
+      },
+      "bytes": 944665,
+      "sha256": "3a575529fc821fe5e87b319b9e42d4d3ee1fb9780ebdcf99f7b8afebda4fb3be",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/scan-grid.json"
+    },
+    "gameplay-backdrop": {
+      "file": "backgrounds/gameplay-backdrop.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352
+      },
+      "bytes": 2363841,
+      "sha256": "736169bed6df4ef8051344d4f54491282669bcda50deee80faab3bb73df139f3",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/gameplay-backdrop.json"
+    },
+    "menu-background": {
+      "file": "backgrounds/menu-background.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352
+      },
+      "bytes": 2495424,
+      "sha256": "2d1f2040151342c9ed8e058c576d2ccca05d2f942cc9802d56ea9799223386b9",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/menu-background.json"
+    },
+    "results-background": {
+      "file": "backgrounds/results-background.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352
+      },
+      "bytes": 2321075,
+      "sha256": "94c8a21dabac5fec43e137dc2b498312c345e397f9285f04ad90390043c5a9c3",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/results-background.json"
+    },
+    "chrome-kit": {
+      "file": "ui/chrome-kit.png",
+      "width": 1024,
+      "height": 1536,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          254
+        ],
+        "fully_transparent_pixels": 980495,
+        "total_pixels": 1572864
+      },
+      "bytes": 1537461,
+      "sha256": "9b5863ed2f99093cc42af50bcf96da2393b26e113c5abfd9d8c2e7102d099a64",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/chrome-kit.json"
+    },
+    "whale-emblem": {
+      "file": "ui/whale-emblem.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 958855,
+        "total_pixels": 1572516
+      },
+      "bytes": 982227,
+      "sha256": "884c5bce86632f41896f00a3c3bf85f183acf7a331aa358fb56e0713f3abe177",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/whale-emblem.json"
+    },
+    "story-prologue-paper-window": {
+      "file": "story/prologue-paper-window.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352
+      },
+      "bytes": 2384442,
+      "sha256": "bb972b6b61de8a2337cf879fc162b92cda5a59de85e9b9a4ba27362a6ae7840f",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-prologue-paper-window.json"
+    },
+    "story-grok-paper-window": {
+      "file": "story/grok-paper-window.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352
+      },
+      "bytes": 2647457,
+      "sha256": "385b56813cbdfa1a791617fd3777d6c9b6a1eccea5ea0ffd5ea2dee8bb1784f7",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-grok-paper-window.json"
+    },
+    "story-broadcast-reveal": {
+      "file": "story/broadcast-reveal.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352
+      },
+      "bytes": 2646821,
+      "sha256": "dde33367c510c6e778a4bdf28b7ec6292181a2fb9febf50aa38c216df1ceac5b",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-broadcast-reveal.json"
+    },
+    "story-evacuation-beacon": {
+      "file": "story/evacuation-beacon.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352
+      },
+      "bytes": 2707282,
+      "sha256": "97eb69a7d04b81f3265d6306b51cb433da96a1b31368a3c516134b7bd389ddcd",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-evacuation-beacon.json"
+    },
+    "story-investigation-epilogue": {
+      "file": "story/investigation-epilogue.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352
+      },
+      "bytes": 2388702,
+      "sha256": "937746a5713bd12df8d8b0a0a7cf5de1f17c8ecf10b5331eb242478a8fcb8ee4",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-investigation-epilogue.json"
+    },
+    "story-cinematic-opening": {
+      "file": "story/cinematic/opening.png",
+      "width": 1672,
+      "height": 940,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1571680,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 3161769,
+      "sha256": "4f74a30bf827cad2eebb66e64f81dfe29e0488c9f1b5bbdb8e0cd11b54a66df9",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-cinematic-opening.json",
+      "story_style": "cinematic",
+      "story_beat": "opening"
+    },
+    "story-cinematic-grok": {
+      "file": "story/cinematic/grok.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 3186245,
+      "sha256": "dcbf1381124b2a62ea6be55b69c74ee977a0cd05acfc3c9bd5c316b37d37286c",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-cinematic-grok.json",
+      "story_style": "cinematic",
+      "story_beat": "grok"
+    },
+    "story-cinematic-claude": {
+      "file": "story/cinematic/claude.png",
+      "width": 1672,
+      "height": 940,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1571680,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 2896122,
+      "sha256": "a043caa6610b92ad5b7a336d0a2dc9dc32fdc2f61dc49c38d1414fd0dc350c94",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-cinematic-claude.json",
+      "story_style": "cinematic",
+      "story_beat": "claude"
+    },
+    "story-cinematic-glm": {
+      "file": "story/cinematic/glm.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 3189877,
+      "sha256": "edfc00631631ba4aa5a1857ef533034f0210601b797f1da5eadb1b80b8aa9d91",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-cinematic-glm.json",
+      "story_style": "cinematic",
+      "story_beat": "glm"
+    },
+    "story-cinematic-broadcast": {
+      "file": "story/cinematic/broadcast.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 3065422,
+      "sha256": "0f90c380747d0e22056a94d105d0ae285d46bfcbcdadf66663bc397fe05378a4",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-cinematic-broadcast.json",
+      "story_style": "cinematic",
+      "story_beat": "broadcast"
+    },
+    "story-cinematic-evacuation": {
+      "file": "story/cinematic/evacuation.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 3057869,
+      "sha256": "ec4f4b6b9d3614583c059c8962602b5dd256534e4f95d24680b8c5221db65134",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-cinematic-evacuation.json",
+      "story_style": "cinematic",
+      "story_beat": "evacuation"
+    },
+    "story-cinematic-epilogue": {
+      "file": "story/cinematic/epilogue.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 2730202,
+      "sha256": "e28d98025488272ac769c1b71c23f6f1a743e84ee264227e54722f198db1a277",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-cinematic-epilogue.json",
+      "story_style": "cinematic",
+      "story_beat": "epilogue"
+    },
+    "story-stage-opening": {
+      "file": "story/stage/opening.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 2479724,
+      "sha256": "457509eac1138d72435671a1486a4338ac00757fb18465db31b642ac029c4e7d",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-stage-opening.json",
+      "story_style": "stage",
+      "story_beat": "opening"
+    },
+    "story-stage-grok": {
+      "file": "story/stage/grok.png",
+      "width": 1671,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1572411,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 2311434,
+      "sha256": "c33009da960af3d9e49577c6812c70fea78e20e42e3ac0894733a2d5e5a230ec",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-stage-grok.json",
+      "story_style": "stage",
+      "story_beat": "grok"
+    },
+    "story-stage-claude": {
+      "file": "story/stage/claude.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 2573383,
+      "sha256": "57c3d5c51729e008a9e568799c42ec4a6238522c8f66700af49a28bcbae229c8",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-stage-claude.json",
+      "story_style": "stage",
+      "story_beat": "claude"
+    },
+    "story-stage-glm": {
+      "file": "story/stage/glm.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 2500799,
+      "sha256": "61b2ce441fd43c9bcf5c0d49f8ba769450ab7f7e3f14b044b1b973fae3f3340f",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-stage-glm.json",
+      "story_style": "stage",
+      "story_beat": "glm"
+    },
+    "story-stage-broadcast": {
+      "file": "story/stage/broadcast.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 2557019,
+      "sha256": "454de15f92ab78e2ee763b5e530395a63b875d3a0797415f7e1e893b03945fc6",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-stage-broadcast.json",
+      "story_style": "stage",
+      "story_beat": "broadcast"
+    },
+    "story-stage-evacuation": {
+      "file": "story/stage/evacuation.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 2305172,
+      "sha256": "42465ffa70246f99badef56d7ed62beacc65674294f5858a16973d90d741d6f9",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-stage-evacuation.json",
+      "story_style": "stage",
+      "story_beat": "evacuation"
+    },
+    "story-stage-epilogue": {
+      "file": "story/stage/epilogue.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 1860420,
+      "sha256": "76077610ab1467ab6222a6f5b10de28d7530d1df57adec05e51dfd9b911a0fc2",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-stage-epilogue.json",
+      "story_style": "stage",
+      "story_beat": "epilogue"
+    },
+    "story-comic-opening": {
+      "file": "story/comic/opening.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 2999239,
+      "sha256": "b17e8e6254a9eab539ffc6f2cfcb709256d8301b7282354a2a4196bd083ed5d1",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-comic-opening.json",
+      "story_style": "comic",
+      "story_beat": "opening"
+    },
+    "story-comic-grok": {
+      "file": "story/comic/grok.png",
+      "width": 1672,
+      "height": 940,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1571680,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 3340715,
+      "sha256": "cdc4eecdd1bb5eebebd626a19941128edc64c2e29b8845a8138c5a1926e52397",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-comic-grok.json",
+      "story_style": "comic",
+      "story_beat": "grok"
+    },
+    "story-comic-claude": {
+      "file": "story/comic/claude.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 2905208,
+      "sha256": "a3d6be61dcc0172c60d0aefb3227ad4a044110d88ecc190914bad1c1419c7b87",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-comic-claude.json",
+      "story_style": "comic",
+      "story_beat": "claude"
+    },
+    "story-comic-glm": {
+      "file": "story/comic/glm.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 3101978,
+      "sha256": "04a248f76a20d1e50fa7f9ede632192fdaeb455b5911aeda543f50ae4f99bbe0",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-comic-glm.json",
+      "story_style": "comic",
+      "story_beat": "glm"
+    },
+    "story-comic-broadcast": {
+      "file": "story/comic/broadcast.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 3076866,
+      "sha256": "4d9c627de5a284954bad278f4811eab38489a454685c4eb14b10a03e71d8dfb0",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-comic-broadcast.json",
+      "story_style": "comic",
+      "story_beat": "broadcast"
+    },
+    "story-comic-evacuation": {
+      "file": "story/comic/evacuation.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 2687881,
+      "sha256": "e0a49c11b14450681595a757416298b80ee7bc00d4ac989e894419746fab45e2",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-comic-evacuation.json",
+      "story_style": "comic",
+      "story_beat": "evacuation"
+    },
+    "story-comic-epilogue": {
+      "file": "story/comic/epilogue.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "transparent": false,
+      "alpha": {
+        "has_channel": false,
+        "extrema": [
+          255,
+          255
+        ],
+        "fully_transparent_pixels": 0,
+        "total_pixels": 1573352,
+        "inspected": "PNG color type has no alpha channel"
+      },
+      "bytes": 2344033,
+      "sha256": "9c339de1adbeab72dcb4633fe574eba1feb0cb7c852b32b54c8a181a4ce19023",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/story-comic-epilogue.json",
+      "story_style": "comic",
+      "story_beat": "epilogue"
+    },
+    "operation-icons-v1": {
+      "file": "ui/operation-icons-v1.png",
+      "width": 1285,
+      "height": 1224,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 838580,
+        "total_pixels": 1572840
+      },
+      "bytes": 1860449,
+      "sha256": "a03190d93e1235c5c15bab27826163edf907438720ab336c7c563c9d4c620290",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/operation-icons-v1.json",
+      "ui_regions": {
+        "left": [
+          39,
+          39,
+          259,
+          235
+        ],
+        "right": [
+          369,
+          39,
+          258,
+          235
+        ],
+        "up": [
+          693,
+          22,
+          235,
+          254
+        ],
+        "down": [
+          1007,
+          22,
+          238,
+          255
+        ],
+        "jump": [
+          10,
+          296,
+          284,
+          294
+        ],
+        "dash": [
+          308,
+          315,
+          362,
+          266
+        ],
+        "interact": [
+          694,
+          295,
+          257,
+          298
+        ],
+        "pause": [
+          1020,
+          322,
+          210,
+          233
+        ],
+        "map": [
+          18,
+          610,
+          317,
+          262
+        ],
+        "settings": [
+          376,
+          597,
+          252,
+          275
+        ],
+        "book": [
+          673,
+          595,
+          259,
+          289
+        ],
+        "play": [
+          1030,
+          615,
+          212,
+          246
+        ],
+        "retry": [
+          45,
+          897,
+          251,
+          272
+        ],
+        "heart": [
+          348,
+          915,
+          286,
+          258
+        ],
+        "clock": [
+          686,
+          876,
+          256,
+          306
+        ],
+        "close": [
+          1005,
+          919,
+          241,
+          240
+        ]
+      }
+    },
+    "button-states-v1": {
+      "file": "ui/button-states-v1.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "transparent": true,
+      "alpha": {
+        "has_channel": true,
+        "extrema": [
+          0,
+          255
+        ],
+        "fully_transparent_pixels": 818265,
+        "total_pixels": 1573538
+      },
+      "bytes": 1212351,
+      "sha256": "87f27711da29a3c9509cb4a84acc81efa443f376ac47cf4bc288a88696d780e0",
+      "raw_output_sha256_verified": true,
+      "provenance": "provenance/button-states-v1.json",
+      "ui_regions": {
+        "normal": [
+          26,
+          118,
+          837,
+          242
+        ],
+        "focus": [
+          912,
+          118,
+          837,
+          242
+        ],
+        "pressed": [
+          26,
+          529,
+          837,
+          242
+        ],
+        "disabled": [
+          912,
+          529,
+          837,
+          242
+        ]
+      }
+    }
+  },
+  "sprites": {
+    "character-deepseek-left-idle": {
+      "image": "deepseek-actions",
+      "source_rect": [
+        0,
+        0,
+        396,
+        397
+      ],
+      "content_rect": [
+        66,
+        33,
+        302,
+        362
+      ],
+      "solid_rect": [
+        68,
+        34,
+        298,
+        359
+      ],
+      "label": "DeepSeek／朝左／待机",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "idle",
+      "direction": "left",
+      "character": "deepseek",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2430939226519337
+    },
+    "character-deepseek-right-idle": {
+      "image": "deepseek-actions",
+      "source_rect": [
+        396,
+        0,
+        397,
+        397
+      ],
+      "content_rect": [
+        433,
+        33,
+        293,
+        362
+      ],
+      "solid_rect": [
+        435,
+        34,
+        290,
+        359
+      ],
+      "label": "DeepSeek／朝右／待机",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "idle",
+      "direction": "right",
+      "character": "deepseek",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2430939226519337
+    },
+    "character-deepseek-left-walk": {
+      "image": "deepseek-actions",
+      "source_rect": [
+        0,
+        397,
+        396,
+        396
+      ],
+      "content_rect": [
+        52,
+        431,
+        323,
+        358
+      ],
+      "solid_rect": [
+        53,
+        432,
+        320,
+        356
+      ],
+      "label": "DeepSeek／朝左／行走关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "walk",
+      "direction": "left",
+      "character": "deepseek",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2430939226519337
+    },
+    "character-deepseek-right-walk": {
+      "image": "deepseek-actions",
+      "source_rect": [
+        396,
+        397,
+        397,
+        396
+      ],
+      "content_rect": [
+        419,
+        429,
+        323,
+        361
+      ],
+      "solid_rect": [
+        420,
+        430,
+        321,
+        359
+      ],
+      "label": "DeepSeek／朝右／行走关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "walk",
+      "direction": "right",
+      "character": "deepseek",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2430939226519337
+    },
+    "character-deepseek-left-jump": {
+      "image": "deepseek-actions",
+      "source_rect": [
+        0,
+        793,
+        396,
+        397
+      ],
+      "content_rect": [
+        76,
+        818,
+        299,
+        359
+      ],
+      "solid_rect": [
+        77,
+        819,
+        297,
+        357
+      ],
+      "label": "DeepSeek／朝左／跳跃",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "jump",
+      "direction": "left",
+      "character": "deepseek",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2430939226519337
+    },
+    "character-deepseek-right-jump": {
+      "image": "deepseek-actions",
+      "source_rect": [
+        396,
+        793,
+        397,
+        397
+      ],
+      "content_rect": [
+        419,
+        819,
+        299,
+        358
+      ],
+      "solid_rect": [
+        420,
+        820,
+        297,
+        355
+      ],
+      "label": "DeepSeek／朝右／跳跃",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "jump",
+      "direction": "right",
+      "character": "deepseek",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2430939226519337
+    },
+    "character-deepseek-left-fall": {
+      "image": "deepseek-actions",
+      "source_rect": [
+        0,
+        1190,
+        396,
+        396
+      ],
+      "content_rect": [
+        45,
+        1216,
+        333,
+        359
+      ],
+      "solid_rect": [
+        46,
+        1217,
+        331,
+        357
+      ],
+      "label": "DeepSeek／朝左／下落",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "fall",
+      "direction": "left",
+      "character": "deepseek",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2430939226519337
+    },
+    "character-deepseek-right-fall": {
+      "image": "deepseek-actions",
+      "source_rect": [
+        396,
+        1190,
+        397,
+        396
+      ],
+      "content_rect": [
+        416,
+        1215,
+        333,
+        360
+      ],
+      "solid_rect": [
+        418,
+        1217,
+        330,
+        357
+      ],
+      "label": "DeepSeek／朝右／下落",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "fall",
+      "direction": "right",
+      "character": "deepseek",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2430939226519337
+    },
+    "character-deepseek-left-skill": {
+      "image": "deepseek-actions",
+      "source_rect": [
+        0,
+        1586,
+        396,
+        397
+      ],
+      "content_rect": [
+        42,
+        1622,
+        332,
+        307
+      ],
+      "solid_rect": [
+        43,
+        1623,
+        330,
+        305
+      ],
+      "label": "DeepSeek／朝左／技能关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "skill",
+      "direction": "left",
+      "character": "deepseek",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2430939226519337
+    },
+    "character-deepseek-right-skill": {
+      "image": "deepseek-actions",
+      "source_rect": [
+        396,
+        1586,
+        397,
+        397
+      ],
+      "content_rect": [
+        420,
+        1623,
+        333,
+        306
+      ],
+      "solid_rect": [
+        421,
+        1624,
+        331,
+        304
+      ],
+      "label": "DeepSeek／朝右／技能关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "skill",
+      "direction": "right",
+      "character": "deepseek",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2430939226519337
+    },
+    "portrait-deepseek": {
+      "image": "deepseek-portrait",
+      "source_rect": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "content_rect": [
+        36,
+        99,
+        1182,
+        1079
+      ],
+      "solid_rect": [
+        37,
+        101,
+        1180,
+        1076
+      ],
+      "label": "DeepSeek头像",
+      "category": "portrait",
+      "logical_size": [
+        96,
+        96
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ]
+    },
+    "character-grok-left-idle": {
+      "image": "grok-actions",
+      "source_rect": [
+        0,
+        0,
+        396,
+        406
+      ],
+      "content_rect": [
+        43,
+        47,
+        336,
+        326
+      ],
+      "solid_rect": [
+        45,
+        48,
+        332,
+        324
+      ],
+      "label": "Grok／朝左／待机",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "idle",
+      "direction": "left",
+      "character": "grok",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2691131498470948
+    },
+    "character-grok-right-idle": {
+      "image": "grok-actions",
+      "source_rect": [
+        396,
+        0,
+        397,
+        406
+      ],
+      "content_rect": [
+        415,
+        46,
+        335,
+        327
+      ],
+      "solid_rect": [
+        416,
+        47,
+        333,
+        325
+      ],
+      "label": "Grok／朝右／待机",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "idle",
+      "direction": "right",
+      "character": "grok",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2691131498470948
+    },
+    "character-grok-left-walk": {
+      "image": "grok-actions",
+      "source_rect": [
+        0,
+        406,
+        396,
+        366
+      ],
+      "content_rect": [
+        36,
+        439,
+        320,
+        316
+      ],
+      "solid_rect": [
+        37,
+        442,
+        318,
+        312
+      ],
+      "label": "Grok／朝左／行走关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "walk",
+      "direction": "left",
+      "character": "grok",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2691131498470948
+    },
+    "character-grok-right-walk": {
+      "image": "grok-actions",
+      "source_rect": [
+        396,
+        406,
+        397,
+        366
+      ],
+      "content_rect": [
+        437,
+        439,
+        321,
+        316
+      ],
+      "solid_rect": [
+        438,
+        442,
+        318,
+        312
+      ],
+      "label": "Grok／朝右／行走关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "walk",
+      "direction": "right",
+      "character": "grok",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2691131498470948
+    },
+    "character-grok-left-jump": {
+      "image": "grok-actions",
+      "source_rect": [
+        0,
+        772,
+        396,
+        416
+      ],
+      "content_rect": [
+        46,
+        789,
+        322,
+        371
+      ],
+      "solid_rect": [
+        48,
+        790,
+        318,
+        369
+      ],
+      "label": "Grok／朝左／跳跃",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "jump",
+      "direction": "left",
+      "character": "grok",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2691131498470948
+    },
+    "character-grok-right-jump": {
+      "image": "grok-actions",
+      "source_rect": [
+        396,
+        772,
+        397,
+        416
+      ],
+      "content_rect": [
+        425,
+        789,
+        322,
+        371
+      ],
+      "solid_rect": [
+        427,
+        791,
+        318,
+        368
+      ],
+      "label": "Grok／朝右／跳跃",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "jump",
+      "direction": "right",
+      "character": "grok",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2691131498470948
+    },
+    "character-grok-left-fall": {
+      "image": "grok-actions",
+      "source_rect": [
+        0,
+        1188,
+        396,
+        445
+      ],
+      "content_rect": [
+        64,
+        1217,
+        306,
+        386
+      ],
+      "solid_rect": [
+        66,
+        1218,
+        303,
+        384
+      ],
+      "label": "Grok／朝左／下落",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "fall",
+      "direction": "left",
+      "character": "grok",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2691131498470948
+    },
+    "character-grok-right-fall": {
+      "image": "grok-actions",
+      "source_rect": [
+        396,
+        1188,
+        397,
+        445
+      ],
+      "content_rect": [
+        424,
+        1218,
+        305,
+        385
+      ],
+      "solid_rect": [
+        425,
+        1219,
+        303,
+        383
+      ],
+      "label": "Grok／朝右／下落",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "fall",
+      "direction": "right",
+      "character": "grok",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2691131498470948
+    },
+    "character-grok-left-skill": {
+      "image": "grok-actions",
+      "source_rect": [
+        0,
+        1633,
+        396,
+        350
+      ],
+      "content_rect": [
+        19,
+        1663,
+        369,
+        247
+      ],
+      "solid_rect": [
+        21,
+        1665,
+        366,
+        244
+      ],
+      "label": "Grok／朝左／技能关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "skill",
+      "direction": "left",
+      "character": "grok",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2691131498470948
+    },
+    "character-grok-right-skill": {
+      "image": "grok-actions",
+      "source_rect": [
+        396,
+        1633,
+        397,
+        350
+      ],
+      "content_rect": [
+        405,
+        1663,
+        369,
+        247
+      ],
+      "solid_rect": [
+        406,
+        1664,
+        367,
+        245
+      ],
+      "label": "Grok／朝右／技能关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "skill",
+      "direction": "right",
+      "character": "grok",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2691131498470948
+    },
+    "portrait-grok": {
+      "image": "grok-portrait",
+      "source_rect": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "content_rect": [
+        18,
+        81,
+        1215,
+        1090
+      ],
+      "solid_rect": [
+        19,
+        82,
+        1211,
+        1088
+      ],
+      "label": "Grok头像",
+      "category": "portrait",
+      "logical_size": [
+        96,
+        96
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ]
+    },
+    "character-claude-left-idle": {
+      "image": "claude-actions",
+      "source_rect": [
+        0,
+        0,
+        396,
+        410
+      ],
+      "content_rect": [
+        112,
+        51,
+        271,
+        343
+      ],
+      "solid_rect": [
+        113,
+        52,
+        268,
+        341
+      ],
+      "label": "Claude／朝左／待机",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "idle",
+      "direction": "left",
+      "character": "claude",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2565597667638484
+    },
+    "character-claude-right-idle": {
+      "image": "claude-actions",
+      "source_rect": [
+        396,
+        0,
+        397,
+        410
+      ],
+      "content_rect": [
+        412,
+        51,
+        269,
+        343
+      ],
+      "solid_rect": [
+        413,
+        52,
+        267,
+        341
+      ],
+      "label": "Claude／朝右／待机",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "idle",
+      "direction": "right",
+      "character": "claude",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2565597667638484
+    },
+    "character-claude-left-walk": {
+      "image": "claude-actions",
+      "source_rect": [
+        0,
+        410,
+        396,
+        364
+      ],
+      "content_rect": [
+        98,
+        424,
+        287,
+        342
+      ],
+      "solid_rect": [
+        99,
+        426,
+        285,
+        339
+      ],
+      "label": "Claude／朝左／行走关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "walk",
+      "direction": "left",
+      "character": "claude",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2565597667638484
+    },
+    "character-claude-right-walk": {
+      "image": "claude-actions",
+      "source_rect": [
+        396,
+        410,
+        397,
+        364
+      ],
+      "content_rect": [
+        409,
+        424,
+        287,
+        342
+      ],
+      "solid_rect": [
+        410,
+        427,
+        285,
+        338
+      ],
+      "label": "Claude／朝右／行走关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "walk",
+      "direction": "right",
+      "character": "claude",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2565597667638484
+    },
+    "character-claude-left-jump": {
+      "image": "claude-actions",
+      "source_rect": [
+        0,
+        774,
+        396,
+        396
+      ],
+      "content_rect": [
+        46,
+        782,
+        332,
+        369
+      ],
+      "solid_rect": [
+        47,
+        783,
+        330,
+        367
+      ],
+      "label": "Claude／朝左／跳跃",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "jump",
+      "direction": "left",
+      "character": "claude",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2565597667638484
+    },
+    "character-claude-right-jump": {
+      "image": "claude-actions",
+      "source_rect": [
+        396,
+        774,
+        397,
+        396
+      ],
+      "content_rect": [
+        411,
+        782,
+        337,
+        369
+      ],
+      "solid_rect": [
+        412,
+        783,
+        334,
+        367
+      ],
+      "label": "Claude／朝右／跳跃",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "jump",
+      "direction": "right",
+      "character": "claude",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2565597667638484
+    },
+    "character-claude-left-fall": {
+      "image": "claude-actions",
+      "source_rect": [
+        0,
+        1170,
+        396,
+        405
+      ],
+      "content_rect": [
+        82,
+        1188,
+        297,
+        373
+      ],
+      "solid_rect": [
+        83,
+        1189,
+        295,
+        371
+      ],
+      "label": "Claude／朝左／下落",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "fall",
+      "direction": "left",
+      "character": "claude",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2565597667638484
+    },
+    "character-claude-right-fall": {
+      "image": "claude-actions",
+      "source_rect": [
+        396,
+        1170,
+        397,
+        405
+      ],
+      "content_rect": [
+        415,
+        1188,
+        298,
+        374
+      ],
+      "solid_rect": [
+        416,
+        1189,
+        296,
+        372
+      ],
+      "label": "Claude／朝右／下落",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "fall",
+      "direction": "right",
+      "character": "claude",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2565597667638484
+    },
+    "character-claude-left-skill": {
+      "image": "claude-actions",
+      "source_rect": [
+        0,
+        1575,
+        396,
+        408
+      ],
+      "content_rect": [
+        52,
+        1588,
+        333,
+        345
+      ],
+      "solid_rect": [
+        53,
+        1589,
+        329,
+        343
+      ],
+      "label": "Claude／朝左／技能关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "skill",
+      "direction": "left",
+      "character": "claude",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2565597667638484
+    },
+    "character-claude-right-skill": {
+      "image": "claude-actions",
+      "source_rect": [
+        396,
+        1575,
+        397,
+        408
+      ],
+      "content_rect": [
+        411,
+        1588,
+        331,
+        346
+      ],
+      "solid_rect": [
+        412,
+        1589,
+        329,
+        343
+      ],
+      "label": "Claude／朝右／技能关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "skill",
+      "direction": "right",
+      "character": "claude",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.2565597667638484
+    },
+    "portrait-claude": {
+      "image": "claude-portrait",
+      "source_rect": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "content_rect": [
+        16,
+        32,
+        1224,
+        1202
+      ],
+      "solid_rect": [
+        16,
+        32,
+        1223,
+        1201
+      ],
+      "label": "Claude头像",
+      "category": "portrait",
+      "logical_size": [
+        96,
+        96
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ]
+    },
+    "character-glm-left-idle": {
+      "image": "glm-actions",
+      "source_rect": [
+        0,
+        0,
+        396,
+        422
+      ],
+      "content_rect": [
+        104,
+        36,
+        275,
+        371
+      ],
+      "solid_rect": [
+        105,
+        38,
+        273,
+        368
+      ],
+      "label": "GLM／朝左／待机",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "idle",
+      "direction": "left",
+      "character": "glm",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.23655913978494625
+    },
+    "character-glm-right-idle": {
+      "image": "glm-actions",
+      "source_rect": [
+        396,
+        0,
+        397,
+        422
+      ],
+      "content_rect": [
+        416,
+        35,
+        276,
+        372
+      ],
+      "solid_rect": [
+        418,
+        36,
+        271,
+        370
+      ],
+      "label": "GLM／朝右／待机",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "idle",
+      "direction": "right",
+      "character": "glm",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.23655913978494625
+    },
+    "character-glm-left-walk": {
+      "image": "glm-actions",
+      "source_rect": [
+        0,
+        422,
+        396,
+        378
+      ],
+      "content_rect": [
+        77,
+        437,
+        307,
+        355
+      ],
+      "solid_rect": [
+        78,
+        438,
+        305,
+        353
+      ],
+      "label": "GLM／朝左／行走关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "walk",
+      "direction": "left",
+      "character": "glm",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.23655913978494625
+    },
+    "character-glm-right-walk": {
+      "image": "glm-actions",
+      "source_rect": [
+        396,
+        422,
+        397,
+        378
+      ],
+      "content_rect": [
+        409,
+        437,
+        308,
+        354
+      ],
+      "solid_rect": [
+        410,
+        438,
+        305,
+        353
+      ],
+      "label": "GLM／朝右／行走关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "walk",
+      "direction": "right",
+      "character": "glm",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.23655913978494625
+    },
+    "character-glm-left-jump": {
+      "image": "glm-actions",
+      "source_rect": [
+        0,
+        800,
+        396,
+        386
+      ],
+      "content_rect": [
+        72,
+        807,
+        304,
+        377
+      ],
+      "solid_rect": [
+        74,
+        808,
+        300,
+        374
+      ],
+      "label": "GLM／朝左／跳跃",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "jump",
+      "direction": "left",
+      "character": "glm",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.23655913978494625
+    },
+    "character-glm-right-jump": {
+      "image": "glm-actions",
+      "source_rect": [
+        396,
+        800,
+        397,
+        386
+      ],
+      "content_rect": [
+        418,
+        807,
+        303,
+        376
+      ],
+      "solid_rect": [
+        419,
+        808,
+        301,
+        375
+      ],
+      "label": "GLM／朝右／跳跃",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "jump",
+      "direction": "right",
+      "character": "glm",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.23655913978494625
+    },
+    "character-glm-left-fall": {
+      "image": "glm-actions",
+      "source_rect": [
+        0,
+        1186,
+        396,
+        396
+      ],
+      "content_rect": [
+        71,
+        1189,
+        300,
+        384
+      ],
+      "solid_rect": [
+        72,
+        1190,
+        298,
+        382
+      ],
+      "label": "GLM／朝左／下落",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "fall",
+      "direction": "left",
+      "character": "glm",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.23655913978494625
+    },
+    "character-glm-right-fall": {
+      "image": "glm-actions",
+      "source_rect": [
+        396,
+        1186,
+        397,
+        396
+      ],
+      "content_rect": [
+        423,
+        1188,
+        300,
+        384
+      ],
+      "solid_rect": [
+        424,
+        1190,
+        298,
+        381
+      ],
+      "label": "GLM／朝右／下落",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "fall",
+      "direction": "right",
+      "character": "glm",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.23655913978494625
+    },
+    "character-glm-left-skill": {
+      "image": "glm-actions",
+      "source_rect": [
+        0,
+        1582,
+        396,
+        401
+      ],
+      "content_rect": [
+        68,
+        1591,
+        321,
+        338
+      ],
+      "solid_rect": [
+        69,
+        1592,
+        319,
+        336
+      ],
+      "label": "GLM／朝左／技能关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "skill",
+      "direction": "left",
+      "character": "glm",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.23655913978494625
+    },
+    "character-glm-right-skill": {
+      "image": "glm-actions",
+      "source_rect": [
+        396,
+        1582,
+        397,
+        401
+      ],
+      "content_rect": [
+        415,
+        1591,
+        310,
+        338
+      ],
+      "solid_rect": [
+        416,
+        1592,
+        308,
+        336
+      ],
+      "label": "GLM／朝右／技能关键姿态",
+      "category": "character",
+      "logical_size": [
+        88,
+        88
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "state": "skill",
+      "direction": "right",
+      "character": "glm",
+      "animation_note": "单张关键姿态；行走配合程序起伏，非完整逐帧步态循环",
+      "native_scale": 0.23655913978494625
+    },
+    "portrait-glm": {
+      "image": "glm-portrait",
+      "source_rect": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "content_rect": [
+        10,
+        21,
+        1238,
+        1224
+      ],
+      "solid_rect": [
+        11,
+        23,
+        1236,
+        1221
+      ],
+      "label": "GLM头像",
+      "category": "portrait",
+      "logical_size": [
+        96,
+        96
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ]
+    },
+    "enemy-guard": {
+      "image": "guard",
+      "source_rect": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "content_rect": [
+        210,
+        164,
+        871,
+        907
+      ],
+      "solid_rect": [
+        210,
+        165,
+        870,
+        904
+      ],
+      "label": "普通守卫",
+      "category": "enemy",
+      "logical_size": [
+        72,
+        72
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "direction": "left"
+    },
+    "enemy-investigator": {
+      "image": "investigator",
+      "source_rect": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "content_rect": [
+        222,
+        150,
+        812,
+        1002
+      ],
+      "solid_rect": [
+        223,
+        151,
+        810,
+        1000
+      ],
+      "label": "调查员",
+      "category": "enemy",
+      "logical_size": [
+        72,
+        72
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "direction": "right"
+    },
+    "prop-data-cube": {
+      "image": "props-kit",
+      "source_rect": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "content_rect": [
+        92,
+        86,
+        376,
+        369
+      ],
+      "solid_rect": [
+        110,
+        103,
+        335,
+        327
+      ],
+      "label": "数据块",
+      "category": "prop",
+      "logical_size": [
+        40,
+        40
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "prop-data-node": {
+      "image": "props-kit",
+      "source_rect": [
+        512,
+        0,
+        512,
+        512
+      ],
+      "content_rect": [
+        628,
+        80,
+        278,
+        381
+      ],
+      "solid_rect": [
+        632,
+        81,
+        272,
+        378
+      ],
+      "label": "数据节点",
+      "category": "prop",
+      "logical_size": [
+        60,
+        72
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "prop-qualifier-token": {
+      "image": "props-kit",
+      "source_rect": [
+        1024,
+        0,
+        512,
+        512
+      ],
+      "content_rect": [
+        1143,
+        124,
+        272,
+        307
+      ],
+      "solid_rect": [
+        1152,
+        126,
+        262,
+        299
+      ],
+      "label": "限定词",
+      "category": "prop",
+      "logical_size": [
+        44,
+        44
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "prop-resume-decoy": {
+      "image": "props-kit",
+      "source_rect": [
+        0,
+        512,
+        512,
+        512
+      ],
+      "content_rect": [
+        65,
+        595,
+        433,
+        346
+      ],
+      "solid_rect": [
+        81,
+        605,
+        400,
+        320
+      ],
+      "label": "简历诱饵",
+      "category": "prop",
+      "logical_size": [
+        40,
+        48
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "prop-broadcast-console": {
+      "image": "props-kit",
+      "source_rect": [
+        512,
+        512,
+        512,
+        512
+      ],
+      "content_rect": [
+        595,
+        527,
+        348,
+        412
+      ],
+      "solid_rect": [
+        596,
+        564,
+        346,
+        373
+      ],
+      "label": "广播开关",
+      "category": "prop",
+      "logical_size": [
+        64,
+        80
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "prop-return-beacon": {
+      "image": "props-kit",
+      "source_rect": [
+        1024,
+        512,
+        512,
+        512
+      ],
+      "content_rect": [
+        1121,
+        519,
+        336,
+        426
+      ],
+      "solid_rect": [
+        1123,
+        563,
+        333,
+        381
+      ],
+      "label": "返航信标",
+      "category": "prop",
+      "logical_size": [
+        64,
+        64
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-platform-middle": {
+      "image": "masonry-kit",
+      "source_rect": [
+        0,
+        0,
+        640,
+        448
+      ],
+      "content_rect": [
+        28,
+        131,
+        610,
+        246
+      ],
+      "solid_rect": [
+        29,
+        134,
+        608,
+        240
+      ],
+      "label": "平台中段",
+      "category": "scene",
+      "logical_size": [
+        128,
+        32
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-platform-left-cap": {
+      "image": "masonry-kit",
+      "source_rect": [
+        640,
+        0,
+        400,
+        448
+      ],
+      "content_rect": [
+        650,
+        94,
+        376,
+        284
+      ],
+      "solid_rect": [
+        651,
+        95,
+        374,
+        280
+      ],
+      "label": "平台左端",
+      "category": "scene",
+      "logical_size": [
+        64,
+        32
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-platform-right-cap": {
+      "image": "masonry-kit",
+      "source_rect": [
+        1040,
+        0,
+        496,
+        448
+      ],
+      "content_rect": [
+        1081,
+        95,
+        430,
+        283
+      ],
+      "solid_rect": [
+        1082,
+        95,
+        427,
+        280
+      ],
+      "label": "平台右端",
+      "category": "scene",
+      "logical_size": [
+        64,
+        32
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-platform-thin": {
+      "image": "masonry-kit",
+      "source_rect": [
+        0,
+        448,
+        620,
+        576
+      ],
+      "content_rect": [
+        53,
+        651,
+        554,
+        130
+      ],
+      "solid_rect": [
+        54,
+        652,
+        551,
+        126
+      ],
+      "label": "窄平台",
+      "category": "scene",
+      "logical_size": [
+        96,
+        20
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-paper-barrier-intact": {
+      "image": "masonry-kit",
+      "source_rect": [
+        620,
+        448,
+        420,
+        576
+      ],
+      "content_rect": [
+        636,
+        452,
+        395,
+        466
+      ],
+      "solid_rect": [
+        637,
+        454,
+        392,
+        463
+      ],
+      "label": "完整可破纸障",
+      "category": "scene",
+      "logical_size": [
+        64,
+        96
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-paper-barrier-broken": {
+      "image": "masonry-kit",
+      "source_rect": [
+        1040,
+        448,
+        496,
+        576
+      ],
+      "content_rect": [
+        1075,
+        452,
+        393,
+        466
+      ],
+      "solid_rect": [
+        1077,
+        453,
+        389,
+        464
+      ],
+      "label": "破损可破纸障",
+      "category": "scene",
+      "logical_size": [
+        64,
+        96
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-ladder": {
+      "image": "mechanisms-kit",
+      "source_rect": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "content_rect": [
+        163,
+        18,
+        151,
+        453
+      ],
+      "solid_rect": [
+        167,
+        19,
+        145,
+        451
+      ],
+      "label": "梯子",
+      "category": "scene",
+      "logical_size": [
+        32,
+        128
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-lift-platform": {
+      "image": "mechanisms-kit",
+      "source_rect": [
+        512,
+        0,
+        512,
+        512
+      ],
+      "content_rect": [
+        529,
+        208,
+        478,
+        172
+      ],
+      "solid_rect": [
+        530,
+        209,
+        476,
+        168
+      ],
+      "label": "升降台",
+      "category": "scene",
+      "logical_size": [
+        112,
+        32
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-pressure-plate": {
+      "image": "mechanisms-kit",
+      "source_rect": [
+        1024,
+        0,
+        512,
+        512
+      ],
+      "content_rect": [
+        1096,
+        365,
+        373,
+        95
+      ],
+      "solid_rect": [
+        1098,
+        367,
+        370,
+        90
+      ],
+      "label": "压力板",
+      "category": "scene",
+      "logical_size": [
+        48,
+        16
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-gate-closed": {
+      "image": "mechanisms-kit",
+      "source_rect": [
+        0,
+        512,
+        512,
+        512
+      ],
+      "content_rect": [
+        43,
+        531,
+        427,
+        426
+      ],
+      "solid_rect": [
+        44,
+        534,
+        424,
+        422
+      ],
+      "label": "机关闸门关闭",
+      "category": "scene",
+      "logical_size": [
+        64,
+        128
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-gate-open": {
+      "image": "mechanisms-kit",
+      "source_rect": [
+        512,
+        512,
+        512,
+        512
+      ],
+      "content_rect": [
+        555,
+        531,
+        426,
+        426
+      ],
+      "solid_rect": [
+        556,
+        534,
+        424,
+        422
+      ],
+      "label": "机关闸门开启",
+      "category": "scene",
+      "logical_size": [
+        64,
+        128
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-mfa-door-fixed": {
+      "image": "mechanisms-kit",
+      "source_rect": [
+        1024,
+        512,
+        512,
+        512
+      ],
+      "content_rect": [
+        1074,
+        527,
+        414,
+        434
+      ],
+      "solid_rect": [
+        1075,
+        528,
+        412,
+        432
+      ],
+      "label": "多重认证固定钢门",
+      "category": "scene",
+      "logical_size": [
+        64,
+        128
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-room-back-wall": {
+      "image": "harbor-kit",
+      "source_rect": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "content_rect": [
+        47,
+        83,
+        446,
+        410
+      ],
+      "solid_rect": [
+        48,
+        86,
+        441,
+        404
+      ],
+      "label": "机房后墙立面",
+      "category": "scene",
+      "logical_size": [
+        128,
+        128
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-water-channel": {
+      "image": "harbor-kit",
+      "source_rect": [
+        512,
+        0,
+        512,
+        512
+      ],
+      "content_rect": [
+        529,
+        242,
+        478,
+        250
+      ],
+      "solid_rect": [
+        531,
+        256,
+        474,
+        234
+      ],
+      "label": "水道危险区",
+      "category": "scene",
+      "logical_size": [
+        128,
+        64
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-mothership": {
+      "image": "harbor-kit",
+      "source_rect": [
+        1024,
+        0,
+        512,
+        512
+      ],
+      "content_rect": [
+        1043,
+        211,
+        463,
+        249
+      ],
+      "solid_rect": [
+        1045,
+        214,
+        460,
+        244
+      ],
+      "label": "母舰停靠艇",
+      "category": "scene",
+      "logical_size": [
+        176,
+        128
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-alarm-sensor": {
+      "image": "harbor-kit",
+      "source_rect": [
+        0,
+        512,
+        512,
+        512
+      ],
+      "content_rect": [
+        156,
+        617,
+        226,
+        291
+      ],
+      "solid_rect": [
+        157,
+        666,
+        221,
+        241
+      ],
+      "label": "警戒器",
+      "category": "scene",
+      "logical_size": [
+        32,
+        32
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-hidden-trap": {
+      "image": "harbor-kit",
+      "source_rect": [
+        512,
+        512,
+        512,
+        512
+      ],
+      "content_rect": [
+        539,
+        729,
+        459,
+        182
+      ],
+      "solid_rect": [
+        540,
+        730,
+        456,
+        180
+      ],
+      "label": "隐藏陷阱",
+      "category": "scene",
+      "logical_size": [
+        48,
+        24
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "scene-server-rack": {
+      "image": "harbor-kit",
+      "source_rect": [
+        1024,
+        512,
+        512,
+        512
+      ],
+      "content_rect": [
+        1127,
+        546,
+        284,
+        398
+      ],
+      "solid_rect": [
+        1128,
+        547,
+        283,
+        396
+      ],
+      "label": "scene-server-rack",
+      "category": "scene",
+      "logical_size": [
+        64,
+        112
+      ],
+      "anchor": [
+        0.5,
+        1
+      ]
+    },
+    "fx-water-dash-01": {
+      "image": "water-dash-atlas",
+      "source_rect": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "content_rect": [
+        59,
+        225,
+        522,
+        305
+      ],
+      "solid_rect": [
+        70,
+        236,
+        501,
+        282
+      ],
+      "label": "鲸形水流冲刺／第1帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "water-dash",
+      "frame": 0
+    },
+    "fx-water-dash-02": {
+      "image": "water-dash-atlas",
+      "source_rect": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "content_rect": [
+        629,
+        212,
+        591,
+        330
+      ],
+      "solid_rect": [
+        642,
+        225,
+        563,
+        305
+      ],
+      "label": "鲸形水流冲刺／第2帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "water-dash",
+      "frame": 1
+    },
+    "fx-water-dash-03": {
+      "image": "water-dash-atlas",
+      "source_rect": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "content_rect": [
+        49,
+        798,
+        565,
+        289
+      ],
+      "solid_rect": [
+        62,
+        807,
+        542,
+        270
+      ],
+      "label": "鲸形水流冲刺／第3帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "water-dash",
+      "frame": 2
+    },
+    "fx-water-dash-04": {
+      "image": "water-dash-atlas",
+      "source_rect": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "content_rect": [
+        705,
+        873,
+        490,
+        199
+      ],
+      "solid_rect": [
+        716,
+        883,
+        472,
+        177
+      ],
+      "label": "鲸形水流冲刺／第4帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "water-dash",
+      "frame": 3
+    },
+    "fx-axe-impact-01": {
+      "image": "axe-impact-atlas",
+      "source_rect": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "content_rect": [
+        54,
+        147,
+        531,
+        379
+      ],
+      "solid_rect": [
+        60,
+        158,
+        521,
+        363
+      ],
+      "label": "斧刃撞击／第1帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "axe-impact",
+      "frame": 0
+    },
+    "fx-axe-impact-02": {
+      "image": "axe-impact-atlas",
+      "source_rect": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "content_rect": [
+        631,
+        41,
+        617,
+        560
+      ],
+      "solid_rect": [
+        636,
+        49,
+        599,
+        542
+      ],
+      "label": "斧刃撞击／第2帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "axe-impact",
+      "frame": 1
+    },
+    "fx-axe-impact-03": {
+      "image": "axe-impact-atlas",
+      "source_rect": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "content_rect": [
+        60,
+        697,
+        557,
+        478
+      ],
+      "solid_rect": [
+        105,
+        702,
+        508,
+        471
+      ],
+      "label": "斧刃撞击／第3帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "axe-impact",
+      "frame": 2
+    },
+    "fx-axe-impact-04": {
+      "image": "axe-impact-atlas",
+      "source_rect": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "content_rect": [
+        724,
+        783,
+        448,
+        329
+      ],
+      "solid_rect": [
+        729,
+        786,
+        439,
+        320
+      ],
+      "label": "斧刃撞击／第4帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "axe-impact",
+      "frame": 3
+    },
+    "fx-paper-decoy-01": {
+      "image": "paper-decoy-atlas",
+      "source_rect": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "content_rect": [
+        147,
+        103,
+        437,
+        456
+      ],
+      "solid_rect": [
+        161,
+        114,
+        409,
+        432
+      ],
+      "label": "书页诱饵／第1帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "paper-decoy",
+      "frame": 0
+    },
+    "fx-paper-decoy-02": {
+      "image": "paper-decoy-atlas",
+      "source_rect": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "content_rect": [
+        730,
+        147,
+        413,
+        408
+      ],
+      "solid_rect": [
+        741,
+        161,
+        389,
+        380
+      ],
+      "label": "书页诱饵／第2帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "paper-decoy",
+      "frame": 1
+    },
+    "fx-paper-decoy-03": {
+      "image": "paper-decoy-atlas",
+      "source_rect": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "content_rect": [
+        103,
+        695,
+        504,
+        450
+      ],
+      "solid_rect": [
+        117,
+        707,
+        476,
+        425
+      ],
+      "label": "书页诱饵／第3帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "paper-decoy",
+      "frame": 2
+    },
+    "fx-paper-decoy-04": {
+      "image": "paper-decoy-atlas",
+      "source_rect": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "content_rect": [
+        716,
+        711,
+        454,
+        413
+      ],
+      "solid_rect": [
+        728,
+        725,
+        429,
+        386
+      ],
+      "label": "书页诱饵／第4帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "paper-decoy",
+      "frame": 3
+    },
+    "fx-scan-grid-01": {
+      "image": "scan-grid-atlas",
+      "source_rect": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "content_rect": [
+        44,
+        276,
+        550,
+        160
+      ],
+      "solid_rect": [
+        59,
+        281,
+        512,
+        137
+      ],
+      "label": "网格扫描／第1帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "scan-grid",
+      "frame": 0
+    },
+    "fx-scan-grid-02": {
+      "image": "scan-grid-atlas",
+      "source_rect": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "content_rect": [
+        655,
+        239,
+        581,
+        226
+      ],
+      "solid_rect": [
+        676,
+        245,
+        552,
+        195
+      ],
+      "label": "网格扫描／第2帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "scan-grid",
+      "frame": 1
+    },
+    "fx-scan-grid-03": {
+      "image": "scan-grid-atlas",
+      "source_rect": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "content_rect": [
+        41,
+        823,
+        564,
+        266
+      ],
+      "solid_rect": [
+        59,
+        853,
+        523,
+        202
+      ],
+      "label": "网格扫描／第3帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "scan-grid",
+      "frame": 2
+    },
+    "fx-scan-grid-04": {
+      "image": "scan-grid-atlas",
+      "source_rect": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "content_rect": [
+        667,
+        799,
+        567,
+        251
+      ],
+      "solid_rect": [
+        677,
+        805,
+        549,
+        240
+      ],
+      "label": "网格扫描／第4帧",
+      "category": "fx_frame",
+      "logical_size": [
+        144,
+        144
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "group": "scan-grid",
+      "frame": 3
+    },
+    "background-gameplay-backdrop": {
+      "image": "gameplay-backdrop",
+      "source_rect": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "content_rect": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "solid_rect": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "label": "background-gameplay-backdrop",
+      "category": "background",
+      "logical_size": [
+        1280,
+        720
+      ],
+      "anchor": [
+        0,
+        0
+      ]
+    },
+    "background-menu-background": {
+      "image": "menu-background",
+      "source_rect": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "content_rect": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "solid_rect": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "label": "标题菜单背景",
+      "category": "background",
+      "logical_size": [
+        1280,
+        720
+      ],
+      "anchor": [
+        0,
+        0
+      ]
+    },
+    "background-results-background": {
+      "image": "results-background",
+      "source_rect": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "content_rect": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "solid_rect": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "label": "结算背景",
+      "category": "background",
+      "logical_size": [
+        1280,
+        720
+      ],
+      "anchor": [
+        0,
+        0
+      ]
+    },
+    "ui-hud-shell": {
+      "image": "chrome-kit",
+      "source_rect": [
+        0,
+        170,
+        580,
+        190
+      ],
+      "content_rect": [
+        33,
+        215,
+        519,
+        90
+      ],
+      "solid_rect": [
+        35,
+        216,
+        516,
+        88
+      ],
+      "label": "hud-shell",
+      "category": "ui",
+      "logical_size": [
+        200,
+        100
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ]
+    },
+    "ui-skill-button-shell": {
+      "image": "chrome-kit",
+      "source_rect": [
+        580,
+        40,
+        444,
+        440
+      ],
+      "content_rect": [
+        608,
+        82,
+        355,
+        350
+      ],
+      "solid_rect": [
+        610,
+        83,
+        353,
+        348
+      ],
+      "label": "skill-button-shell",
+      "category": "ui",
+      "logical_size": [
+        200,
+        100
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ]
+    },
+    "ui-dialogue-shell": {
+      "image": "chrome-kit",
+      "source_rect": [
+        0,
+        610,
+        560,
+        320
+      ],
+      "content_rect": [
+        35,
+        654,
+        492,
+        238
+      ],
+      "solid_rect": [
+        38,
+        655,
+        488,
+        235
+      ],
+      "label": "dialogue-shell",
+      "category": "ui",
+      "logical_size": [
+        200,
+        100
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ]
+    },
+    "ui-results-shell": {
+      "image": "chrome-kit",
+      "source_rect": [
+        560,
+        510,
+        464,
+        470
+      ],
+      "content_rect": [
+        584,
+        532,
+        406,
+        413
+      ],
+      "solid_rect": [
+        585,
+        535,
+        404,
+        410
+      ],
+      "label": "results-shell",
+      "category": "ui",
+      "logical_size": [
+        200,
+        100
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ]
+    },
+    "ui-resource-shell": {
+      "image": "chrome-kit",
+      "source_rect": [
+        0,
+        1180,
+        590,
+        220
+      ],
+      "content_rect": [
+        34,
+        1218,
+        529,
+        142
+      ],
+      "solid_rect": [
+        35,
+        1220,
+        527,
+        139
+      ],
+      "label": "resource-shell",
+      "category": "ui",
+      "logical_size": [
+        200,
+        100
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ]
+    },
+    "ui-pause-shell": {
+      "image": "chrome-kit",
+      "source_rect": [
+        590,
+        1090,
+        400,
+        370
+      ],
+      "content_rect": [
+        632,
+        1130,
+        300,
+        292
+      ],
+      "solid_rect": [
+        633,
+        1131,
+        298,
+        289
+      ],
+      "label": "pause-shell",
+      "category": "ui",
+      "logical_size": [
+        200,
+        100
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ]
+    },
+    "ui-whale-emblem": {
+      "image": "whale-emblem",
+      "source_rect": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "content_rect": [
+        105,
+        139,
+        1051,
+        979
+      ],
+      "solid_rect": [
+        106,
+        140,
+        1049,
+        977
+      ],
+      "label": "鲸鱼魔盗团徽记",
+      "category": "ui",
+      "logical_size": [
+        72,
+        72
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ]
+    }
+  },
+  "animations": {
+    "water-dash": {
+      "frames": [
+        "fx-water-dash-01",
+        "fx-water-dash-02",
+        "fx-water-dash-03",
+        "fx-water-dash-04"
+      ],
+      "fps": 8,
+      "loop_default": false,
+      "duration_ms": 500,
+      "layout": [
+        2,
+        2
+      ]
+    },
+    "axe-impact": {
+      "frames": [
+        "fx-axe-impact-01",
+        "fx-axe-impact-02",
+        "fx-axe-impact-03",
+        "fx-axe-impact-04"
+      ],
+      "fps": 8,
+      "loop_default": false,
+      "duration_ms": 500,
+      "layout": [
+        2,
+        2
+      ]
+    },
+    "paper-decoy": {
+      "frames": [
+        "fx-paper-decoy-01",
+        "fx-paper-decoy-02",
+        "fx-paper-decoy-03",
+        "fx-paper-decoy-04"
+      ],
+      "fps": 8,
+      "loop_default": false,
+      "duration_ms": 500,
+      "layout": [
+        2,
+        2
+      ]
+    },
+    "scan-grid": {
+      "frames": [
+        "fx-scan-grid-01",
+        "fx-scan-grid-02",
+        "fx-scan-grid-03",
+        "fx-scan-grid-04"
+      ],
+      "fps": 8,
+      "loop_default": false,
+      "duration_ms": 500,
+      "layout": [
+        2,
+        2
+      ]
+    }
+  },
+  "summary": {
+    "png_files": 51,
+    "sprite_regions": 96,
+    "character_poses": 40,
+    "portraits": 4,
+    "fx_groups": 4,
+    "fx_frames": 16,
+    "categories": {
+      "character": 40,
+      "portrait": 4,
+      "enemy": 2,
+      "prop": 6,
+      "scene": 18,
+      "fx_frame": 16,
+      "background": 3,
+      "ui": 7
+    },
+    "story_png_files": 26,
+    "story_style_png_files": 21
+  },
+  "notes": [
+    "所有PNG保留原始输出；坐标描述用于运行时drawImage取样。",
+    "行走为单张关键姿态，非完整逐帧步态循环。",
+    "drawActor使用每角色统一native_scale，切换动作不因武器外包围框变化而整体缩放。",
+    "特效播放应使用source_rect，以共同帧中心防止抖动。",
+    "背景实际为1672×941，运行时cover适配16:9，不拉伸人物。",
+    "平台装饰支架不等于碰撞盒；碰撞顶面由关卡数据单独定义。",
+    "个别姿态和头像未达到原计划12%留白，已按实际取样确认主体完整。"
+  ]
+}

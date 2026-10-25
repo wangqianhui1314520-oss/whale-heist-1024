@@ -1,0 +1,58 @@
+{
+  "asset": "whale-emblem",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "generatedDate": "2026-10-24",
+  "promptPath": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\prompts\\whale-emblem.txt",
+  "references": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\concepts\\gameplay-sideview-visual-target.png"
+  ],
+  "rawPath": "C:\\Users\\Administrator\\.codex\\generated_images\\01a169be-8449-7543-93d9-e3c3c89b1190\\exec-21611b5e-ef72-4017-ae6a-4450c2a7b83b.png",
+  "targetPath": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\ui\\whale-emblem.png",
+  "dimensions": {
+    "width": 1254,
+    "height": 1254
+  },
+  "imageMode": "RGBA",
+  "transparency": {
+    "hasAlpha": true,
+    "fullyTransparentPixels": 958855,
+    "partiallyTransparentPixels": 611264,
+    "opaquePixels": 2397,
+    "fullyTransparentFraction": 0.609759,
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "actualAlphaPassed": true
+  },
+  "layout": {
+    "columns": 1,
+    "rows": 1
+  },
+  "frames": [
+    {
+      "state": "default",
+      "src": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.5
+      ]
+    }
+  ],
+  "sha256": "884c5bce86632f41896f00a3c3bf85f183acf7a331aa358fb56e0713f3abe177",
+  "postProcessing": "Copied exact generated PNG; no raster editing or resizing. Pillow used for read-only dimension and alpha inspection.",
+  "visualQA": {
+    "inspected": true,
+    "observations": [
+      "Single complete blue whale with pale belly and water drops, no text or surrounding UI.",
+      "Polished cel-colored emblem is more detailed than tiny reference icon."
+    ],
+    "criticalIssues": false
+  }
+}

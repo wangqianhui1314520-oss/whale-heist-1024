@@ -1,0 +1,5 @@
+Use case: background-extraction
+Asset type: reusable transparent foreground game asset
+Primary request: A wide deep-sea fantasy dock overlay with ornate brass and navy pier railings, foreground mooring bollards, chains, warm hanging lanterns, wet metal crates, banners and a compass ornament. The center stays partially open for menu UI and the layer sits in front of a blue underwater city background.
+Style/medium: premium anime game key art, polished cel-shaded metallic linework.
+Constraints: transparent background, clean anti-aliased alpha, no characters, no text, no watermark.

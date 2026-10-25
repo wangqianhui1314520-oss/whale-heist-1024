@@ -1,0 +1,147 @@
+/* Four painted button states, sampled from the unmodified production atlas. */
+.game-button:not(.text-button),
+.game-shell .v3-command-panel .command-submit>.game-button,
+.v3-title-brand .title-actions .game-button.primary {
+  background-image:url('../../assets/ui/button-states-v1.png') !important;
+  background-size:211.947431% 366.528926% !important;
+  background-position:var(--plate-x,2.774813%) var(--plate-y,18.294574%) !important;
+  background-repeat:no-repeat !important;
+  background-color:transparent !important;
+  color:#edf9ff !important;
+  border:0 !important; border-radius:0 !important; box-shadow:none !important;
+  text-shadow:0 1px 3px #02101b; filter:none;
+}
+.game-button.primary { --plate-x:97.331910%; color:#ffdfa1 !important; }
+.game-button:not(.text-button):hover:not(:disabled),
+.game-button:not(.text-button):focus-visible { --plate-x:97.331910%; --plate-y:18.294574%; }
+.game-button:not(.text-button):active:not(:disabled) { --plate-x:2.774813%; --plate-y:82.015504%; transform:translateY(1px); }
+.game-button:not(.text-button):disabled { --plate-x:97.331910%; --plate-y:82.015504%; color:#adc0cd !important; opacity:.65; }
+.v3-title-brand .title-actions .game-button.primary { min-height:4.7cqw; font-size:1.35cqw; }
+.game-button.text-button { background:none !important; border:0; box-shadow:none; }
+.v3-title-brand .title-actions .title-restart { background:none !important; opacity:.8; }
+.ui-icon { background-repeat:no-repeat; border:0; box-shadow:none; border-radius:0; min-width:0; }
+.hud-clock .clock-dial,.hud-vitals .hp-icon { width:1.7cqw; height:1.7cqw; flex:0 0 1.7cqw; }
+.touch-controls .ui-icon { width:58%; height:58%; }
+.touch-controls .touch-interact .ui-icon { width:48%; height:48%; }
+.touch-controls small { font-size:max(9px,.6cqw); }
+.art-details { margin:.6em 0; color:#a8c9d9; font-size:inherit; }
+.art-details>summary { cursor:pointer; color:#c6e8f4; min-height:32px; display:flex; align-items:center; gap:.5em; }
+.art-details>summary::before { content:'＋'; color:#8ce6f5; font-size:1.2em; }
+.art-details[open]>summary::before { content:'−'; }
+.art-details>p { margin:.5em 0; line-height:1.75; }
+.guide-cards { display:grid; gap:.8cqw; align-content:start; }
+.guide-cards>article { display:flex; gap:.9cqw; align-items:center; }
+.guide-cards>article>.ui-icon { width:3.5cqw; height:3.5cqw; flex:0 0 3.5cqw; }
+.guide-cards>article h3 { margin:0 0 .25em; }
+.guide-cards>article p { margin:0; }
+.guide-cards>article small { font-size:.72cqw; color:#81aabd; line-height:1.7; }
+.guide-portrait { width:2.4cqw; height:2.4cqw; object-fit:contain; }
+.save-tools.art-details { border:0; padding:0; }
+.setting-toggle>i { width:49px; height:27px; background:url('../../assets/ui/hud-pill.png') center/100% 100% no-repeat; border:0; border-radius:0; box-shadow:none; }
+.setting-toggle>i::after { width:19px; height:19px; top:4px; left:5px; border:0; border-radius:0; background:url('../../assets/ui/hud-icon-badges.png') 0% center/600% 100% no-repeat; filter:grayscale(1) brightness(.7); }
+.setting-toggle>input:checked+i { background:url('../../assets/ui/hud-pill.png') center/100% 100% no-repeat; border:0; }
+.setting-toggle>input:checked+i::after { left:25px; background:url('../../assets/ui/hud-icon-badges.png') 0% center/600% 100% no-repeat; filter:none; }
+.setting-row>input[type=range] { appearance:none; height:20px; background:transparent; }
+.setting-row>input[type=range]::-webkit-slider-runnable-track { height:8px; background:url('../../assets/ui/button-rail.png') center top/100% 190% no-repeat; }
+.setting-row>input[type=range]::-webkit-slider-thumb { appearance:none; width:23px; height:23px; margin-top:-8px; background:url('../../assets/ui/hud-icon-badges.png') 0% center/600% 100% no-repeat; border:0; }
+.setting-row>input[type=range]::-moz-range-track { height:8px; background:url('../../assets/ui/button-rail.png') center top/100% 190% no-repeat; }
+.setting-row>input[type=range]::-moz-range-thumb { width:23px; height:23px; background:url('../../assets/ui/hud-icon-badges.png') 0% center/600% 100% no-repeat; border:0; }
+.analysis-clue .art-details { font-size:.8cqw; }
+.v3-contracts .contract-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:.8cqw; }
+.v3-contracts .contract-card,.v3-contracts .contract-card[aria-pressed=true] { display:grid; grid-template-columns:44px 1fr; gap:4px 12px; align-content:center; min-height:110px; padding:10px 14px; border:8px solid transparent; border-image:url('../../assets/ui/panel-card.png') 40 55 65 45 fill / 8px stretch; background:none; border-radius:0; box-shadow:none; }
+.v3-contracts .contract-card { filter:saturate(.45) brightness(.85); }
+.v3-contracts .contract-card[aria-pressed=true],.v3-contracts .contract-card:hover { filter:brightness(1.15); transform:none; }
+.v3-contracts .contract-card>.art-mark { grid-column:1; grid-row:1 / span 2; width:40px; height:40px; align-self:center; }
+.v3-contracts .contract-card h3 { margin:0; font-size:15px; }
+.v3-contracts .contract-card p { margin:0; font-size:11px; line-height:1.6; }
+.v3-contracts>.v3-panel-body>.art-details { font-size:11px; }
+/* Each comic sheet contains three portrait frames. Keep the native frame ratio
+ * instead of stretching one frame into a landscape card. */
+.menu-root.screen-story[data-story-style=comic] .comic-board { grid-template-columns:repeat(var(--comic-panel-count,3),minmax(0,20cqw)); justify-content:center; justify-items:center; }
+.menu-root.screen-story[data-story-style=comic] .comic-panel { width:auto; height:100%; max-width:100%; aspect-ratio:557.333 / 941; }
+.menu-root.screen-story[data-story-style=comic] .comic-panel.is-active p span { display:none; }
+.v3-chapters { width:90%; max-height:96%; }
+.v3-chapters .v3-panel-heading { padding-bottom:.6cqw; margin-bottom:.7cqw; }
+.v3-chapters .chapter-card-art { height:6.3cqw; }
+.v3-chapters .chapter-card-copy { padding:.65cqw .8cqw; }
+.v3-chapters .chapter-card-copy small { margin-bottom:.35cqw; }
+.v3-chapters .chapter-mode-note { margin-bottom:.65cqw; }
+.crew-job { display:none; }
+.crew-ready { display:none; }
+.v3-title-brand .title-secondary { gap:1.2cqw; }
+.v3-title-brand .title-secondary .art-mark { width:2.7cqw; height:2.7cqw; min-width:30px; min-height:30px; }
+/* One compact command deck. Header, target, plan and confirmation remain in
+ * document order; the confirm footer is outside the scrolling body. */
+.v3-command-panel {
+  width:min(64%,820px); max-height:82%; bottom:2.5%; padding:.65cqw .85cqw;
+  border:13px solid transparent!important;
+  border-image:url('../../assets/ui/panel-card.png') 40 55 65 45 fill / 13px stretch!important;
+  background:#071b2df2!important; border-radius:0; box-shadow:none;
+  display:flex; flex-direction:column; overflow:hidden; gap:.35cqw;
+}
+.v3-command-panel .command-header { min-height:45px; padding:0 44px .4cqw 0; gap:.7cqw; border:0; flex:0 0 auto; }
+.v3-command-panel .command-header>img { width:43px; height:43px; border:0; background:none; }
+.v3-command-panel .command-header h2 { font-size:20px; }
+.v3-command-panel .command-header small { font-size:11px; }
+.v3-command-panel .command-header>.icon-button { right:0; top:0; width:38px; height:38px; min-width:38px; min-height:38px; background:none; }
+.v3-command-panel .command-header>.icon-button>.ui-icon { width:25px; height:25px; }
+.v3-command-panel .command-budget { font-size:12px; margin-left:auto; }
+.v3-command-panel .command-step-rail { flex:0 0 auto; font-size:10px; padding:0 0 .3cqw; }
+.v3-command-panel .v3-command-body { display:flex; flex-direction:column; gap:.5cqw; padding:0; overflow:auto; min-height:0; }
+.v3-command-body>* { order:0!important; grid-area:auto!important; }
+.v3-command-panel .command-target-control { display:flex; gap:.7cqw; padding:0; background:none!important; }
+.command-target-visual { min-width:42px; }
+.command-target-visual>span:last-child,.command-target-control>span { display:none; }
+.v3-command-panel .command-target-control>label { display:flex; align-items:center; gap:.5cqw; flex:1; font-size:12px; }
+.v3-command-panel .command-target-control>label>span { display:none; }
+.v3-command-panel .command-target-control select { max-width:none; width:100%; min-height:44px; font-size:14px; background:#09273c!important; border:7px solid transparent; border-image:url('../../assets/ui/panel-card.png') 40 55 65 45 fill / 7px stretch; box-shadow:none; }
+.v3-command-panel .command-target-ring { width:40px; height:40px; }
+.v3-command-panel .command-preview-card { min-height:24px; padding:.2cqw .3cqw; font-size:11px; background:none!important; }
+.v3-command-panel .command-preview-card strong { font-size:13px; }
+.v3-command-panel .command-preview-card p { max-width:none; white-space:normal; font-size:11px; margin:0; }
+.v3-command-panel .command-preview-card p:not(.is-warning) { display:none; }
+.v3-command-panel .command-options { display:grid; grid-template-columns:1fr 1fr; gap:.65cqw; }
+.v3-command-panel .command-options>button { display:grid; grid-template-columns:46px 1fr; align-items:center; min-height:78px; padding:5px; border:7px solid transparent; border-image:url('../../assets/ui/panel-card.png') 40 55 65 45 fill / 7px stretch; background:none!important; filter:saturate(.75); }
+.v3-command-panel .command-options>button[aria-pressed=true] { border:7px solid transparent; border-image:url('../../assets/ui/panel-card.png') 40 55 65 45 fill / 7px stretch; filter:brightness(1.15) saturate(1.1); background:none!important; }
+.v3-command-panel .command-option-art { width:42px; height:42px; min-width:42px; min-height:42px; grid-column:1; grid-row:1 / span 2; }
+.v3-command-panel .command-option-art .ui-icon { width:31px; height:31px; }
+.v3-command-panel .command-option-heading { display:grid; gap:4px; }
+.v3-command-panel .command-option-heading b { font-size:15px; }
+.v3-command-panel .command-option-heading em { font-size:10px; }
+.v3-command-panel .command-options>button>strong { font-size:10px; }
+.v3-command-panel .command-options p { display:none; }
+.v3-command-panel .command-receipt { padding:.25cqw .4cqw; background:none!important; }
+.v3-command-panel .command-receipt>span { font-size:10px; }
+.v3-command-panel .command-receipt>p { font-size:12px; max-width:none; white-space:normal; margin:0; }
+.v3-command-panel .command-forecast-toggle { min-height:30px; width:max-content; padding:3px 7px; font-size:11px; border:0; background:none; }
+.v3-command-panel .command-forecast-toggle .ui-icon { width:18px; height:18px; }
+.v3-command-panel .command-advanced-wrap .command-more { position:static; display:flex; width:max-content; min-height:30px; font-size:11px; padding:3px 7px; background:none!important; border:0; }
+.v3-command-panel .command-submit { order:0; flex:0 0 auto; margin:0; padding:.4cqw 0 0; border:0; gap:10px; }
+.v3-command-panel .command-submit>span { font-size:11px; background:none; }
+.v3-command-panel .command-submit>.game-button { min-width:165px; min-height:46px; font-size:15px; padding:6px 15px; }
+.v3-command-panel .command-submit>small { display:none; }
+@media(max-width:800px),(max-height:480px){
+  .v3-title-brand .title-actions .game-button.primary { min-height:50px; font-size:14px; }
+  .hud-clock .clock-dial,.hud-vitals .hp-icon { width:18px; height:18px; flex-basis:18px; }
+  .guide-cards>article>.ui-icon { width:34px; height:34px; flex-basis:34px; }
+  .guide-cards>article small,.analysis-clue .art-details { font-size:9px; }
+  .v3-contracts .contract-card,.v3-contracts .contract-card[aria-pressed=true] { min-height:78px; padding:5px 8px; grid-template-columns:30px 1fr; gap:2px 7px; }
+  .v3-contracts .contract-card>.art-mark { width:28px; height:28px; }
+  .v3-contracts .contract-card h3 { font-size:12px; }
+  .v3-contracts .contract-card p { font-size:10px; }
+  .guide-portrait { width:23px; height:23px; }
+  .v3-command-panel { width:92%; max-height:85%; border-width:9px!important; border-image-width:9px!important; padding:5px 9px; gap:3px; }
+  .v3-command-panel .v3-command-body { gap:5px; }
+  .v3-command-panel .command-header { min-height:37px; padding-bottom:2px; }
+  .v3-command-panel .command-header>img { width:34px; height:34px; }
+  .v3-command-panel .command-header h2 { font-size:15px; }
+  .v3-command-panel .command-step-rail { font-size:8px; padding:0; }
+  .v3-command-panel .command-target-control select { font-size:12px; }
+  .v3-command-panel .command-options>button { min-height:66px; grid-template-columns:36px 1fr; padding:3px; }
+  .v3-command-panel .command-option-art { width:34px; height:34px; min-width:34px; min-height:34px; }
+  .v3-command-panel .command-option-heading b { font-size:12px; }
+  .v3-command-panel .command-option-heading em { font-size:9px; }
+  .v3-command-panel .command-submit>.game-button { min-width:150px; min-height:44px; font-size:13px; }
+  .v3-command-panel .command-submit>span { font-size:10px; }
+  .v3-command-panel .command-receipt>p { font-size:11px; }
+}

@@ -1,0 +1,14 @@
+Use case: stylized-concept
+Asset type: transparent UI decorative chrome atlas for the 2D side-view platform game 鲸鱼魔盗团.
+Input image: the approved game screenshot provides the exact deep navy glass, thin cyan outlines and maritime brass detail style to match. Do not reproduce the scene or any content labels.
+Primary request: Produce exactly SIX empty interface frame objects, STRICTLY arranged in 2 columns x 3 rows on a 1024 x 1536 transparent canvas. The six invisible equal square cells are each 512 x 512. The content order is row-major:
+Top-left: empty long shallow TOP HUD BAR, with thin brass and icy-blue metal edges and dark translucent navy glass. Occupy a wide shallow horizontal rectangle centered inside the cell; do not add compartments or symbols.
+Top-right: empty ROUND SKILL BUTTON FRAME, thin metallic cyan-blue rim, subtle gold joint details, empty dark translucent glass center.
+Middle-left: empty wide low DIALOGUE BOX FRAME with gently rounded corners, dark navy translucent glass and thin cyan-metal rim, small brass corner rivets. No portrait slot.
+Middle-right: empty RESULTS PANEL FRAME, almost square with refined brass ornamental corners and a tiny abstract whale-tail filigree in the frame only, dark empty glass interior.
+Bottom-left: empty narrow rounded RESOURCE CAPSULE FRAME, horizontal with metal-blue ends and thin brass trim, dark blank glass.
+Bottom-right: empty PAUSE BUTTON SHELL, a compact rounded square with blue-metal border and empty dark navy glass center.
+Style: polished hand-painted 2D game UI, crisp readable geometry, fine cyan edge glow and restrained gold flecks, deep navy glass tint. All glass interiors must be completely EMPTY with translucent navy fill only. Exterior of every object must be true transparent alpha.
+Composition: each of six frames is a separate disconnected whole object with generous transparent separation. All objects stay inside their own cells with 12 percent blank margin, no overlaps, no clipping. No labels or visible grid lines. All frames seen straight-on and front-facing, no perspective distortion.
+Text: NONE. No words, no Chinese characters, no letters, no digits, no pseudotext.
+Avoid: icons, pause bars, arrows, hearts, symbols in the center, character faces, whales inside panels, data cubes, buttons nested in a panel, background canvas fill, checkerboard, shadows outside frames, extra objects, logos.

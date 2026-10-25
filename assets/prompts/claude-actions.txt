@@ -1,0 +1,14 @@
+Use case: stylized-concept
+Asset type: production-ready transparent character action atlas for the 2D side-view platform game 鲸鱼魔盗团.
+Input images: Image 1 is the approved game look and exact chibi Claude design (the orange-haired girl on the middle platform); Image 2 is supplementary Claude character identity reference. Match the approved game screenshot's polished hand-painted anime chibi proportions, clean dark outlines, cream ruffles, brown/orange fabrics and warm small gold accents. Do not draw its scene.
+Primary request: ONE atlas only, Claude alone repeated in exactly TEN complete full-body poses, arranged in a STRICT equal 2-column x 5-row grid on a 1024 x 2560 transparent canvas. Each cell is 512 x 512. The cells must be invisible, no lines or labels. All of the LEFT column's five figures face LEFT; all of the RIGHT column's five figures face RIGHT. Head, torso, knees, feet, eyes and book should follow the specified side-view direction, not a front view.
+The same youthful adult female chibi identity, 2 to 2.5 heads tall, orange long flowing hair, small dark brown hair ornament, cream and brown academic dress, white ruffles and stockings, brown ankle boots, a small closed dark book. SAME head size, face, clothes, proportions and rendering across every cell.
+Row 1: idle, relaxed grounded stance with book held.
+Row 2: walking stride, knees bent, long hair swinging, small book held close.
+Row 3: jumping upward, knees bent beneath her and one arm raised.
+Row 4: falling downward, slightly extended legs and hands balancing, hair lifting.
+Row 5: skill action, opens her small book and confidently extends a hand. Do not add flying documents or large effects.
+Composition: Each cell contains exactly one whole Claude, centered, both head and all hair/accessories/feet completely inside its cell with at least 12 percent empty margin on each side. Consistent head scale across all ten cells. Grounded foot baseline at each cell's local y=0.875 and horizontal center at x=0.5, keeping these same anchor positions even for airborne poses by using bent legs. Never let any hair, fingers, book or fabric cross a cell boundary.
+Backdrop: genuinely transparent alpha background.
+Text: none.
+Avoid: captions, letters, numbers, labels, grid lines, extra characters, floor, contact shadow, scenery, dramatic splash effects, borders, white background, checkerboard pattern.

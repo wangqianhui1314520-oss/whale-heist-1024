@@ -1,0 +1,12 @@
+Use case: stylized-concept.
+Asset type: production-ready 2D side-view platform game sprite atlas for Whale Heist / 鲸鱼魔盗团.
+Input image: supplied approved gameplay visual is a STYLE REFERENCE only: navy blue underwater server temple, ivory stone slabs trimmed aged brass, precise painterly anime game outlines, warm amber lantern lighting and restrained cyan accents.
+Generate ONE transparent PNG atlas, canvas landscape 3:2, target 1536 by 1024. EXACT 3 columns by 2 rows of equal square cells, no cell borders and no labels. Fully transparent unused space. Each cell is exactly 512 x 512 logical pixels with generous 12% transparent padding all around. Put one isolated complete module centered in each cell. Orthographic SIDE ELEVATION view, no top down and no isometric perspective, every walkable collision surface is a perfectly horizontal line. Shared scale/materials.
+Six cells in reading order:
+TOP LEFT: wide rectangular platform middle section, straight ivory stone top with worn gold rim, dark navy masonry and steel supports below, flat left/right joining sides.
+TOP MIDDLE: matching left end-cap platform segment, finished rounded ornamental left edge, flat right join.
+TOP RIGHT: matching right end-cap platform segment, flat left join, finished right edge.
+BOTTOM LEFT: thin floating platform, horizontal narrow ivory slab with gold corners and small navy steel underside.
+BOTTOM MIDDLE: intact paper security barrier, tall antique brass and navy rectangular freestanding frame filled by pale cracked paper / parchment, no symbols or writing, straight base.
+BOTTOM RIGHT: the same barrier frame after smashed open, enormous clear central opening, ragged parchment scraps attached only to frame, broken bottom fragments, intact supporting upright frame with recognizable damage, no flying debris outside cell.
+Treat these as six isolated game sprites, NOT a scene, NOT a mockup. No characters, UI, text, numbers, watermark, floor, scenery, dark checkerboard, or extra objects. Edges crisp, detailed at small game scale. Transparent alpha background is required.

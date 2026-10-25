@@ -1,0 +1,10 @@
+Use case: stylized-concept
+Asset type: production game UI icon atlas, no mockup, no UI screenshot.
+Create one high quality transparent PNG sprite sheet for a polished side-view underwater heist adventure "Whale Heist". Hand painted game inventory icons with deep navy enamel, restrained brass rims, luminous icy cyan highlights, readable bold silhouettes. Match a whimsical premium submarine / brass and cyan fantasy game. Actual bitmap illustration, not vector line icons.
+Layout: perfectly regular 4 columns by 4 rows, 16 equal square cells, each centered and completely separated by generous transparent padding. Each icon occupies 65% of its cell. Absolutely no frames around the whole sheet, no text or labels, no numbers, no watermarks, no contact sheet annotations. Fully transparent background.
+The 16 cells in exact reading order:
+row 1: a left-pointing chunky brass arrow; a right-pointing chunky brass arrow; an upward arrow; a downward arrow.
+row 2: a jump icon with a boot and upward curved trajectory; a fast dash icon with a miniature whale tail and speed streaks; a gloved hand for interaction; two vertical pause bars.
+row 3: an unfolded nautical chart; a recognizable brass gear with six teeth; a closed leather archive book with clasp; a rightward play triangle.
+row 4: a curved restart arrow; a heart-shaped blue glass health gem; a miniature brass stopwatch; a crisp X close symbol in brass.
+Use recognizable symbols. Keep forms simple and clear at 24px. Same scale and light direction. No halos spilling into adjoining cells, no baked checkerboard, no black background.

@@ -1,0 +1,22 @@
+{
+  "stem": "story-prologue-paper-window",
+  "raw": "C:/Users/Administrator/.codex/generated_images/01a16df1-3611-77a0-8abc-3d4da96f36ed/exec-d471f4cb-fd97-4d4e-823b-d13522504286.png",
+  "workspace": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\story\\prologue-paper-window.png",
+  "dimensions": [
+    1672,
+    941
+  ],
+  "alpha": {
+    "channel": false,
+    "opaque": true
+  },
+  "tool": "image_gen",
+  "date": "2026-10-25",
+  "mode": "built-in",
+  "prompts": [
+    "D:/Vibe coding/1024切磋大会/游戏-鲸鱼魔盗团/assets/prompts/story-prologue-paper-window.txt"
+  ],
+  "usage": "story keyframe",
+  "sha256": "bb972b6b61de8a2337cf879fc162b92cda5a59de85e9b9a4ba27362a6ae7840f",
+  "bytes": 2384442
+}

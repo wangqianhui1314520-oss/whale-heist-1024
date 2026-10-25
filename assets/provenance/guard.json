@@ -1,0 +1,58 @@
+{
+  "asset": "guard",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "generatedDate": "2026-10-24",
+  "promptPath": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\prompts\\guard.txt",
+  "references": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\concepts\\gameplay-sideview-visual-target.png"
+  ],
+  "rawPath": "C:\\Users\\Administrator\\.codex\\generated_images\\01a169be-8449-7543-93d9-e3c3c89b1190\\exec-c993e66d-7370-4d37-82e6-b6ef8f73bfc9.png",
+  "targetPath": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\enemies\\guard.png",
+  "dimensions": {
+    "width": 1254,
+    "height": 1254
+  },
+  "imageMode": "RGBA",
+  "transparency": {
+    "hasAlpha": true,
+    "fullyTransparentPixels": 1143205,
+    "partiallyTransparentPixels": 427889,
+    "opaquePixels": 1422,
+    "fullyTransparentFraction": 0.726991,
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "actualAlphaPassed": true
+  },
+  "layout": {
+    "columns": 1,
+    "rows": 1
+  },
+  "frames": [
+    {
+      "state": "default",
+      "src": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.5
+      ]
+    }
+  ],
+  "sha256": "a09c9525f6a1f841ffc5c37c4733b7fd9cdf77f0554ffc4b3deb9d91092dcb72",
+  "postProcessing": "Copied exact generated PNG; no raster editing or resizing. Pillow used for read-only dimension and alpha inspection.",
+  "visualQA": {
+    "inspected": true,
+    "observations": [
+      "Single complete left-facing white enamel drone with red optics, antenna and mechanical claws.",
+      "More detailed than gameplay target but silhouette and colors match."
+    ],
+    "criticalIssues": false
+  }
+}

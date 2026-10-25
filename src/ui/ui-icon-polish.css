@@ -1,0 +1,62 @@
+/* Shared authored badge language. The raster badge strip supplies geometry;
+   this file only maps semantic actions to its six painted marks. */
+.ui-icon {
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  min-width: 1.5em;
+  flex: 0 0 auto;
+  vertical-align: middle;
+  overflow: hidden;
+  color: currentColor;
+  background-image: url('../../assets/ui/hud-icon-badges.png');
+  background-repeat: no-repeat;
+  background-size: 600% 100%;
+  background-position: var(--ui-badge-position, 0%) center;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: color .15s ease, filter .15s ease, opacity .15s ease, transform .12s ease;
+}
+
+/* Semantic colors are opt-in and inherit naturally from a button or badge. */
+.ui-icon--left,
+.ui-icon--right,
+.ui-icon--jump,
+.ui-icon--dash { --ui-badge-position: 100%; color: var(--ui-icon-move, #9be7ff); }
+.ui-icon--pause { --ui-badge-position: 80%; color: var(--ui-icon-neutral, #b7d9e9); }
+.ui-icon--scan { --ui-badge-position: 20%; color: var(--ui-icon-scan, #8ee8dc); }
+.ui-icon--axe { --ui-badge-position: 0%; color: var(--ui-icon-danger, #ffb07f); }
+.ui-icon--book { --ui-badge-position: 40%; color: var(--ui-icon-archive, #f0d39a); }
+.ui-icon--token,
+.ui-icon--cube { --ui-badge-position: 60%; color: var(--ui-icon-resource, #7edfff); }
+.ui-icon--heart { --ui-badge-position: 40%; color: var(--ui-icon-health, #8fe7e4); }
+
+button:hover:not(:disabled) > .ui-icon,
+button:focus-visible > .ui-icon,
+.game-button:hover:not(:disabled) .ui-icon {
+  filter: drop-shadow(0 0 5px currentColor);
+}
+button:active:not(:disabled) > .ui-icon,
+.game-button:active:not(:disabled) .ui-icon {
+  transform: scale(.92);
+}
+button:disabled > .ui-icon,
+.game-button:disabled .ui-icon {
+  opacity: .46;
+  filter: saturate(.35);
+}
+
+/* Keep icon-only controls readable and easy to hit on touch screens. */
+.icon-button > .ui-icon,
+.hud-pause > .ui-icon {
+  width: 1.25em;
+  height: 1.25em;
+}
+.touch-controls .ui-icon {
+  min-width: 1em;
+  min-height: 1em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-icon { transition: none; }
+}

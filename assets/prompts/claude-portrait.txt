@@ -1,0 +1,8 @@
+Use case: stylized-concept
+Asset type: transparent square character portrait for game dialogue and party selection in 鲸鱼魔盗团.
+Input images: Image 1 is the exact Claude identity and finalized costume from her newly generated game sprite atlas. Image 2 is the approved overall game's rendering style. Match the same orange-haired chibi girl.
+Primary request: A single FRONT-FACING head-and-upper-torso bust of Claude, youthful adult female anime chibi with a warm clever smile, amber-orange eyes, long rich orange hair, a small dark brown hair bow with tiny gold flower detail, cream ruffled blouse and chocolate-brown academic dress with burnt orange ribbon. Same face, costume colors, bow and shading as the action atlas. Hands can hold a small closed brown book at the lower edge.
+Composition: one portrait only on a square 1024 x 1024 transparent canvas. Head comfortably centered, entire hair top and shoulders fit with 10 percent transparent safe margin, upper torso included. Gently lit, clear polished hand-painted anime style, clean dark contour lines, soft dimensional cel shading, crisp enough at small UI size.
+Backdrop: genuine transparent alpha.
+Text: none.
+Avoid: picture frames, circular rings, borders, plaques, letters, labels, logos, numbers, extra characters, environment, scenic background, drop shadow, checkerboard.

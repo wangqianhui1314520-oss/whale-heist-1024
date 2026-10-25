@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>鲸鱼魔盗团 · 美术资产库</title>
+  <link rel="stylesheet" href="../ui/game-ui.css"><link rel="stylesheet" href="gallery.css">
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="#"><img src="../ui/whale-emblem.png" alt="鲸鱼徽标"><span>鲸鱼魔盗团<small>WHALE HEIST / ART LIBRARY</small></span></a>
+    <div class="header-meta"><span class="live-dot"></span>横版侧视 · 正式素材包<span class="edition">ART BUILD 01</span></div>
+  </header>
+  <main>
+    <section class="intro">
+      <div><div class="eyebrow">THE CREW IS READY.</div><h1>潜入深蓝，准备开演。</h1><p>角色、机关与海底机房在这里集合。逐项检查透明边缘、动作姿态与技能效果，或在场景中查看素材的组合。</p></div>
+      <div class="stat-grid"><div><strong id="image-count">—</strong><span>原始美术图</span></div><div><strong id="sprite-count">—</strong><span>可调用切片</span></div><div><strong id="animation-count">—</strong><span>动画组</span></div></div>
+    </section>
+    <section class="showcase-grid">
+      <div class="assembly-panel"><div class="section-bar"><div><span class="eyebrow">SCENE ASSEMBLY</span><h2>美术拼装预览</h2></div><span class="quiet-tag">展示组合效果 · 不可游玩</span></div><canvas id="scene-canvas" width="1200" height="540" aria-label="使用实际素材拼装的海底关卡美术预览"></canvas><div class="assembly-caption"><span><i></i>实际背景、平台、角色与机关</span><span>鼠标悬停素材卡可查看细节</span></div></div>
+      <a class="concept-card" href="../concepts/gameplay-sideview-visual-target.png" target="_blank" rel="noopener"><img src="../concepts/gameplay-sideview-visual-target.png" alt="已确认的游戏视觉目标"><span><small>APPROVED DIRECTION</small><strong>已确认视觉稿 ↗</strong><em>查看构图、配色与角色比例</em></span></a>
+    </section>
+    <section class="library">
+      <div class="library-heading"><div><span class="eyebrow">ASSET EXPLORER</span><h2>素材浏览</h2></div><label class="checker-control"><input id="checker-toggle" type="checkbox" checked><span class="switch"></span>透明棋盘</label><label class="search-field"><span aria-hidden="true">⌕</span><input id="asset-search" type="search" placeholder="搜索角色、机关、技能…" aria-label="搜索素材"></label></div>
+      <nav id="tabs" class="tabs" aria-label="素材分类"></nav>
+      <div id="actor-controls" class="filter-bar"><label>角色 <select id="character-select"><option value="all">全部角色</option><option value="deepseek">DeepSeek</option><option value="grok">Grok</option><option value="claude">Claude</option><option value="glm">GLM</option></select></label><label>状态 <select id="state-select"><option value="all">全部动作</option><option value="idle">待机</option><option value="walk">行走</option><option value="jump">起跳</option><option value="fall">下落</option><option value="skill">技能</option></select></label><label>方向 <select id="direction-select"><option value="all">左右双向</option><option value="left">向左</option><option value="right">向右</option></select></label><span>动作图集按真实透明边界取帧</span></div>
+      <div id="fx-controls" class="filter-bar" hidden><button id="fx-play" class="small-button" type="button">暂停播放</button><label>播放速度 <input id="fx-speed" type="range" min="2" max="18" value="8"><output id="fx-speed-label">8 FPS</output></label><span>逐帧展示原始技能图集</span></div>
+      <p id="catalog-status" class="catalog-status" role="status">正在载入本地素材目录…</p><div id="asset-grid" class="asset-grid"></div>
+    </section>
+    <section id="ui-showcase" class="ui-showcase" hidden>
+      <div class="library-heading"><div><span class="eyebrow">INTERFACE COMPONENTS</span><h2>游戏界面组件</h2></div><p>文字与布局由代码渲染，可直接复用。</p></div>
+      <div class="ui-demo-grid">
+        <article class="ui-demo whale-ui whale-title-menu"><span class="sample-label">01 / 主菜单</span><img src="../ui/whale-emblem.png" class="whale-menu-emblem" alt=""><h2>鲸鱼魔盗团</h2><p>把话说清楚，把队友带回家。</p><button class="whale-button whale-button-primary" type="button">开始行动</button><button class="whale-button" type="button">继续航程</button></article>
+        <article class="ui-demo whale-ui"><span class="sample-label">02 / 任务 HUD</span><div class="whale-hud"><b>第四章 · 战报公开</b><span>03:12</span><span class="whale-health">♥ 80 / 100</span><span class="whale-cargo">◇ ◇ ▢</span></div><div class="whale-mission"><span class="whale-pill">任务</span> 关闭广播 <b>1 / 2</b></div><div class="whale-progress"><i style="width:80%"></i></div></article>
+        <article class="ui-demo whale-ui"><span class="sample-label">03 / 指令预览</span><div class="whale-command-preview"><b>Claude</b><span>只引这个。</span><span class="whale-command-cost">限定词 × 1</span></div><div class="whale-target-line"><i></i><i></i><i></i><span>预览作用范围</span></div><p class="whale-hint">确认后消耗限定词，队友按目标执行。</p></article>
+        <article class="ui-demo whale-ui"><span class="sample-label">04 / 小队指令面板</span><div class="whale-command-panel"><button class="whale-crew-card" type="button"><img src="../portraits/grok-portrait.png" alt="Grok"><b>Grok</b><small>破障</small></button><button class="whale-crew-card is-selected" type="button"><img src="../portraits/claude-portrait.png" alt="Claude"><b>Claude</b><small>诱饵</small></button><button class="whale-crew-card" type="button"><img src="../portraits/glm-portrait.png" alt="GLM"><b>GLM</b><small>扫描</small></button></div></article>
+        <article class="ui-demo whale-ui"><span class="sample-label">05 / 触屏操作</span><div class="whale-touch-controls"><div><button class="whale-touch-button" type="button" aria-label="向左">◀</button><button class="whale-touch-button" type="button" aria-label="向右">▶</button></div><div><button class="whale-touch-button whale-touch-action" type="button">↑<small>跳跃</small></button><button class="whale-touch-button whale-touch-action" type="button">≈<small>冲刺</small></button></div></div></article>
+        <article class="ui-demo whale-ui"><span class="sample-label">06 / 角色对话</span><div class="whale-dialogue"><img src="../portraits/deepseek-portrait.png" alt="DeepSeek"><div><b>DeepSeek</b><p>数据到手！等等……谁把战报公开了？</p></div><span class="whale-dialogue-next">▼</span></div></article>
+        <article class="ui-demo whale-ui"><span class="sample-label">07 / 章节结算</span><div class="whale-chapter-result"><span class="whale-pill">CHAPTER 04 CLEAR</span><h3>战报公开</h3><div class="whale-result-stats"><span>数据 <b>12</b></span><span>用时 <b>04:38</b></span><span>暴露 <b>低</b></span></div><button class="whale-button whale-button-primary" type="button">下一章 →</button></div></article>
+        <article class="ui-demo whale-ui"><span class="sample-label">08 / 主线结算</span><div class="whale-campaign-result"><div class="whale-rank">A</div><div><span class="whale-pill">全员返航</span><h3>本次行动，顺利收工。</h3><p>五章完成 · 数据已归档 · 小队完整</p><div class="whale-result-actions"><button class="whale-button" type="button">调查笔录</button><button class="whale-button whale-button-primary" type="button">章节挑战</button></div></div></div></article>
+      </div>
+    </section>
+    <footer><span>鲸鱼魔盗团 / 美术资产预览</span><span>本地离线目录 · PNG 原图 + 图集坐标 + 代码界面</span><a href="../asset-manifest.json" target="_blank">查看资产清单 ↗</a></footer>
+  </main>
+  <dialog id="asset-dialog"><form method="dialog"><button class="dialog-close" aria-label="关闭">×</button></form><div class="inspector-preview"><canvas id="inspector-canvas" width="800" height="700"></canvas></div><div class="inspector-info"><span id="inspector-category" class="eyebrow"></span><h2 id="inspector-title"></h2><p id="inspector-meta"></p><code id="inspector-source"></code><a id="inspector-open" class="small-button" target="_blank" rel="noopener">打开原始图集 ↗</a></div></dialog>
+  <script src="catalog.js"></script><script src="gallery.js"></script>
+</body>
+</html>

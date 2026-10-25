@@ -1,0 +1,25 @@
+{
+  "stem": "story-cinematic-evacuation",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "date": "2026-10-25",
+  "raw_output_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a16df1-3611-77a0-8abc-3d4da96f36ed\\exec-109665a9-d533-41cd-bcfb-44a6e0f56f6e.png",
+  "prompts": [
+    "assets/prompts/story-cinematic-evacuation.txt"
+  ],
+  "references": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\deepseek-portrait.png",
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\grok-portrait.png",
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\claude-portrait.png",
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\glm-portrait.png"
+  ],
+  "reference_role": "character identity references",
+  "style": "cinematic",
+  "beat": "evacuation",
+  "post_processing": "None; byte-identical copy of original generated PNG.",
+  "sha256": "ec4f4b6b9d3614583c059c8962602b5dd256534e4f95d24680b8c5221db65134",
+  "dimensions": [
+    1672,
+    941
+  ]
+}

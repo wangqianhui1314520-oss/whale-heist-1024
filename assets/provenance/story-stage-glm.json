@@ -1,0 +1,22 @@
+{
+  "stem": "story-stage-glm",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "date": "2026-10-25",
+  "raw_output_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a16df1-3611-77a0-8abc-3d4da96f36ed\\exec-c9aac77c-c195-48de-84c3-0860ced495ea.png",
+  "prompts": [
+    "assets/prompts/story-stage-glm.txt"
+  ],
+  "references": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\backgrounds\\gameplay-backdrop.png"
+  ],
+  "reference_role": "environment style reference",
+  "style": "stage",
+  "beat": "glm",
+  "post_processing": "None; byte-identical copy of original generated PNG.",
+  "sha256": "61b2ce441fd43c9bcf5c0d49f8ba769450ab7f7e3f14b044b1b973fae3f3340f",
+  "dimensions": [
+    1672,
+    941
+  ]
+}

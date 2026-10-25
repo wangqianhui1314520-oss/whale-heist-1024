@@ -1,0 +1,6 @@
+Use case: stylized-concept
+Asset type: transparent square game HUD portrait, 1024x1024.
+Input images: Image 1 is the approved side-scrolling game's style. Image 2 is the exact Grok sprite atlas whose identity and costume must match.
+Primary request: ONE front-facing centered head-and-shoulders chibi bust portrait of Grok. Same blonde amber-red-eyed girl as image 2, long wavy golden hair, black bows with burgundy roses, tiny dark gothic bonnet details, black and burgundy gothic maid dress, white lace collar, gold accents, playful confident smile and energetic expression. Keep same face, same chibi proportions and same costume as atlas. No axe in this close-up.
+Composition: entire hair silhouette visible, head about 65 percent of canvas height; bust tapers naturally at lower chest with clean curved bottom. 12 percent alpha padding on all edges. Fine expressive outlines, polished hand-painted anime cutout style, rich warm gold and black burgundy palette matching game's teammates.
+Real transparent background. No frame, circle, UI border, badge, text, logos, extra character, props, painted backdrop or floor shadow.

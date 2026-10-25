@@ -1,0 +1,67 @@
+/* Keep authored scene art and dialogue in separate, measured regions. */
+.menu-root.screen-story .story-dialogue,
+.menu-root.screen-story[data-story-style=comic] .comic-dialogue {
+  min-height:0; max-height:48%; padding:1cqw 1.6cqw;
+}
+.menu-root.screen-story .story-dialogue > p,
+.menu-root.screen-story[data-story-style=comic] .comic-dialogue > p {
+  font-size:calc(clamp(13px,1.35cqw,20px) * var(--subtitle-scale));
+  min-height:0; line-height:1.65; margin:6px 0 10px;
+}
+.menu-root.screen-story .story-dialogue-footer { gap:8px; }
+.menu-root.screen-story .story-dialogue-footer > span { font-size:max(11px,.75cqw); line-height:1.5; }
+.menu-root.screen-story .story-dialogue-footer .game-button { min-height:44px; flex-shrink:0; }
+.menu-root.screen-story .story-backdrop,
+.menu-root.screen-story .story-stage,
+.menu-root.screen-story[data-story-style=comic] .comic-board {
+  inset:var(--story-art-top,12%) 4% var(--story-art-bottom,35%);
+  transform:none; animation:none;
+}
+.menu-root.screen-story .story-backdrop {
+  background-size:contain; background-position:center; background-repeat:no-repeat;
+  background-color:#061725; filter:none;
+}
+.menu-root.screen-story .story-stage {
+  overflow:hidden;
+  width:min(92%,calc(var(--story-art-height,30cqw) * 1672 / 941));
+  height:auto; aspect-ratio:1672 / 941; margin:auto;
+}
+.menu-root.screen-story .story-shade,
+.menu-root.screen-story .comic-shade { background:transparent; }
+.menu-root.screen-story[data-story-style=comic] .story-backdrop { background-image:none !important; }
+.menu-root.screen-story[data-story-style=comic] .comic-board {
+  grid-template-columns:repeat(3,minmax(0,1fr)); gap:0;
+  width:min(92%,calc(var(--story-art-height,30cqw) * 1672 / 941)); height:auto; aspect-ratio:1672 / 941;
+  max-width:92%; max-height:calc(100% - var(--story-art-top,12%) - var(--story-art-bottom,35%));
+  margin:auto; align-items:stretch; justify-items:stretch;
+}
+.menu-root.screen-story[data-story-style=comic] .comic-panel {
+  width:100%; height:100%; max-width:none; aspect-ratio:auto;
+  border:0; border-radius:0; box-shadow:none; opacity:1; filter:none;
+}
+.menu-root.screen-story[data-story-style=comic] .comic-panel.is-active {
+  transform:none; box-shadow:inset 0 0 0 2px #e9ca91;
+}
+.menu-root.screen-story[data-story-style=comic] .comic-caption {
+  top:5px; left:5px; font-size:max(9px,.7cqw); letter-spacing:0;
+  pointer-events:none;
+}
+.menu-root.screen-story[data-story-style=cinematic] .story-backdrop {
+  animation:story-full-frame 14s ease-in-out infinite alternate;
+}
+@keyframes story-full-frame { from { transform:scale(.975); } to { transform:scale(1); } }
+@media(max-width:900px),(max-height:480px) {
+  .menu-root.screen-story .story-dialogue,
+  .menu-root.screen-story[data-story-style=comic] .comic-dialogue {
+    max-height:58%; padding:10px 14px; display:grid;
+    grid-template-columns:minmax(0,1fr) auto; gap:4px 10px;
+  }
+  .menu-root.screen-story .story-speaker-name,
+  .menu-root.screen-story .story-dialogue > p { grid-column:1 / -1; }
+  .menu-root.screen-story .story-choice { grid-column:1; grid-row:3; display:flex; align-items:center; flex-wrap:wrap; margin:0; }
+  .menu-root.screen-story .story-choice[hidden] { display:none; }
+  .menu-root.screen-story .story-choice > span { white-space:nowrap; }
+  .menu-root.screen-story .story-choice-button { flex-direction:row; align-items:center; gap:8px; }
+  .menu-root.screen-story .story-dialogue-footer { grid-column:2; grid-row:3; align-self:end; }
+  .menu-root.screen-story .story-dialogue-footer > span { display:none; }
+}

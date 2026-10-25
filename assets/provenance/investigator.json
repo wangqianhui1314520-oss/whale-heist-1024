@@ -1,0 +1,35 @@
+{
+  "asset": "investigator",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "date": "2026-10-24",
+  "refs": [
+    "D:/Vibe coding/1024切磋大会/游戏-鲸鱼魔盗团/assets/concepts/gameplay-sideview-visual-target.png",
+    "D:/Vibe coding/1024切磋大会/游戏-鲸鱼魔盗团/assets/atlases/glm-actions.png"
+  ],
+  "raw_output_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a169bf-2fdf-7903-ada2-0b9f1e422eb1\\exec-32a80913-ff47-4839-a8f9-b61b2d4ef56c.png",
+  "workspace_output_path": "D:/Vibe coding/1024切磋大会/游戏-鲸鱼魔盗团/assets/enemies/investigator.png",
+  "prompt_path": "D:/Vibe coding/1024切磋大会/游戏-鲸鱼魔盗团/assets/prompts/investigator.txt",
+  "width": 1254,
+  "height": 1254,
+  "mode_rgba": "RGBA",
+  "alpha": true,
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "grid": {
+    "columns": 1,
+    "rows": 1,
+    "frames": [
+      {
+        "id": "investigator_right",
+        "x": 0,
+        "y": 0,
+        "width": 1254,
+        "height": 1254
+      }
+    ]
+  },
+  "review": "Visually checked one complete cute chibi investigator, blue-gray coat and cap, clipboard and flashlight, facing right, no scene or watermark. Original native output preserved."
+}

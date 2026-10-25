@@ -1,0 +1,38 @@
+name: Verify game
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify game rules and interactions
+        run: |
+          node src/core/verify-core.mjs
+          node scripts/verify-architecture.mjs
+          node scripts/verify-maps.mjs
+          node scripts/verify-input.mjs
+          node scripts/verify-world.mjs
+          node scripts/verify-expanded-campaign.mjs --all
+          node scripts/verify-story-flow.mjs
+          node scripts/verify-story-theater.mjs
+          node scripts/verify-runtime-save.mjs
+      - name: Build and verify production assets
+        run: |
+          node scripts/build-game.mjs
+          node scripts/verify-build.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: whale-heist-web
+          path: dist
+          retention-days: 7

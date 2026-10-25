@@ -1,0 +1,5 @@
+Use case: logo-brand
+Asset type: transparent square game emblem for Whale Heist, 1024x1024.
+Input image: approved game screenshot. Focus ONLY on the small friendly blue whale-and-water-droplets emblem at the upper left of the title bar, use as motif and palette reference. Do not reproduce the title or the bar.
+Primary request: ONE polished cute blue whale emblem, centered and fully isolated on transparent background. Whale faces screen LEFT, smiling tiny eye, plump curved navy-and-cyan body, pale ice-blue belly, uplifted small tail on right, one tiny flipper, three curved water droplets above head and a curling splash around lower body. A compact clean asymmetrical silhouette suitable at 48px HUD size. Delicate dark navy outline and bright cyan highlight, mostly flat illustrated colors with gentle cel shading, coherent with game's hand-painted anime UI.
+Composition: complete whale, tail and all droplets visible with generous 15 percent transparent margin, nearly square visual footprint. Actual transparent alpha. No frame, circle, tile, text, letters, name, watermark, shadow, background, title bar or second emblem.

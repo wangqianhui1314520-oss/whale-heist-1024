@@ -1,0 +1,25 @@
+{
+  "stem": "story-comic-claude",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "date": "2026-10-25",
+  "raw_output_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a16df1-3611-77a0-8abc-3d4da96f36ed\\exec-e84d4a4f-5dc0-4a67-9c8f-cd5ff769699a.png",
+  "prompts": [
+    "assets/prompts/story-comic-claude.txt"
+  ],
+  "references": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\deepseek-portrait.png",
+    "D:\\Vibe coding\\1024切磆大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\grok-portrait.png",
+    "D:\\Vibe coding\\1024切磆大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\claude-portrait.png",
+    "D:\\Vibe coding\\1024切磆大会\\游戏-鲸鱼魔盗团\\assets\\portraits\\glm-portrait.png"
+  ],
+  "reference_role": "character identity references",
+  "style": "comic",
+  "beat": "claude",
+  "post_processing": "None; byte-identical copy of original generated PNG.",
+  "sha256": "a3d6be61dcc0172c60d0aefb3227ad4a044110d88ecc190914bad1c1419c7b87",
+  "dimensions": [
+    1672,
+    941
+  ]
+}

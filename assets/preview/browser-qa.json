@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-24",
+  "browser": "Codex in-app browser",
+  "page": "http://127.0.0.1:8765/assets/preview/index.html",
+  "result": "passed",
+  "layouts_observed": ["305px narrow panel", "1280x900 landscape browser viewport"],
+  "checks": [
+    "28 PNG / 96 sprite region / 4 animation counts rendered",
+    "Scene assembly visibly uses actual backgrounds, platforms, actors, enemies and props",
+    "Scene explicitly marked as non-playable art assembly",
+    "DeepSeek / walk / left filters return exactly one visible result",
+    "FX tab shows 16 frame cards and four animation cards",
+    "FX pause action changes control to resume",
+    "UI tab renders all seven sampled graphics without clipping",
+    "Browser error log empty during verification",
+    "Character filters reset and temporary viewport override removed"
+  ],
+  "screenshot": "preview-screenshot.jpg",
+  "note": "Screenshot documents the art browser and assembled art preview, not actual gameplay. Local file protocol was statically checked; this browser verification used HTTP."
+}

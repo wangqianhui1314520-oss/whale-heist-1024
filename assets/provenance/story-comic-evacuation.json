@@ -1,0 +1,23 @@
+{
+  "stem": "story-comic-evacuation",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "date": "2026-10-25",
+  "raw_output_path": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\story\\comic\\evacuation.png",
+  "prompts": [
+    "assets/prompts/story-comic-evacuation.txt"
+  ],
+  "references": [
+    "D:\\Vibe coding\\1024切磆大会\\游戏-鲸鱼魔盗团\\assets\\story\\cinematic\\evacuation.png",
+    "D:\\Vibe coding\\1024切磆大会\\游戏-鲸鱼魔盗团\\assets\\story\\stage\\evacuation.png"
+  ],
+  "reference_role": "generated story style source frames",
+  "style": "comic",
+  "beat": "evacuation",
+  "post_processing": "Three-panel composite assembled from generated cinematic and stage frames; no external art.",
+  "sha256": "e0a49c11b14450681595a757416298b80ee7bc00d4ac989e894419746fab45e2",
+  "dimensions": [
+    1672,
+    941
+  ]
+}

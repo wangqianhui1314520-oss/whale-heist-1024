@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-24",
+  "summary": {
+    "png_files": 28,
+    "sprite_regions": 96,
+    "character_poses": 40,
+    "portraits": 4,
+    "fx_groups": 4,
+    "fx_frames": 16,
+    "categories": {
+      "character": 40,
+      "portrait": 4,
+      "enemy": 2,
+      "prop": 6,
+      "scene": 18,
+      "fx_frame": 16,
+      "background": 3,
+      "ui": 7
+    }
+  },
+  "read_only_image_checks": true,
+  "raster_modifications": false,
+  "checks": [
+    "28 PNG存在且可完整解码",
+    "透明素材具真实Alpha及零Alpha像素",
+    "所有取样框均在原图内",
+    "所有取样框均含实色内容",
+    "原图SHA256已登记",
+    "所有PNG均附独立生成来源记录"
+  ],
+  "warnings": [],
+  "limitations": [
+    "所有PNG保留原始输出；坐标描述用于运行时drawImage取样。",
+    "行走为单张关键姿态，非完整逐帧步态循环。",
+    "drawActor使用每角色统一native_scale，切换动作不因武器外包围框变化而整体缩放。",
+    "特效播放应使用source_rect，以共同帧中心防止抖动。",
+    "背景实际为1672×941，运行时cover适配16:9，不拉伸人物。",
+    "平台装饰支架不等于碰撞盒；碰撞顶面由关卡数据单独定义。",
+    "个别姿态和头像未达到原计划12%留白，已按实际取样确认主体完整。"
+  ]
+}

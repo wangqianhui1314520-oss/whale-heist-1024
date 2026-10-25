@@ -1,0 +1,15 @@
+Use case: stylized-concept
+Asset type: production-ready transparent character action atlas for the 2D side-view platform game 鲸鱼魔盗团.
+Input images: Image 1 is the approved game look and exact GLM design (the black-haired academic girl standing by the terminal on lower-left platform); Image 2 is supplementary GLM identity. Claude from Image 3 is a scale/rendering style reference only: do NOT copy her hair color or clothes.
+Primary request: ONE atlas only, GLM alone repeated in exactly TEN complete full-body poses, arranged in a STRICT equal 2-column x 5-row grid on a 1024 x 2560 transparent canvas. Every cell is 512 x 512. The grid is invisible. All five LEFT column figures face LEFT; all five RIGHT column figures face RIGHT.
+Subject: Same youthful adult female chibi identity in all ten cells, 2 to 2.5 heads tall, very long black hair with a slight cool blue sheen, black square graduation mortarboard with small gold tassel and tiny gold floral details, amber-brown eyes, black-and-white ruffled academic gown/short dress, white blouse and black neck ribbon, black shoes and stockings. She holds a small blue-screen dark terminal or closed book. Stay faithful to approved black-white costume, no orange hair, no whale tail.
+Row 1: idle, relaxed grounded pose, terminal held close.
+Row 2: walking stride, knees bent and long black hair swinging gently.
+Row 3: upward jumping, knees bent, free hand balancing.
+Row 4: falling downward, slightly extended legs, hair lifting.
+Row 5: skill action, holds up a small blue terminal in one hand and points forward with the other. No huge beam or wide scan effect.
+Style: same polished hand-painted anime chibi game sprite style, same clean dark contour line weight, dimensional cel shading, restrained cool highlights and gold accents as approved screenshot and Claude atlas.
+Composition/framing: Exactly ten figures and no other subjects, consistent head and body size. Each cell contains one complete character centered at local x=0.5 with the foot anchor close to local y=0.875. All cap, hair, fingers, terminal and feet stay safely inside the cell with a 12 percent transparent safe margin on all four sides. Keep scale identical across all rows.
+Backdrop: genuinely transparent alpha, no floor and no cast shadow.
+Text: none.
+Avoid: labels, grid lines, text, numbers, UI, frames, backgrounds, floating effects, extra characters, clipping, black rectangles, checkerboard.

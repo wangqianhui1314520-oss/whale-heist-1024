@@ -1,0 +1,11 @@
+Use case: stylized-concept.
+Create ONE finished game-asset sprite sheet, transparent background, 1536 by 1024 pixels. The canvas is an invisible strict 3 columns by 2 rows grid of 512 by 512 cells. All SIX objects have equal square allocation and are centered in each cell. Every object must fit inside an inset 380 by 380 region of its cell with no overlap. Do not draw any borders or writing.
+Approved reference image is STYLE ONLY. Match its 2D anime hand-painted side-view underwater machinery: navy stone and metal, polished brass trim, ivory ceramic, small cyan indicator lights, crisp black outlines and warm lantern highlights. Flat orthographic SIDE ELEVATION, no isometric vanishing surfaces.
+TOP LEFT CELL: one complete vertical brass-and-navy rung ladder.
+TOP CENTER CELL: one horizontal compact elevator platform with ivory top and dark navy underside, no cables reaching outside own cell.
+TOP RIGHT CELL: one low brass pressure plate with cyan luminous center, horizontal.
+BOTTOM LEFT CELL: one compact closed portcullis gate, navy/brass outer frame with vertical metal bars down; frame complete inside cell.
+BOTTOM CENTER CELL: same outer gate frame and scale, but bars raised entirely into top housing leaving empty transparent passage.
+BOTTOM RIGHT CELL: one heavy closed submarine server door, navy steel, pale ivory bevel rim, gold bolts, small cyan panel, simple raised whale emblem at center; no letters or digits.
+Unused areas AND open gate interior must be genuinely transparent alpha 0, no backdrop or gradient, no painted black background, no ground shadows.
+Only the SIX complete isolated modules. No characters, pipes between cells, room background, scenery, UI, text, watermark, grid lines or checkerboard.

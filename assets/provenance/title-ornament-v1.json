@@ -1,0 +1,10 @@
+{
+  "asset": "ui/title-ornament-v1.png",
+  "tool": "built-in image_gen",
+  "generated_at": "2026-10-25",
+  "purpose": "title screen ornament behind game name",
+  "mode": "RGBA",
+  "transparent": true,
+  "usage": ["title_screen"],
+  "prompt_path": "assets/prompts/title-ornament-v1.txt"
+}

@@ -1,0 +1,347 @@
+{
+  "asset": "deepseek-actions",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "generatedDate": "2026-10-24",
+  "promptPath": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\prompts\\deepseek-actions.txt",
+  "references": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\concepts\\gameplay-sideview-visual-target.png",
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\references\\deepseek-chibi-reference.jpg"
+  ],
+  "rawPath": "C:\\Users\\Administrator\\.codex\\generated_images\\01a169be-8449-7543-93d9-e3c3c89b1190\\exec-2ee0d9bc-e973-4f77-ade0-f2ace528e296.png",
+  "targetPath": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\atlases\\deepseek-actions.png",
+  "dimensions": {
+    "width": 793,
+    "height": 1983
+  },
+  "imageMode": "RGBA",
+  "transparency": {
+    "hasAlpha": true,
+    "fullyTransparentPixels": 815535,
+    "partiallyTransparentPixels": 756122,
+    "opaquePixels": 862,
+    "fullyTransparentFraction": 0.518617,
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "actualAlphaPassed": true
+  },
+  "layout": {
+    "columns": 2,
+    "rows": 5,
+    "rowStates": [
+      "idle",
+      "walk",
+      "jump",
+      "fall",
+      "skill"
+    ],
+    "columnDirections": [
+      "left",
+      "right"
+    ],
+    "recommendedRowBoundaries": [
+      0,
+      397,
+      793,
+      1190,
+      1586,
+      1983
+    ]
+  },
+  "frames": [
+    {
+      "state": "idle",
+      "direction": "left",
+      "src": [
+        0,
+        0,
+        396,
+        397
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.875
+      ],
+      "alphaBoundsThreshold": 8,
+      "contentBounds": [
+        66,
+        33,
+        302,
+        362
+      ],
+      "recommendedSrc": [
+        0,
+        0,
+        396,
+        397
+      ],
+      "contentFeetBaselineInFrame": 0.9924433249370277
+    },
+    {
+      "state": "idle",
+      "direction": "right",
+      "src": [
+        396,
+        0,
+        397,
+        397
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.875
+      ],
+      "alphaBoundsThreshold": 8,
+      "contentBounds": [
+        433,
+        33,
+        293,
+        362
+      ],
+      "recommendedSrc": [
+        396,
+        0,
+        397,
+        397
+      ],
+      "contentFeetBaselineInFrame": 0.9924433249370277
+    },
+    {
+      "state": "walk",
+      "direction": "left",
+      "src": [
+        0,
+        397,
+        396,
+        396
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.875
+      ],
+      "alphaBoundsThreshold": 8,
+      "contentBounds": [
+        52,
+        431,
+        323,
+        358
+      ],
+      "recommendedSrc": [
+        0,
+        397,
+        396,
+        396
+      ],
+      "contentFeetBaselineInFrame": 0.9873737373737373
+    },
+    {
+      "state": "walk",
+      "direction": "right",
+      "src": [
+        396,
+        397,
+        397,
+        396
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.875
+      ],
+      "alphaBoundsThreshold": 8,
+      "contentBounds": [
+        419,
+        429,
+        323,
+        361
+      ],
+      "recommendedSrc": [
+        396,
+        397,
+        397,
+        396
+      ],
+      "contentFeetBaselineInFrame": 0.98989898989899
+    },
+    {
+      "state": "jump",
+      "direction": "left",
+      "src": [
+        0,
+        793,
+        396,
+        397
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.875
+      ],
+      "alphaBoundsThreshold": 8,
+      "contentBounds": [
+        76,
+        818,
+        299,
+        359
+      ],
+      "recommendedSrc": [
+        0,
+        793,
+        396,
+        397
+      ],
+      "contentFeetBaselineInFrame": 0.964735516372796
+    },
+    {
+      "state": "jump",
+      "direction": "right",
+      "src": [
+        396,
+        793,
+        397,
+        397
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.875
+      ],
+      "alphaBoundsThreshold": 8,
+      "contentBounds": [
+        419,
+        819,
+        299,
+        358
+      ],
+      "recommendedSrc": [
+        396,
+        793,
+        397,
+        397
+      ],
+      "contentFeetBaselineInFrame": 0.964735516372796
+    },
+    {
+      "state": "fall",
+      "direction": "left",
+      "src": [
+        0,
+        1190,
+        396,
+        396
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.875
+      ],
+      "alphaBoundsThreshold": 8,
+      "contentBounds": [
+        45,
+        1216,
+        333,
+        359
+      ],
+      "recommendedSrc": [
+        0,
+        1190,
+        396,
+        396
+      ],
+      "contentFeetBaselineInFrame": 0.9696969696969697
+    },
+    {
+      "state": "fall",
+      "direction": "right",
+      "src": [
+        396,
+        1190,
+        397,
+        396
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.875
+      ],
+      "alphaBoundsThreshold": 8,
+      "contentBounds": [
+        416,
+        1215,
+        333,
+        360
+      ],
+      "recommendedSrc": [
+        396,
+        1190,
+        397,
+        396
+      ],
+      "contentFeetBaselineInFrame": 0.9696969696969697
+    },
+    {
+      "state": "skill",
+      "direction": "left",
+      "src": [
+        0,
+        1586,
+        396,
+        397
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.875
+      ],
+      "alphaBoundsThreshold": 8,
+      "contentBounds": [
+        42,
+        1622,
+        332,
+        307
+      ],
+      "recommendedSrc": [
+        0,
+        1586,
+        396,
+        397
+      ],
+      "contentFeetBaselineInFrame": 0.8614609571788413
+    },
+    {
+      "state": "skill",
+      "direction": "right",
+      "src": [
+        396,
+        1586,
+        397,
+        397
+      ],
+      "anchorNormalized": [
+        0.5,
+        0.875
+      ],
+      "alphaBoundsThreshold": 8,
+      "contentBounds": [
+        420,
+        1623,
+        333,
+        306
+      ],
+      "recommendedSrc": [
+        396,
+        1586,
+        397,
+        397
+      ],
+      "contentFeetBaselineInFrame": 0.8614609571788413
+    }
+  ],
+  "sha256": "d5fff2d9187829b1d9e70029224bb440ed5686bbc9698cb31e53c90ddf1ee5e0",
+  "postProcessing": "Copied exact generated PNG; no raster editing or resizing. Pillow used for read-only dimension and alpha inspection.",
+  "visualQA": {
+    "inspected": true,
+    "observations": [
+      "10 complete poses in a regular 2-column by 5-row layout; navy hair and whale-maid costume coherent.",
+      "Idle is a three-quarter profile; feet baseline varies slightly between dynamic poses.",
+      "Whale satchel requested but apron whale and tail are the strongest readable motifs.",
+      "Read-only alpha bounds confirmed every pose fits its equal-grid source cell. Equal-grid recommendedSrc preserves feet, tail and full axe; contentBounds recorded for runtime tuning."
+    ],
+    "criticalIssues": false
+  }
+}

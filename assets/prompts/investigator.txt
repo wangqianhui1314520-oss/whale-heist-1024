@@ -1,0 +1,9 @@
+Use case: stylized-concept
+Asset type: production-ready transparent single enemy character sprite for the 2D side-view platform game 鲸鱼魔盗团.
+Input images: Image 1 is the approved game's setting and rendering style. Image 2 is an example of the final game's chibi sprite proportions and clean outlines, use as style and scale reference only, not a character identity to copy.
+Primary request: ONE cute chibi investigator character, one complete full-body pose, facing RIGHT in a clear three-quarter SIDE-VIEW appropriate to a horizontal platform game. A small charming adult female investigator in a blue-gray navy field coat and matching small round officer cap, cream shirt, dark navy skirt or shorts, dark stockings and sensible small boots. Short ash-brown bob hair, serious but endearing focused expression, large clear eyes. Holds a small clipboard in the left hand and a compact brass/navy flashlight pointing right in the other. Gold button details and a simple generic anchor-like motif are allowed, but no real institution or company emblem.
+Composition/framing: single isolated character, whole hat, hair, coat, hands, props and feet fully visible, centered on a transparent square 1024 x 1024 canvas with 15 percent empty safe margin. Character 2.5 heads tall, head and feet same scale as game heroes. Both legs in a gentle alert walking stance, body and gaze facing right. Flashlight has a tiny light at lens only, NO large light beam.
+Style: polished hand-painted anime chibi game art, clean dark contour line, rich detailed but readable cel shading, blue-gray fabric, restrained brass trim, cream accents. Match the approved artwork's maritime mystery mood.
+Backdrop: genuine transparent alpha.
+Text: none.
+Avoid: background scene, ground, cast shadow, platforms, UI, frame, labels, numbers, watermark, real logos, extra people, duplicate poses, weapon, giant effects, white backdrop, checkerboard.

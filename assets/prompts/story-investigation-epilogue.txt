@@ -1,0 +1,4 @@
+Use case: illustration-story.
+Asset type: 16:9 in-game story animation keyframe.
+Primary request: A quiet investigation desk inside a blue whale submarine after a successful heist, sealed evidence folders, glowing mission receipts, the blue-haired captain and three AI crew silhouettes reflected in a window looking out at the deep sea, hand-painted anime fantasy game art, desk and evidence on the right and calm underwater vista with negative space on the left for dialogue.
+Constraints: no readable text, logos, watermark, UI, photorealism, or guns.

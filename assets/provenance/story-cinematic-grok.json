@@ -1,0 +1,20 @@
+{
+  "stem": "story-cinematic-grok",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "date": "2026-10-25",
+  "raw_output_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a16df1-3611-77a0-8abc-3d4da96f36ed\\exec-783a1944-b0fa-46a4-94eb-b7b9a15cfdd2.png",
+  "prompts": [
+    "assets/prompts/story-cinematic-grok.txt"
+  ],
+  "references": [],
+  "reference_role": "character identity references",
+  "style": "cinematic",
+  "beat": "grok",
+  "post_processing": "None; byte-identical copy of original generated PNG.",
+  "sha256": "dcbf1381124b2a62ea6be55b69c74ee977a0cd05acfc3c9bd5c316b37d37286c",
+  "dimensions": [
+    1672,
+    941
+  ]
+}

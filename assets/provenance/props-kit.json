@@ -1,0 +1,40 @@
+{
+  "id": "props-kit",
+  "tool": "image_gen",
+  "generated_at": "2026-10-24",
+  "raw_output_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a1694f-22b1-72b2-8554-9022bc3cb031\\exec-71364414-ca31-4bb1-835a-f44a0715b9c6.png",
+  "output_path": "assets/atlases/props-kit.png",
+  "prompt_path": "assets/prompts/props-kit.txt",
+  "reference_paths": [
+    "assets/concepts/gameplay-sideview-visual-target.png"
+  ],
+  "grid": {
+    "columns": 3,
+    "rows": 2,
+    "order": [
+      "data-cube",
+      "data-node",
+      "prompt-token",
+      "resume-decoy",
+      "broadcast-switch",
+      "return-beacon"
+    ]
+  },
+  "status": "verified",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "alpha": {
+    "has_channel": true,
+    "extrema": [
+      0,
+      254
+    ],
+    "fully_transparent_pixels": 894875,
+    "total_pixels": 1572864
+  },
+  "sha256": "6bf7453ea03b583cbee8cde62577d04d8b7765ffe606f14e4e350728207896d0",
+  "review": "已目视核对各物件或四个特效阶段的顺序、轮廓与透明边缘；PNG与原始输出字节一致。",
+  "post_processing": "无栅格修改；Pillow仅只读检查。"
+}

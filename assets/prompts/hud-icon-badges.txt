@@ -1,0 +1,4 @@
+Asset type: supplemental HTML HUD icon strip, transparent PNG, six isolated square icons in one horizontal row.
+Visual language: deep ocean blue, cyan glass light, brass gold trim, crisp silhouette at small sizes.
+Reading order: AI Token crystal, alert radar eye, qualifier crystal, data cargo crate, broadcast beacon, compass heading.
+No words, letters, numbers, labels, UI panels, characters, watermark, checkerboard or opaque background. Preserve genuine alpha and generous separation between icons.

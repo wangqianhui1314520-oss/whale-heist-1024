@@ -1,0 +1,22 @@
+生成方式：内置 image_gen / imagegen
+作品：鲸鱼魔盗团
+日期：2026-10-25
+成品：鲸鱼魔盗团-游戏封面-v1-1600x1200.png（1600×1200，4:3，PNG）
+4K放大导出：鲸鱼魔盗团-游戏封面-v1-4K-4096x3072.png（4096×3072，4:3，PNG）
+生成原图：鲸鱼魔盗团-游戏封面-v1-original-1448x1086.png（1448×1086）
+说明：工具返回原图分辨率为1448×1086；两个交付版本均由同一张原图按比例使用高质量双三次插值导出，4K版属于放大导出，非原生4K生成。未裁切构图，未替换游戏内资产。
+
+Final prompt:
+Use case: stylized-concept
+Asset type: official illustrated game cover / key art for the existing game 《鲸鱼魔盗团》.
+Primary request: Generate ONE finished premium game cover, a landscape 4:3 composition. Target a high resolution 4096 × 3072 master with 4K-quality fine detail; the composition must also read beautifully when exported at 1600 × 1200.
+Input images: Image 1 (final-game-visual-master) is a reference for the underwater architecture, navy/cyan/brass palette, polished anime rendering, and the four actual game characters; do NOT copy its interface or collage layout. Image 2 (deepseek-portrait) is the exact primary character identity and chibi face reference. Image 3 (ai-personas-reference) is ONLY a supporting identity reference: use DeepSeek, Grok, Claude, GLM from it and exclude ALL other characters.
+Scene/backdrop: a breathtaking deep-sea steampunk harbor, monumental submerged towers and arched bridges, brass pipes, hanging warm lanterns, translucent turquoise water illuminated by sunbeams from the surface. A recognizable navy-blue brass-trimmed WHALE-SHAPED submarine with a white whale belly, luminous cyan portholes and whale tail is sweeping through the midground. A distant majestic whale silhouette and tiny bubbles establish scale. Restrained environmental detail, clear foreground/midground/background separation.
+Subject: Exactly FOUR cheerful, expressive, cute chibi anime female adventurers from the game, in a unified high quality hand-painted 2D anime style. Main hero largest in front center: DeepSeek, long flowing cobalt-to-cyan blue hair, large blue eyes, WHITE LACE MAID HEADBAND (not a captain hat), blue and white frilled maid dress with navy ribbons and small gold trim, distinctive blue whale tail, joyfully leading the crew through a curling cyan water-dash arc. Her face must closely match the blue-haired portrait reference. Supporting crew smaller in a confident triangular arrangement behind her: Grok has long BLONDE hair, black and burgundy gothic dress, carrying a large double-headed axe; Claude has long ORANGE hair, ivory and orange-brown scholar dress, open book with several glowing cream paper pages swirling nearby; GLM has long BLACK hair, a black academic cap, black-and-white scholarly dress, holding a small cyan scanning grid. Each character has an individual readable silhouette, anatomically coherent hands, charming expressions, purposeful adventure poses. No extra cast.
+Composition/framing: One unified professionally art-directed game box illustration, NOT a screenshot, NOT panels. Large beautifully crafted Chinese game title in the upper quarter, on a quieter dark-blue area of water, with all five glyphs legible and uncropped. Cast occupies the lower-middle 60% with the blue-haired heroine dominant. Whale submarine and architecture frame the cast. Use swirling water and drifting paper to lead the eye toward the hero, with ample breathing room. Keep important faces and title at least 6% from edges. Full bleed 4:3 landscape.
+Lighting/mood: dazzling cyan rim light against warm golden lanterns; adventurous, mischievous, magical and welcoming. Rich blue depth, clean skin tones, luminous eye highlights, exquisite fabric and brass details, crisp clean linework. Premium illustrated indie game launch key art, cohesive and immediately readable at thumbnail size.
+Text (verbatim): "鲸鱼魔盗团"
+Typography: Render the title exactly in these five Chinese characters, elegant bold fantasy display lettering with a warm ivory/gold face, tasteful brass bevel and cyan outer glow, integrated with a small whale-tail flourish. The title is large and highly readable. No other text anywhere.
+Constraints: retain the established character identities, four-person team and deep-sea whale motif. ONLY the blue-haired lead, blonde axe user, orange-haired book user, and black-haired scholar. Fully finished opaque background.
+Avoid: watermark, English captions, extra subtitles, release dates, logos of AI companies, user interface, health bars, play button, platform controls, frame-within-frame, fake screenshots, photorealism, horror, gritty desaturation, sexualized clothes or poses, extra fingers, duplicate characters, cropped title.
+

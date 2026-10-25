@@ -1,0 +1,25 @@
+{
+  "stem": "menu-background",
+  "raw": "C:\\Users\\Administrator\\.codex\\generated_images\\01a169bf-b470-7f53-a490-15da1151f145\\exec-61e91a39-4223-4615-af09-3308916d64d2.png",
+  "workspace": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\backgrounds\\menu-background.png",
+  "dimensions": [
+    1672,
+    941
+  ],
+  "alpha": {
+    "channel": false,
+    "opaque": true
+  },
+  "grid": null,
+  "qa": "Visually verified title background with dark quiet left center and whale-shaped boat at right. No text/UI/characters. No postprocessing; raw output copied byte for byte.",
+  "tool": "image_gen",
+  "date": "2026-10-24",
+  "mode": "built-in",
+  "refs": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\concepts\\gameplay-sideview-visual-target.png"
+  ],
+  "reference_role": "style reference",
+  "prompts": [
+    "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\prompts\\menu-background.txt"
+  ]
+}

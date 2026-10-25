@@ -1,0 +1,20 @@
+{
+  "stem": "story-stage-broadcast",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "date": "2026-10-25",
+  "raw_output_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a16df1-3611-77a0-8abc-3d4da96f36ed\\exec-6c4894eb-e00a-48ac-9b31-3fc1e22bd236.png",
+  "prompts": [
+    "assets/prompts/story-stage-broadcast.txt"
+  ],
+  "references": [],
+  "reference_role": "environment style reference",
+  "style": "stage",
+  "beat": "broadcast",
+  "post_processing": "None; byte-identical copy of original generated PNG.",
+  "sha256": "454de15f92ab78e2ee763b5e530395a63b875d3a0797415f7e1e893b03945fc6",
+  "dimensions": [
+    1672,
+    941
+  ]
+}
