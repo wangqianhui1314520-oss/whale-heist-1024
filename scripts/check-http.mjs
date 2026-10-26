@@ -5,8 +5,8 @@ assert(['127.0.0.1', 'localhost'].includes(new URL(base).hostname), 'This check 
 const checks = [
   ['', 200, 'text/html'],
   ['assets/runtime-catalog.json', 200, 'application/json'],
-  ['assets/ui/hud-icon-badges.png', 200, 'image/png'],
-  ['assets/ui/panel-large.png', 200, 'image/png'],
+  ['assets/ui/hud-icon-badges.webp', 200, 'image/webp'],
+  ['assets/ui/panel-large.webp', 200, 'image/webp'],
   ['src/ui/styles.css', 200, 'text/css'],
   ['story-theater.html', 200, 'text/html'],
   ['missing-game-asset.png', 404],
@@ -33,7 +33,7 @@ for (const method of ['POST', 'PUT', 'DELETE', 'PATCH']) {
 }
 for (let batch = 0; batch < 4; batch++) {
   const responses = await Promise.all(Array.from({ length: 32 }, async (_, index) => {
-    const response = await fetch(base + (index % 2 ? 'assets/ui/whale-emblem.png' : 'src/ui/styles.css'));
+    const response = await fetch(base + (index % 2 ? 'assets/ui/whale-emblem.webp' : 'src/ui/styles.css'));
     assert.equal(response.status, 200); const bytes = await response.arrayBuffer(); assert(bytes.byteLength > 0);
   }));
   requests += responses.length;

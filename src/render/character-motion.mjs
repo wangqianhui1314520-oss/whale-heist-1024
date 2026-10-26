@@ -7,13 +7,18 @@
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const finite = (value, fallback = 0) => Number.isFinite(value) ? value : fallback;
 const LOOPS = Object.freeze({
-  idle: { frames: 4, fps: 8 },
-  walk: { frames: 6, fps: 10 },
-  jump: { frames: 3, fps: 10 },
-  dash: { frames: 4, fps: 16 },
-  interact: { frames: 4, fps: 10 },
+  idle: { frames: 4, fps: 8, poses: ['idle', 'idle', 'idle', 'idle'] },
+  // These are six motion beats, not six authored gait drawings. Inserting an
+  // idle cell swaps the weapon/hair silhouette (especially Grok's axe) every
+  // 300 ms and looks like a turn even though the actor keeps facing forward.
+  walk: { frames: 6, fps: 10, poses: ['walk', 'walk', 'walk', 'walk', 'walk', 'walk'] },
+  jump: { frames: 3, fps: 10, poses: ['jump', 'jump', 'fall'] },
+  // Movement starts immediately in the simulation. Keep the active silhouette
+  // for the entire burst; anticipation/recovery must not insert a running cell.
+  dash: { frames: 4, fps: 16, poses: ['skill', 'skill', 'skill', 'skill'] },
+  interact: { frames: 4, fps: 10, poses: ['idle', 'skill', 'skill', 'idle'] },
   hurt: { frames: 2, fps: 10 },
-  board: { frames: 4, fps: 10 },
+  board: { frames: 4, fps: 10, poses: ['idle', 'walk', 'jump', 'fall'] },
 });
 
 function actorSeed(actor) {
@@ -26,8 +31,12 @@ function actionFor(actor, world) {
   if (actor.isPlayer) {
     if (world.interaction && (target === 'board' || /登艇/.test(world.nearby?.label || ''))) return 'board';
     if (world.interaction) return target === 'delivery' || target === 'prepare' ? 'carry' : 'read';
-    if (world.commandPreview || (world.selected && !world.crew?.some(crew => crew.task))) return 'command';
     if (finite(actor.carryCount, finite(world.carryCount)) > 0) return 'carry';
+    // Selecting a teammate is not an action. A standing preview can show the
+    // console, but must never replace locomotion or turn a dash into a command.
+    if (world.commandPreview && !finite(actor.dashTime) && actor.grounded !== false
+      && !['walk', 'jump', 'fall'].includes(actor.pose) && Math.abs(finite(actor.vx)) <= 10) return 'command';
+    return null;
   }
   if (actor.task?.stage === 'execute' || actor.pose === 'skill') {
     return actor.name === 'Grok' ? 'break' : actor.name === 'Claude' ? 'lure' : actor.name === 'GLM' ? 'scan' : 'command';
@@ -52,37 +61,48 @@ export function sampleCharacterMotion(actor = {}, world = {}, { time = world.tim
   const walking = actor.pose === 'walk' || Math.abs(finite(actor.vx)) > 10;
   const interacting = Boolean(action && action !== 'carry' || world.interaction && actor.isPlayer);
   const state = isHurt ? 'hurt' : isDash ? 'dash' : action === 'board' ? 'board' : airborne ? 'jump'
-    : interacting ? 'interact' : walking ? 'walk' : 'idle';
+    : walking ? 'walk' : interacting ? 'interact' : 'idle';
   const loop = LOOPS[state];
   const clock = actor.task?.stage === 'execute' ? Math.max(0, finite(actor.task.stageTime))
     : state === 'dash' ? Math.max(0, .22 - finite(actor.dashTime)) : now;
   let frame = Math.floor(clock * loop.fps + (state === 'idle' || state === 'walk' ? actorSeed(actor) : 0)) % loop.frames;
   const interactionProgress = clamp(finite(world.interaction?.progress, finite(world.nearby?.progress)), 0, 1);
-  if (state === 'board') frame = Math.min(3, Math.floor(interactionProgress * 4));
-  if (state === 'jump') frame = actor.grounded === true ? 2 : finite(actor.vy) < -120 ? 0 : finite(actor.vy) > 120 || actor.pose === 'fall' ? 2 : 1;
-  if (reduceMotion) frame = state === 'jump' ? 1 : 0;
+  if (state === 'board' || state === 'interact' && actor.isPlayer && world.interaction) frame = Math.min(3, Math.floor(interactionProgress * 4));
+  // Both the player's burst and Grok's charge are one-shot actions. A long
+  // charge holds its settled beat instead of restarting the wind-up at 4 Hz.
+  if (state === 'dash') frame = Math.min(loop.frames - 1, Math.floor(clock * loop.fps));
+  if (state === 'jump') frame = actor.pose === 'fall' || finite(actor.vy) > 120 ? 2 : finite(actor.vy) < -120 ? 0 : 1;
   const motion = {
-    state, pose: 'idle', frame, frames: loop.frames, fps: loop.fps,
+    state, pose: loop.poses?.[frame] || 'idle', frame, frames: loop.frames, fps: loop.fps,
     xOffset: 0, yOffset: 0, rotation: 0, scaleX: 1, scaleY: 1,
     opacity: 1, trail: [], flash: 0,
     progress: state === 'board' || actor.isPlayer && world.interaction ? interactionProgress : (frame + 1) / loop.frames,
     action, reduceMotion: Boolean(reduceMotion),
   };
-  if (state === 'walk') motion.pose = 'walk';
-  if (state === 'jump') motion.pose = frame === 2 ? 'fall' : 'jump';
-  if (state === 'dash' || state === 'interact' || state === 'board') motion.pose = 'skill';
+  if (state === 'interact' && actor.task?.stage === 'execute') {
+    // Long scans/decoys hold the active pose rather than restarting the
+    // anticipation every 400 ms. GLM has a fixed two-second execution window.
+    const elapsed = finite(actor.task.stageTime);
+    motion.pose = elapsed < .1 || actor.name === 'GLM' && elapsed >= 1.85 ? 'idle' : 'skill';
+  }
+  if (state === 'interact' && action === 'command') motion.pose = 'skill';
   if (state === 'hurt') motion.pose = airborne ? (actor.pose === 'fall' ? 'fall' : 'jump') : 'idle';
-  if (reduceMotion) return motion;
+  if (reduceMotion) {
+    // Freeze cosmetic cycling, retaining the actual ascending/descending pose.
+    if (state === 'walk') motion.pose = 'walk';
+    if (['dash', 'interact', 'board'].includes(state)) motion.pose = 'skill';
+    return motion;
+  }
 
   if (state === 'idle') {
     motion.yOffset = [0, -1, -1, 0][frame];
     motion.scaleX = [1, 1.006, 1, .994][frame];
     motion.scaleY = [1, .992, 1, 1.008][frame];
   } else if (state === 'walk') {
-    motion.yOffset = [0, -1, -2, 0, -1, -2][frame];
-    motion.rotation = [-.014, 0, .014, .014, 0, -.014][frame] * direction;
-    motion.scaleX = [1.012, 1, .988, 1.012, 1, .988][frame];
-    motion.scaleY = [.988, 1, 1.012, .988, 1, 1.012][frame];
+    // A small footfall reads without pumping the entire body/axe or changing
+    // its proportions. Preserve the authored side view throughout the stride.
+    motion.yOffset = [0, -1, -1, 0, -1, -1][frame];
+    motion.rotation = .006 * direction;
     if (action === 'carry') motion.rotation *= .4;
   } else if (state === 'jump') {
     motion.scaleX = [.96, 1, 1.025][frame];
@@ -125,7 +145,11 @@ export function drawCharacterMotionFX(ctx, actor, world, motion, assets) {
   const direction = left ? -1 : 1;
   const x = Math.round(finite(actor.x)) + motion.xOffset;
   const y = Math.round(finite(actor.y)) + motion.yOffset;
-  const effect = (group, dx, dy, width, height, opacity = .75) => assets.drawEffect(ctx, group, motion.frame / (assets.catalog?.animations[group]?.fps || 8), x + dx * direction, y + dy, {
+  // Grok can charge for longer than the pose's settling time. Keep flowing
+  // water/impact feedback on its own clock while his body holds the strike.
+  const effectTime = group => motion.action === 'break' && actor.task?.stage === 'execute'
+    ? Math.max(0, finite(actor.task.stageTime)) : motion.frame / (assets.catalog?.animations[group]?.fps || 8);
+  const effect = (group, dx, dy, width, height, opacity = .75) => assets.drawEffect(ctx, group, effectTime(group), x + dx * direction, y + dy, {
     width, height, flipX: left, anchor: [.5, .5], untrimmed: false, opacity, loop: true,
   });
   const prop = (id, dx, dy, width, height, opacity = .9) => assets.draw(ctx, id, x + dx * direction, y + dy, {

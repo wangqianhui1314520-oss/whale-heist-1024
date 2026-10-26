@@ -7,7 +7,9 @@ import json
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'deliverables'
 OUT.mkdir(exist_ok=True)
-excluded={'.git','.openai','.sites-runtime','.sites-checkout','dist','deliverables','__pycache__'}
+# The explainer is a separately produced promotional-video project, not part
+# of the playable game, its source, assets or verification evidence.
+excluded={'.git','.openai','.sites-runtime','.sites-checkout','dist','deliverables','__pycache__','explainer'}
 source_files=sorted([p for p in ROOT.rglob('*') if p.is_file() and not any(x in excluded for x in p.relative_to(ROOT).parts)
               and 'archive' not in p.relative_to(ROOT).parts and p.name!='world-trace.txt'])
 packages=[('鲸鱼魔盗团-本地试玩与完整源码.zip',source_files,ROOT,True),

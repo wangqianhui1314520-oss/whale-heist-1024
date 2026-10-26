@@ -63,14 +63,14 @@ const place = (world, x, y) => Object.assign(world.player,
   { x, y, vx: 0, vy: 0, grounded: true, climbing: false, dashTime: 0 });
 const defensiveIdle = (world) => {
   const p = world.player, warning = world.scanWarning;
-  if (warning) {
+  if (warning && world.scanStatus(warning)==='exposed') {
     if (p.x <= warning.x - 24 || p.x >= warning.x + warning.w + 24) return {};
     const left = Math.max(16, warning.x - 32), right = Math.min(1264, warning.x + warning.w + 32);
     const goal = right > warning.x + warning.w + 20
       && Math.abs(right - p.x) < Math.abs(left - p.x) ? right : left;
     return { [goal > p.x ? 'right' : 'left']: true };
   }
-  const guard = world.guards.some((entry) => Math.abs(entry.y - p.y) < 110
+  const guard = world.guards.some((entry) => entry.luredUntil<=world.time && Math.abs(entry.y - p.y) < 110
     && Math.abs(entry.x - p.x) < 150);
   return guard ? { jump: true, jumpPressed: p.grounded } : {};
 };
@@ -120,6 +120,34 @@ test('movement, jump arc, ladder climb and chained ladder joints', () => {
   assert(Math.abs(world.player.y - 270) < 2, 'Overlapping ladder joints must allow ascent');
   advance(world, 2.3, { down: true });
   assert(Math.abs(world.player.y - 600) < 2, 'Overlapping ladder joints must allow descent');
+});
+
+test('crew routes select ascent, descent and resting poses', () => {
+  const { world } = fixture();
+  const actor = world.crew[0];
+  Object.assign(actor, { x: 240, y: 600, route: [{ x: 240, y: 490 }] });
+  assert(world.moveAlong(actor, DT)); assert.equal(actor.pose, 'jump');
+  actor.y = 490; actor.route = [{ x: 240, y: 600 }];
+  assert(world.moveAlong(actor, DT)); assert.equal(actor.pose, 'fall');
+  actor.route = [{ x: 300, y: actor.y }];
+  assert(world.moveAlong(actor, DT)); assert.equal(actor.pose, 'walk');
+  actor.route = [];
+  assert(world.moveAlong(actor, DT)); assert.equal(actor.pose, 'idle');
+});
+
+test('climbing cancels dash state when movement inputs overlap', () => {
+  const { world } = fixture();
+  place(world, 240, 600);
+  // Start a dash at the ladder foot, then enter the ladder on the following
+  // frame. This is the input ordering that used to leave dashTime alive.
+  step(world, { right: true, dashPressed: true });
+  assert(world.player.dashTime > 0);
+  step(world, { up: true, jump: true, jumpPressed: true });
+  assert.equal(world.player.climbing, true);
+  assert.equal(world.player.dashTime, 0, 'Dash must not be carried into the ladder state');
+  advance(world, .9, { up: true, jump: true });
+  assert.equal(world.player.dashTime, 0, 'Leaving the ladder must not resume the dash');
+  assert.notEqual(world.player.pose, 'skill');
 });
 
 test('dash respects an unbroken Grok barrier', () => {
@@ -371,7 +399,7 @@ function navigate(world, destination, replans = 0) {
         }
       }
       const warning = world.scanWarning;
-      if (warning) {
+      if (warning && world.scanStatus(warning)==='exposed') {
         if (scanEscapeTarget === null) {
           const left = Math.max(16, warning.x - 32);
           const right = Math.min(1264, warning.x + warning.w + 32);
@@ -424,6 +452,7 @@ function navigate(world, destination, replans = 0) {
       }
       if (waypoint.climb) {
         const guardedExit = p.grounded && world.guards.some((guard) => {
+          if (guard.luredUntil>world.time) return false;
           if (Math.abs(guard.y - waypoint.y) >= 4 || p.y <= guard.y + 50) return false;
           if (destination.x >= waypoint.x && guard.minX <= waypoint.x - 90)
             return guard.x > waypoint.x - 90;
@@ -454,7 +483,7 @@ function navigate(world, destination, replans = 0) {
           && (trap.x + trap.w / 2 - p.x) * ahead > 0
           && (dx > 0 ? waypoint.x > trap.x : waypoint.x < trap.x + trap.w)
           && Math.abs(trap.x + trap.w / 2 - p.x) < 75)
-          || world.guards.some((guard) => Math.abs(guard.y - p.y) < 20
+          || world.guards.some((guard) => guard.luredUntil<=world.time && Math.abs(guard.y - p.y) < 20
             && (guard.x - p.x) * ahead > 0 && Math.abs(guard.x - p.x) < 78);
         if (hazard && Math.abs(dx) > 10 && p.grounded && world.time - lastJump > .5) {
           input.jumpPressed = true; lastJump = world.time;
@@ -606,7 +635,10 @@ test('all five chapters complete through physical directional input and held int
         assert(core.view().attempt.returnBeaconReady);
       }
     } else {
-      navigate(world,{x:1100,y:380});
+      // Reach the upper patrol from the quiet high ladder before spending
+      // Claude's six-second crossing window. The lower return patrol is a
+      // different floor and is deliberately not affected by this decoy.
+      navigate(world,{x:930,y:170});
       command(world,'evacuation-patrol');
       for (const item of world.items) navigate(world, item);
       assert.equal(core.view().attempt.inventory.length, 3);

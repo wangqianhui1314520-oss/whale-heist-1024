@@ -32,6 +32,15 @@ async function harness() {
     addEventListener() {},
   };
   context.window = { matchMedia: () => ({ matches: false }), addEventListener() {} };
+  // Story keyframes preload through new Image(); decode resolves asynchronously.
+  context.Image = class {
+    constructor() { this.onload = null; this.onerror = null; }
+    set src(value) { this._src = value; queueMicrotask(() => this.onload?.()); }
+    get src() { return this._src; }
+    decode() { return Promise.resolve(); }
+    get complete() { return true; }
+    addEventListener() {}
+  };
   context.requestAnimationFrame = () => {};
   context.GameUI = class {
     constructor() { this.screen = 'none'; this.toasts = []; }
@@ -42,8 +51,9 @@ async function harness() {
     dialogue() {}
   };
   context.GameInput = class { clear() {} configure() {} sample() { return {}; } consume() {} };
-  context.GameAudio = class { configure() {} play() {} unlock() {} setPaused() {} setScene() {} };
-  context.GameRenderer = class { render() {} };
+  context.GameAudio = class { muted = false; configure() {} play() {} playMusic() {} playVoice() {} unlock() {} setPaused() {} setScene() {} stopAmbience() {} setAlertHigh() {} };
+  context.renderCalls = 0;
+  context.GameRenderer = class { render() { context.renderCalls++; } };
   const instrumented = source
     .replace(/^import[^\n]+\r?\n/gm, '')
     .replaceAll('import.meta.url', JSON.stringify(mainURL.href))
@@ -54,6 +64,7 @@ globalThis.api = {
   initAssets() { assets = { preload: async () => {} }; },
   setTutorialWorld(nextWorld, director) { world = nextWorld; tutorial = director; lesson = null; },
   setSkipSeen(value) { settings.skipSeenStory = value; },
+  setQuality(value) { settings.quality = value; },
   setAuto(value) { settings.autoDialogue = value; }
 };`;
   vm.createContext(context);
@@ -156,24 +167,22 @@ await test('an unfocused start keeps its pending intro and resumes through the r
   assert.equal(api.state.tutorial.current().id, 'move');
 });
 
-await test('Grok target selection is explicit and alternate command inputs cannot skip it', async () => {
+await test('command guidance follows explicit choices while alternate valid choices remain available', async () => {
   const { api, context, canvasEvents } = await harness(), world = commandWorld();
   const director = atCommandLesson(context);
   api.setTutorialWorld(world, director);
   await api.act('command-select', { teammate: 'Grok' });
   assert.equal(director.getState().guidedCommandStage, 1, 'nearest target does not count as a player choice');
   await api.act('prompt-mode', { precise: false });
-  await api.act('prompt-parse', { text: 'Grok，撞开纸窗。' });
-  await api.act('template-load', { templateId: 'grok-default' });
-  await api.act('prompt-constraint', { constraintId: 'stop-at-target' });
   await api.act('prompt-target', { targetId: 'other-window' });
   canvasEvents.get('pointerdown')({ clientX: 900, clientY: 490 });
   assert.equal(director.getState().guidedCommandStage, 1);
-  assert.equal(world.commandPreview.targetId, 'paper-window');
+  assert.equal(world.commandPreview.targetId, 'other-window', 'guidance never locks the target');
   canvasEvents.get('pointerdown')({ clientX: 440, clientY: 490 });
   assert.equal(director.getState().guidedCommandStage, 2);
   await api.act('prompt-mode', { precise: true });
   assert.equal(director.getState().guidedCommandStage, 2);
+  assert.equal(world.promptConfig.precise, true, 'precise commands remain available during the default lesson');
   await api.act('prompt-mode', { precise: false });
   assert.equal(director.getState().guidedCommandStage, 3);
 });
@@ -239,6 +248,33 @@ await test('two real world hits reveal a route, and an explicit hint requests th
   await api.act('tutorial-hint');
   assert.equal(tutorial.getState().hintLevel, 3);
   assert(api.state.ui.toasts.at(-1).includes('路线'));
+});
+
+await test('180 Hz callbacks draw 60 standard frames; overlays stay idle and quality changes resume immediately', async () => {
+  const { api, context } = await harness();
+  await api.startWorld({ showIntro: false });
+  api.state.ui.show('none');
+  api.setQuality('standard');
+  for (let i = 0; i < 180; i++) api.frame(1000 + i * 1000 / 180);
+  assert(context.renderCalls >= 59 && context.renderCalls <= 61, `standard drew ${context.renderCalls} frames`);
+  let before = context.renderCalls;
+  api.setQuality('high');
+  for (let i = 0; i < 180; i++) api.frame(2000 + i * 1000 / 180);
+  assert.equal(context.renderCalls - before, 180, 'high quality retains native refresh');
+  before = context.renderCalls;
+  api.setQuality('standard');
+  for (let i = 0; i < 6; i++) api.frame(3000 + i * 1000 / 180);
+  assert(context.renderCalls - before >= 1, 'switching back does not leave a future render deadline');
+  for (const name of ['story', 'pause', 'title']) {
+    api.state.ui.show(name); before = context.renderCalls;
+    for (let i = 0; i < 180; i++) api.frame(4000 + i * 1000 / 180);
+    assert.equal(context.renderCalls, before, `${name} keeps the last gameplay frame`);
+  }
+  api.state.ui.show('none'); context.document.hidden = true;
+  before = context.renderCalls; api.frame(6000);
+  assert.equal(context.renderCalls, before, 'hidden pages do not redraw');
+  context.document.hidden = false; api.frame(6010);
+  assert.equal(context.renderCalls, before + 1, 'returning to play draws immediately');
 });
 
 console.log(`Main flow: ${passed} passed, ${failed} failed`);

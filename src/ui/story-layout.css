@@ -1,4 +1,12 @@
-/* Keep authored scene art and dialogue in separate, measured regions. */
+/* Scene art fills the story viewport; controls and dialogue sit above it. */
+.menu-root.screen-story .story-backdrop { z-index:0; }
+.menu-root.screen-story .story-shade,
+.menu-root.screen-story .comic-shade { pointer-events:none; }
+.menu-root.screen-story .story-stage,
+.menu-root.screen-story[data-story-style=comic] .comic-board { z-index:1; pointer-events:none; }
+.menu-root.screen-story .story-heading,
+.menu-root.screen-story .story-dialogue,
+.menu-root.screen-story .story-progress { z-index:2; }
 .menu-root.screen-story .story-dialogue,
 .menu-root.screen-story[data-story-style=comic] .comic-dialogue {
   min-height:0; max-height:48%; padding:1cqw 1.6cqw;
@@ -14,26 +22,30 @@
 .menu-root.screen-story .story-backdrop,
 .menu-root.screen-story .story-stage,
 .menu-root.screen-story[data-story-style=comic] .comic-board {
-  inset:var(--story-art-top,12%) 4% var(--story-art-bottom,35%);
+  /* Keyframes are authored at 16:9 and should read as a full-screen scene.
+     Keep the dialogue panel above the image instead of shrinking the image
+     into the gap left between the heading and subtitles. */
+  inset:0;
   transform:none; animation:none;
 }
 .menu-root.screen-story .story-backdrop {
-  background-size:contain; background-position:center; background-repeat:no-repeat;
+  background-size:cover; background-position:center; background-repeat:no-repeat;
   background-color:#061725; filter:none;
 }
 .menu-root.screen-story .story-stage {
   overflow:hidden;
-  width:min(92%,calc(var(--story-art-height,30cqw) * 1672 / 941));
-  height:auto; aspect-ratio:1672 / 941; margin:auto;
+  width:100%; height:100%; aspect-ratio:auto; margin:0;
+}
+.menu-root.screen-story[data-story-style=stage] .story-stage {
+  inset:0; width:100%; height:100%; bottom:0;
 }
 .menu-root.screen-story .story-shade,
 .menu-root.screen-story .comic-shade { background:transparent; }
 .menu-root.screen-story[data-story-style=comic] .story-backdrop { background-image:none !important; }
 .menu-root.screen-story[data-story-style=comic] .comic-board {
   grid-template-columns:repeat(3,minmax(0,1fr)); gap:0;
-  width:min(92%,calc(var(--story-art-height,30cqw) * 1672 / 941)); height:auto; aspect-ratio:1672 / 941;
-  max-width:92%; max-height:calc(100% - var(--story-art-top,12%) - var(--story-art-bottom,35%));
-  margin:auto; align-items:stretch; justify-items:stretch;
+  width:100%; height:100%; aspect-ratio:auto;
+  max-width:none; max-height:none; margin:0; align-items:stretch; justify-items:stretch;
 }
 .menu-root.screen-story[data-story-style=comic] .comic-panel {
   width:100%; height:100%; max-width:none; aspect-ratio:auto;
@@ -49,7 +61,7 @@
 .menu-root.screen-story[data-story-style=cinematic] .story-backdrop {
   animation:story-full-frame 14s ease-in-out infinite alternate;
 }
-@keyframes story-full-frame { from { transform:scale(.975); } to { transform:scale(1); } }
+@keyframes story-full-frame { from { transform:scale(1); } to { transform:scale(1.025); } }
 @media(max-width:900px),(max-height:480px) {
   .menu-root.screen-story .story-dialogue,
   .menu-root.screen-story[data-story-style=comic] .comic-dialogue {

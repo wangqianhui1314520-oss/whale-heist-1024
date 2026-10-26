@@ -50,6 +50,6 @@ for (const file of files) {
   }
 }
 assert.equal(missing.size, 0, `Missing production references:\n${[...missing].join('\n')}`);
-const required = ['index.html', 'assets/runtime-catalog.json', 'assets/ui/hud-icon-badges.png', 'src/main.js'];
+const required = ['index.html', 'assets/runtime-catalog.json', 'assets/ui/hud-icon-badges.webp', 'src/main.js'];
 for (const file of required) assert(await exists(path.join(dist, file)), `${file} is missing from production snapshot`);
 console.log(JSON.stringify({ status: 'verified', directory: dist, files: files.length, missing: 0, required }));

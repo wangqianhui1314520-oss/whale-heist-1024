@@ -36,6 +36,15 @@ async function harness() {
     addEventListener() {},
   };
   context.window = { matchMedia: () => ({ matches: false }), addEventListener() {} };
+  // Story keyframes preload through new Image(); decode resolves asynchronously.
+  context.Image = class {
+    constructor() { this.onload = null; this.onerror = null; }
+    set src(value) { this._src = value; queueMicrotask(() => this.onload?.()); }
+    get src() { return this._src; }
+    decode() { return Promise.resolve(); }
+    get complete() { return true; }
+    addEventListener() {}
+  };
   context.requestAnimationFrame = () => {};
   context.GameUI = class {
     constructor() { this.screen = 'none'; this.toasts = []; }
@@ -46,7 +55,7 @@ async function harness() {
     dialogue() {}
   };
   context.GameInput = class { clear() {} configure() {} sample() { return {}; } consume() {} };
-  context.GameAudio = class { configure() {} play() {} unlock() {} setPaused() {} setScene() {} };
+  context.GameAudio = class { muted = false; configure() {} play() {} playMusic() {} playVoice() {} unlock() {} setPaused() {} setScene() {} stopAmbience() {} setAlertHigh() {} };
   context.GameRenderer = class { render() {} };
   const instrumented = source
     .replace(/^import[^\n]+\r?\n/gm, '')

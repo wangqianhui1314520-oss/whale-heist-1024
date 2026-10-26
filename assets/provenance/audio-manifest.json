@@ -1,0 +1,949 @@
+{
+  "schema_version": "1.0.0",
+  "project": "鲸鱼魔盗团",
+  "generated": "2026-10-25",
+  "tool": "text_to_audio_plus",
+  "note": "音频资产生成登记（满足策划案'登记声音来源'要求）。语音为纯 AI 合成、无真人声纹。",
+  "assets": [
+    {
+      "id": "bgm_title",
+      "category": "music",
+      "use": "标题/主菜单背景音乐",
+      "target_duration_s": 30,
+      "loop": true,
+      "priority": "P1",
+      "prompt": "诙谐欢快的海港阳光背景音乐，动画游戏标题界面配乐。主奏手风琴轻快小调旋律，配轻快的鼓点与零星水花、气泡点缀音色，节奏明朗活泼，卡通感十足，情绪轻松阳光带一点俏皮。整体风格为轻爵士与海港民谣的混合，音色温暖明亮。乐器编配：手风琴、原声贝斯、轻鼓组、零星水花和气泡音效点缀。旋律平稳持续、无剧烈起伏、无明显收尾感，适合无缝循环播放。时长约32秒。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/7oVgg1e5NL",
+      "transcoded": {
+        "duration_s": 30.0,
+        "bitrate_kbps": 96.0,
+        "channels": 2,
+        "bytes": 360847,
+        "pcm_duration_s": 30.0
+      },
+      "status": "ok"
+    },
+    {
+      "id": "bgm_harbor",
+      "category": "music",
+      "use": "第1–3章行动背景音乐",
+      "target_duration_s": 36,
+      "loop": true,
+      "priority": "P0",
+      "prompt": "轻快带一点悬念感的轻爵士游戏行动背景音乐，海港冒险场景配乐。中速轻爵士律动，钢琴与电钢琴交织的旋律线，低音提琴拨奏，轻爵士鼓刷节奏，点缀水滴般的清脆音色和微弱电子脉冲，营造\"海港阳光但暗藏悬念\"的气氛。乐器编配：钢琴、低音提琴、鼓刷、马林巴滴水音色、微弱合成器脉冲。情绪平稳持续、无剧烈变化、无明显收尾感，适合无缝循环播放，整体音量适中，给游戏音效留出空间。时长约48秒。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/n62k2avfiu",
+      "transcoded": {
+        "duration_s": 36.0,
+        "bitrate_kbps": 96.0,
+        "channels": 2,
+        "bytes": 432945,
+        "pcm_duration_s": 36.0
+      },
+      "status": "ok"
+    },
+    {
+      "id": "bgm_investigation",
+      "category": "music",
+      "use": "第4章战报公开背景音乐",
+      "target_duration_s": 36,
+      "loop": true,
+      "priority": "P1",
+      "prompt": "悬疑紧迫的游戏章节背景音乐，调查揭秘场景配乐。低频弦乐长音脉冲与规律的滴答钟表声交织，随进行逐步加密加厚，营造紧张逼近的气氛但保持克制，不能过于恐怖。乐器编配：低音弦乐群、大提琴、钟表滴答声、微弱合成器低音脉冲、远处木鱼点缀。情绪平稳推进、无剧烈爆发、无明显收尾感，适合无缝循环播放，整体音量适中给音效留空间。时长约44秒。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/Urjma4SWlL",
+      "transcoded": {
+        "duration_s": 36.0,
+        "bitrate_kbps": 96.0,
+        "channels": 2,
+        "bytes": 432945,
+        "pcm_duration_s": 36.0
+      },
+      "status": "ok"
+    },
+    {
+      "id": "bgm_evacuation",
+      "category": "music",
+      "use": "第5章60秒撤离背景音乐",
+      "target_duration_s": 36,
+      "loop": true,
+      "priority": "P0",
+      "prompt": "高速紧迫的游戏撤离背景音乐，倒计时逃出场景配乐。电子脉冲节奏明显偏快，密集的合成器打击与加速的鼓点推进，叠加紧张的低音铺底，节奏感强、能量充沛，适合60秒倒计时撤离。乐器编配：电子脉冲音色、合成器贝斯、快速军鼓与拍手音色、微弱警报衬底。情绪高能持续、无停顿、无明显收尾感，适合无缝循环播放。时长约44秒。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/96rgterc2V",
+      "transcoded": {
+        "duration_s": 36.0,
+        "bitrate_kbps": 96.0,
+        "channels": 2,
+        "bytes": 432945,
+        "pcm_duration_s": 36.0
+      },
+      "status": "ok"
+    },
+    {
+      "id": "bgm_results",
+      "category": "music",
+      "use": "章末结算/总评背景音乐",
+      "target_duration_s": 16,
+      "loop": false,
+      "priority": "P0",
+      "prompt": "滑稽加冕仪式感的游戏结算背景音乐，章末评分揭晓配乐。小型铜管乐队的上行号角旋律，像卡通片里滑稽的授勋加冕，节奏诙谐欢快带一点夸张，最后干净收尾。乐器编配：小号、长号、圆号、轻鼓与铙钹点缀、低音提琴。时长约18秒，需要有明确干净的开头和结尾。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/DAyYuMcajT",
+      "transcoded": {
+        "duration_s": 16.0,
+        "bitrate_kbps": 96.0,
+        "channels": 2,
+        "bytes": 192827,
+        "pcm_duration_s": 16.0
+      },
+      "status": "ok"
+    },
+    {
+      "id": "bgm_failure",
+      "category": "music",
+      "use": "失败结算背景音乐",
+      "target_duration_s": 10,
+      "loop": false,
+      "priority": "P1",
+      "prompt": "诙谐懊恼的游戏失败结算背景音乐，卡通式的垂头丧气。低音提琴拨弦奏出经典的\"哇哇\"下行音型，配短促无力的弱奏弦乐与一声小号\"噗\"，幽默可爱而非悲伤沉重。乐器编配：低音提琴拨弦、弦乐群弱奏、小号、鼓刷轻点。时长约12秒，开头明确、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/WBYhm39da6",
+      "transcoded": {
+        "duration_s": 10.0,
+        "bitrate_kbps": 96.0,
+        "channels": 2,
+        "bytes": 120729,
+        "pcm_duration_s": 10.0
+      },
+      "status": "ok"
+    },
+    {
+      "id": "bgm_story",
+      "category": "music",
+      "use": "剧情演出背景音乐",
+      "target_duration_s": 30,
+      "loop": true,
+      "priority": "P1",
+      "prompt": "叙事性的游戏剧情演出背景音乐，轻柔的弦乐与钢琴长音垫底，温暖、专注、略带期待，给对白留出空间，不抢戏。乐器编配：弦乐群长音、钢琴分解和弦、极轻的竖琴点缀。情绪平稳安静、无旋律性抢戏、无明显收尾感，适合无缝循环播放，整体音量较低。时长约38秒。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/V7anXUAjJv",
+      "transcoded": {
+        "duration_s": 30.0,
+        "bitrate_kbps": 96.0,
+        "channels": 2,
+        "bytes": 360847,
+        "pcm_duration_s": 30.0
+      },
+      "status": "ok"
+    },
+    {
+      "id": "amb_harbor",
+      "category": "ambience",
+      "use": "港口常驻氛围（1–4章）",
+      "target_duration_s": 25,
+      "loop": true,
+      "priority": "P0",
+      "prompt": "海港氛围环境音：轻柔的波浪拍打岸边、水滴落下、远处低沉的气笛偶尔响起、海鸥鸣叫很轻，安静舒适的海港清晨，无音乐，适合游戏章节背景环境。声音连续平稳、无突兀事件、无明显收尾感，适合无缝循环播放。时长约32秒。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/dBQwDLYzC8",
+      "transcoded": {
+        "duration_s": 25.0,
+        "bitrate_kbps": 96.0,
+        "channels": 2,
+        "bytes": 300974,
+        "pcm_duration_s": 25.0
+      },
+      "status": "ok"
+    },
+    {
+      "id": "amb_ops",
+      "category": "ambience",
+      "use": "机房运转氛围（室内叠加）",
+      "target_duration_s": 25,
+      "loop": true,
+      "priority": "P1",
+      "prompt": "机房运转环境音：服务器风扇低沉的持续嗡鸣、硬盘读写细碎声、键盘敲击声很轻、散热底噪，安静的机房内部，无音乐。声音连续平稳、无突兀事件、无明显收尾感，适合无缝循环播放。时长约32秒。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/jUM2OcMdWP",
+      "transcoded": {
+        "duration_s": 25.0,
+        "bitrate_kbps": 96.0,
+        "channels": 2,
+        "bytes": 300974,
+        "pcm_duration_s": 25.0
+      },
+      "status": "ok"
+    },
+    {
+      "id": "amb_alarm",
+      "category": "ambience",
+      "use": "警戒≥70时叠层",
+      "target_duration_s": 15,
+      "loop": true,
+      "priority": "P1",
+      "prompt": "警戒警报环境音：低频持续嗡鸣加上规律雷达脉冲\"哔——\"声，间隔均匀、紧张但克制，像基地警戒状态，无音乐。声音连续、无明显收尾感，适合无缝循环播放。时长约20秒。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/x4uBZEjb67",
+      "transcoded": {
+        "duration_s": 15.0,
+        "bitrate_kbps": 96.0,
+        "channels": 2,
+        "bytes": 180915,
+        "pcm_duration_s": 15.0
+      },
+      "status": "ok"
+    },
+    {
+      "id": "dash",
+      "category": "sfx",
+      "use": "鲸形冲刺（水花滑行）",
+      "target_duration_s": 0.3,
+      "loop": false,
+      "priority": "P0",
+      "prompt": "游戏音效：鲸形冲刺滑行，水花\"唰\"的一声加气泡，清亮利落，卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/FoBN5LBZvc",
+      "transcoded": {
+        "duration_s": 0.55,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 10074,
+        "pcm_duration_s": 0.55
+      },
+      "status": "ok"
+    },
+    {
+      "id": "impact",
+      "category": "sfx",
+      "use": "撞开数据节点/破障",
+      "target_duration_s": 0.3,
+      "loop": false,
+      "priority": "P0",
+      "prompt": "游戏音效：撞开数据节点的玻璃罐碎裂声加低频\"砰\"，带一点金属尾音，有力但不刺耳，卡通夸张风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/ldingOPvDh",
+      "transcoded": {
+        "duration_s": 0.55,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 10074,
+        "pcm_duration_s": 0.55
+      },
+      "status": "ok"
+    },
+    {
+      "id": "pickup",
+      "category": "sfx",
+      "use": "数据吸附入包",
+      "target_duration_s": 0.3,
+      "loop": false,
+      "priority": "P0",
+      "prompt": "游戏音效：数据吸附入包的\"啵\"一声加轻微电子收束音，短促可爱，卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/aNglKWI0iv",
+      "transcoded": {
+        "duration_s": 0.266,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 5476,
+        "pcm_duration_s": 0.266
+      },
+      "status": "ok"
+    },
+    {
+      "id": "delivery",
+      "category": "sfx",
+      "use": "交付数据确认",
+      "target_duration_s": 0.3,
+      "loop": false,
+      "priority": "P0",
+      "prompt": "游戏音效：交付确认的\"叮\"一声加小号上行两音，清脆上扬、有成就感，卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/uNXNT1UgZq",
+      "transcoded": {
+        "duration_s": 0.415,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 7566,
+        "pcm_duration_s": 0.415
+      },
+      "status": "ok"
+    },
+    {
+      "id": "command-confirm",
+      "category": "sfx",
+      "use": "指令确认",
+      "target_duration_s": 0.3,
+      "loop": false,
+      "priority": "P0",
+      "prompt": "游戏音效：战术指令确认电子音，双音短促确认，区别于交付音，偏电子设备感，卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/aDrHszJItc",
+      "transcoded": {
+        "duration_s": 0.55,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 10074,
+        "pcm_duration_s": 0.55
+      },
+      "status": "ok"
+    },
+    {
+      "id": "alarm",
+      "category": "sfx",
+      "use": "警戒器报警",
+      "target_duration_s": 0.4,
+      "loop": false,
+      "priority": "P0",
+      "prompt": "游戏音效：警戒报警器高频双音脉冲，重复两到三次的\"哔哔\"声，紧张但卡通化，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/GJIRgQfG4N",
+      "transcoded": {
+        "duration_s": 0.55,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 10074,
+        "pcm_duration_s": 0.55
+      },
+      "status": "ok"
+    },
+    {
+      "id": "results",
+      "category": "sfx",
+      "use": "结算播报加冕号角",
+      "target_duration_s": 0.4,
+      "loop": false,
+      "priority": "P0",
+      "prompt": "游戏音效：结算播报加冕号角，短促欢快的铜管上行两三个音，与加冕主题呼应，卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/9OiUkKyWOm",
+      "transcoded": {
+        "duration_s": 0.55,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 10074,
+        "pcm_duration_s": 0.55
+      },
+      "status": "ok"
+    },
+    {
+      "id": "jump",
+      "category": "sfx",
+      "use": "跳跃/爬梯",
+      "target_duration_s": 0.3,
+      "loop": false,
+      "priority": "P1",
+      "prompt": "游戏音效：跳跃或爬梯的轻弹跳音，弹性十足、俏皮，卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/TR2YPzVCFD",
+      "transcoded": {
+        "duration_s": 0.412,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 7566,
+        "pcm_duration_s": 0.412
+      },
+      "status": "ok"
+    },
+    {
+      "id": "ui",
+      "category": "sfx",
+      "use": "通用UI点击",
+      "target_duration_s": 0.2,
+      "loop": false,
+      "priority": "P1",
+      "prompt": "游戏音效：通用界面点击，柔和纸感的\"咔哒\"一声，轻巧安静，卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/4E2dpC26Zk",
+      "transcoded": {
+        "duration_s": 0.123,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 2968,
+        "pcm_duration_s": 0.123
+      },
+      "status": "ok"
+    },
+    {
+      "id": "door",
+      "category": "sfx",
+      "use": "房间切换/登艇舱门",
+      "target_duration_s": 0.5,
+      "loop": false,
+      "priority": "P1",
+      "prompt": "游戏音效：舱门气动开合的\"嘶——砰\"两声，先放气声再关门声，Q版卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/RlWVmleuxc",
+      "transcoded": {
+        "duration_s": 0.55,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 10074,
+        "pcm_duration_s": 0.55
+      },
+      "status": "ok"
+    },
+    {
+      "id": "story",
+      "category": "sfx",
+      "use": "剧情翻页/推进",
+      "target_duration_s": 0.4,
+      "loop": false,
+      "priority": "P1",
+      "prompt": "游戏音效：剧情翻页或推进，纸页翻动声加一个轻提示音，干净利落，卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/yIsK9uH5h8",
+      "transcoded": {
+        "duration_s": 0.475,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 8820,
+        "pcm_duration_s": 0.475
+      },
+      "status": "ok"
+    },
+    {
+      "id": "story-page",
+      "category": "sfx",
+      "use": "剧情对话框打字/翻页",
+      "target_duration_s": 0.3,
+      "loop": false,
+      "priority": "P1",
+      "prompt": "游戏音效：剧情对话框的短促打字或翻页声，细碎轻快，卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/uEnHeueJ01",
+      "transcoded": {
+        "duration_s": 0.277,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 5476,
+        "pcm_duration_s": 0.277
+      },
+      "status": "ok"
+    },
+    {
+      "id": "story-scan",
+      "category": "sfx",
+      "use": "GLM电子网格扫描",
+      "target_duration_s": 0.5,
+      "loop": false,
+      "priority": "P1",
+      "prompt": "游戏音效：电子网格扫描扫频音，由低到高的电子扫描\"嗖——\"，科技感，卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/4Yhfa7Nusl",
+      "transcoded": {
+        "duration_s": 0.55,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 10074,
+        "pcm_duration_s": 0.55
+      },
+      "status": "ok"
+    },
+    {
+      "id": "story-impact",
+      "category": "sfx",
+      "use": "剧情中破障撞击",
+      "target_duration_s": 0.4,
+      "loop": false,
+      "priority": "P1",
+      "prompt": "游戏音效：剧情中破障的低沉撞击声，闷响一下带轻微震动，不刺耳，卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/Hf0ilg5cQq",
+      "transcoded": {
+        "duration_s": 0.55,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 10074,
+        "pcm_duration_s": 0.55
+      },
+      "status": "ok"
+    },
+    {
+      "id": "story-alert",
+      "category": "sfx",
+      "use": "剧情中柔和警报",
+      "target_duration_s": 0.4,
+      "loop": false,
+      "priority": "P1",
+      "prompt": "游戏音效：剧情中警报的柔和变体，比常规警报更轻更柔和的高频双音，提示感强但不刺耳，卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/aPLhwmsFcj",
+      "transcoded": {
+        "duration_s": 0.55,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 10074,
+        "pcm_duration_s": 0.55
+      },
+      "status": "ok"
+    },
+    {
+      "id": "story-beacon",
+      "category": "sfx",
+      "use": "返航信标灯塔脉冲",
+      "target_duration_s": 0.5,
+      "loop": false,
+      "priority": "P1",
+      "prompt": "游戏音效：返航信标的灯塔脉冲\"叮——嘟\"两音，一高一低、温暖清晰，卡通风格，约1秒，开头立即起音、结尾干净。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/MCzGityYuP",
+      "transcoded": {
+        "duration_s": 0.55,
+        "bitrate_kbps": 128.0,
+        "channels": 1,
+        "bytes": 10074,
+        "pcm_duration_s": 0.55
+      },
+      "status": "ok"
+    },
+    {
+      "id": "voice_hero_confirm",
+      "category": "voice",
+      "use": "角色语音短句（hero）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，年轻元气少女，活泼明亮，带一点俏皮，用中文自然地说台词：收到，出发！",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/xbWrj1Gc0r",
+      "transcoded": {
+        "duration_s": 0.969,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 12582,
+        "pcm_duration_s": 0.969
+      },
+      "status": "ok",
+      "character": "hero"
+    },
+    {
+      "id": "voice_hero_charge",
+      "category": "voice",
+      "use": "角色语音短句（hero）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，年轻元气少女，活泼明亮，带一点俏皮，用中文自然地说台词：冲锋！",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/k2KmxqLz5y",
+      "transcoded": {
+        "duration_s": 0.566,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 7567,
+        "pcm_duration_s": 0.566
+      },
+      "status": "ok",
+      "character": "hero"
+    },
+    {
+      "id": "voice_hero_scan",
+      "category": "voice",
+      "use": "角色语音短句（hero）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，年轻元气少女，活泼明亮，带一点俏皮，用中文自然地说台词：扫描完成！",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/SeuUlVMoIJ",
+      "transcoded": {
+        "duration_s": 1.179,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 15090,
+        "pcm_duration_s": 1.179
+      },
+      "status": "ok",
+      "character": "hero"
+    },
+    {
+      "id": "voice_hero_encourage",
+      "category": "voice",
+      "use": "角色语音短句（hero）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，年轻元气少女，活泼明亮，带一点俏皮，用中文自然地说台词：别怕，跟我来！",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/FLBqa99061",
+      "transcoded": {
+        "duration_s": 1.209,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 15404,
+        "pcm_duration_s": 1.209
+      },
+      "status": "ok",
+      "character": "hero"
+    },
+    {
+      "id": "voice_hero_evacuate",
+      "category": "voice",
+      "use": "角色语音短句（hero）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，年轻元气少女，活泼明亮，带一点俏皮，用中文自然地说台词：快撤快撤，跟上我！",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/BwFNFMyp6v",
+      "transcoded": {
+        "duration_s": 1.601,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 20106,
+        "pcm_duration_s": 1.601
+      },
+      "status": "ok",
+      "character": "hero"
+    },
+    {
+      "id": "voice_grok_confirm",
+      "category": "voice",
+      "use": "角色语音短句（grok）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，爽朗利落的青年男声，干脆带笑，用中文自然地说台词：明白，包在我身上！",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/AHAzCFGnyi",
+      "transcoded": {
+        "duration_s": 1.469,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 18538,
+        "pcm_duration_s": 1.469
+      },
+      "status": "ok",
+      "character": "grok"
+    },
+    {
+      "id": "voice_grok_charge",
+      "category": "voice",
+      "use": "角色语音短句（grok）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，爽朗利落的青年男声，干脆带笑，用中文自然地说台词：就是现在，冲！",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/BlObZQOo3E",
+      "transcoded": {
+        "duration_s": 1.296,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 16344,
+        "pcm_duration_s": 1.296
+      },
+      "status": "ok",
+      "character": "grok"
+    },
+    {
+      "id": "voice_grok_pickup",
+      "category": "voice",
+      "use": "角色语音短句（grok）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，爽朗利落的青年男声，干脆带笑，用中文自然地说台词：数据到手啦！",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/WWJ1zlBYTD",
+      "transcoded": {
+        "duration_s": 0.847,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 11015,
+        "pcm_duration_s": 0.847
+      },
+      "status": "ok",
+      "character": "grok"
+    },
+    {
+      "id": "voice_grok_evacuate",
+      "category": "voice",
+      "use": "角色语音短句（grok）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，爽朗利落的青年男声，干脆带笑，用中文自然地说台词：走走走，别磨蹭！",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/btJAfgFBGB",
+      "transcoded": {
+        "duration_s": 1.375,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 17284,
+        "pcm_duration_s": 1.375
+      },
+      "status": "ok",
+      "character": "grok"
+    },
+    {
+      "id": "voice_grok_cheer",
+      "category": "voice",
+      "use": "角色语音短句（grok）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，爽朗利落的青年男声，干脆带笑，用中文自然地说台词：嘿嘿，小菜一碟！",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/94SCrNAX1q",
+      "transcoded": {
+        "duration_s": 1.245,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 15717,
+        "pcm_duration_s": 1.245
+      },
+      "status": "ok",
+      "character": "grok"
+    },
+    {
+      "id": "voice_claude_confirm",
+      "category": "voice",
+      "use": "角色语音短句（claude）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，文静知性的青年女声，温柔平稳，用中文自然地说台词：收到，交给我吧。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/sdspZj8Bfb",
+      "transcoded": {
+        "duration_s": 1.634,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 20419,
+        "pcm_duration_s": 1.634
+      },
+      "status": "ok",
+      "character": "claude"
+    },
+    {
+      "id": "voice_claude_analyze",
+      "category": "voice",
+      "use": "角色语音短句（claude）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，文静知性的青年女声，温柔平稳，用中文自然地说台词：正在分析……",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/yrP39tEsKT",
+      "transcoded": {
+        "duration_s": 1.668,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 20733,
+        "pcm_duration_s": 1.668
+      },
+      "status": "ok",
+      "character": "claude"
+    },
+    {
+      "id": "voice_claude_careful",
+      "category": "voice",
+      "use": "角色语音短句（claude）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，文静知性的青年女声，温柔平稳，用中文自然地说台词：小心些，慢慢来。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/PHTVV06Zjp",
+      "transcoded": {
+        "duration_s": 2.082,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 25748,
+        "pcm_duration_s": 2.082
+      },
+      "status": "ok",
+      "character": "claude"
+    },
+    {
+      "id": "voice_claude_record",
+      "category": "voice",
+      "use": "角色语音短句（claude）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，文静知性的青年女声，温柔平稳，用中文自然地说台词：记录已归档。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/AUEG8NOeiY",
+      "transcoded": {
+        "duration_s": 1.545,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 19479,
+        "pcm_duration_s": 1.545
+      },
+      "status": "ok",
+      "character": "claude"
+    },
+    {
+      "id": "voice_claude_alert",
+      "category": "voice",
+      "use": "角色语音短句（claude）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，文静知性的青年女声，温柔平稳，用中文自然地说台词：发现异常，请留意。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/HkYXvQBx2J",
+      "transcoded": {
+        "duration_s": 2.158,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 26688,
+        "pcm_duration_s": 2.158
+      },
+      "status": "ok",
+      "character": "claude"
+    },
+    {
+      "id": "voice_glm_confirm",
+      "category": "voice",
+      "use": "角色语音短句（glm）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，冷静理性的青年男声，沉稳平淡，用中文自然地说台词：指令确认。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/PVbr2DeE6R",
+      "transcoded": {
+        "duration_s": 1.145,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 14463,
+        "pcm_duration_s": 1.145
+      },
+      "status": "ok",
+      "character": "glm"
+    },
+    {
+      "id": "voice_glm_scan",
+      "category": "voice",
+      "use": "角色语音短句（glm）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，冷静理性的青年男声，沉稳平淡，用中文自然地说台词：扫描完成，一切正常。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/Azae2B70fL",
+      "transcoded": {
+        "duration_s": 1.735,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 21673,
+        "pcm_duration_s": 1.735
+      },
+      "status": "ok",
+      "character": "glm"
+    },
+    {
+      "id": "voice_glm_warn",
+      "category": "voice",
+      "use": "角色语音短句（glm）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，冷静理性的青年男声，沉稳平淡，用中文自然地说台词：警戒值上升，请注意。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/C025pshthu",
+      "transcoded": {
+        "duration_s": 2.334,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 28883,
+        "pcm_duration_s": 2.334
+      },
+      "status": "ok",
+      "character": "glm"
+    },
+    {
+      "id": "voice_glm_public",
+      "category": "voice",
+      "use": "角色语音短句（glm）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，冷静理性的青年男声，沉稳平淡，用中文自然地说台词：您的作战记录，任何人均可查看。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/27lQyZDNLL",
+      "transcoded": {
+        "duration_s": 2.588,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 32017,
+        "pcm_duration_s": 2.588
+      },
+      "status": "ok",
+      "character": "glm"
+    },
+    {
+      "id": "voice_glm_route",
+      "category": "voice",
+      "use": "角色语音短句（glm）",
+      "target_duration_s": 2.0,
+      "loop": false,
+      "priority": "P2",
+      "prompt": "Q版动画配音风格，冷静理性的青年男声，沉稳平淡，用中文自然地说台词：撤离路线已计算完毕。",
+      "tool": "text_to_audio_plus",
+      "generation_date": "2026-10-25",
+      "generation_url": "https://aka.doubaocdn.com/s/QUUXWz92mX",
+      "transcoded": {
+        "duration_s": 1.98,
+        "bitrate_kbps": 96.0,
+        "channels": 1,
+        "bytes": 24494,
+        "pcm_duration_s": 1.98
+      },
+      "status": "ok",
+      "character": "glm"
+    }
+  ]
+}

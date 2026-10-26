@@ -131,6 +131,30 @@ test('optional annex traversal, collected supply and node damage remain persiste
   assert.equal(world.snapshot().room.optional,true);
 });
 
+test('chapter-one archive unlocks a persistent maintenance shortcut while the original return route remains usable',()=>{
+  const {world,core,events}=fixture();go(world,{x:870,y:380});interact(world);assert.equal(world.currentRoom.id,'paper-window:annex');
+  const hatch=world.currentRoom.exits.find(exit=>exit.id==='maintenance-hatch');assert(hatch);
+  go(world,{x:hatch.x,y:hatch.y});assert.equal(world.getInteraction(core.view()).type,'room-exit-locked');
+  assert.equal(world.transitionRoom(hatch),false);assert.equal(world.transitionRoom({...hatch,requiresEvent:undefined}),false);
+  const unopened=JSON.parse(JSON.stringify(world.exportState()));unopened.eventFlags.push('harbor-annex-found');
+  assert.equal(new GameWorld(core,getMap('paper-window'),{expanded:true}).restoreState(unopened).ok,false,'an unlocked hatch requires its archive item');
+  assert.equal(world.currentRoom.id,'paper-window:annex');
+  go(world,{x:550,y:380});assert(world.items.find(item=>item.id==='harbor-extra-1').collected);
+  assert(world.eventFlags.has('harbor-annex-found'));assert(events.some(event=>event.type==='world-event'&&/维护舱捷径/.test(event.payload.text)));
+  go(world,{x:hatch.x,y:hatch.y});assert.equal(world.getInteraction(core.view()).id,'exit-maintenance-hatch');
+  const saved=JSON.parse(JSON.stringify(world.exportState()));
+  const restored=new GameWorld(core,getMap('paper-window'),{expanded:true});assert.equal(restored.restoreState(saved).ok,true);
+  assert.equal(restored.getInteraction(core.view()).id,'exit-maintenance-hatch');assert(restored.transitionRoom('maintenance-hatch'));
+  assert.equal(restored.currentRoom.id,'paper-window:room-2');
+  const forged=JSON.parse(JSON.stringify(saved));
+  forged.roomStates['paper-window:annex'].items.find(item=>item.id==='harbor-extra-1').collected=false;
+  assert.equal(new GameWorld(core,getMap('paper-window'),{expanded:true}).restoreState(forged).ok,false,'collected archive and unlock event must agree');
+
+  const legacy=fixture().world;go(legacy,{x:870,y:380});interact(legacy);go(legacy,{x:65,y:600});interact(legacy);
+  assert.equal(legacy.currentRoom.id,'paper-window:room-1');go(legacy,{x:1170,y:600});interact(legacy);
+  assert.equal(legacy.currentRoom.id,'paper-window:room-2');
+});
+
 test('JSON world snapshots restore room, bridge, player, clocks, records, receipts and cooldown display state',()=>{
   const {world,core}=fixture();go(world,{x:390,y:490});advance(world,1);world.selectTeammate('Grok');world.selectTarget('paper-window');assert(world.confirmCommand());waitTask(world,'Grok');
   const snapshot=JSON.parse(JSON.stringify(world.exportState()));

@@ -2,11 +2,71 @@ import { CHAPTERS, STORY_FLAGS } from './chapters.mjs';
 
 export const SAVE_VERSION = 1;
 export const SAVE_KEY = 'whale-heist:campaign:v1';
+export const SAVE_TRANSACTION_KEY = 'whale-heist:save-transaction:v1';
+const TRANSACTION_KEYS = [SAVE_KEY, 'whale-heist:experience:v2', 'whale-heist:archive:v3', 'whale-heist:experience:backup:v2'];
 const MAX_SAVE_LENGTH = 128_000;
 const integer = (value, min, max) => Number.isInteger(value) && value >= min && value <= max;
 const flagsValid = (flags) => Array.isArray(flags)
   && flags.length <= STORY_FLAGS.length && new Set(flags).size === flags.length
   && flags.every((flag) => STORY_FLAGS.includes(flag));
+
+function pendingTransaction(storage) {
+  const text = storage.getItem(SAVE_TRANSACTION_KEY);
+  if (text == null) return null;
+  const value = JSON.parse(text);
+  if (value?.version !== 1 || !value.previous || Object.keys(value.previous).length !== TRANSACTION_KEYS.length
+      || !TRANSACTION_KEYS.every(key => Object.hasOwn(value.previous, key)
+        && (value.previous[key] === null || typeof value.previous[key] === 'string'))) throw new Error('Invalid save transaction');
+  return value.previous;
+}
+
+/** An unfinished import always reads as the original save, even if rollback is temporarily blocked. */
+export function readSaveItem(storage, key) {
+  if (!storage) return null;
+  const previous = pendingTransaction(storage);
+  return previous && Object.hasOwn(previous, key) ? previous[key] : storage.getItem(key);
+}
+
+export function recoverSaveTransaction(storage) {
+  try {
+    if (!storage) return false;
+    const previous = pendingTransaction(storage);
+    if (!previous) return true;
+    // Free changed values before restoring originals, so quota failures can recover.
+    for (const key of TRANSACTION_KEYS) {
+      if (storage.getItem(key) !== previous[key]) storage.removeItem(key);
+    }
+    for (const key of TRANSACTION_KEYS) {
+      if (previous[key] !== null && storage.getItem(key) !== previous[key]) storage.setItem(key, previous[key]);
+      if (storage.getItem(key) !== previous[key]) return false;
+    }
+    storage.removeItem(SAVE_TRANSACTION_KEY);
+    return storage.getItem(SAVE_TRANSACTION_KEY) == null;
+  } catch { return false; }
+}
+
+/** The journal's removal commits all save records together; failures preserve their previous logical values. */
+export function writeSaveTransaction(storage, values) {
+  if (!storage || !TRANSACTION_KEYS.every(key => Object.hasOwn(values, key)
+      && (values[key] === null || typeof values[key] === 'string'))
+      || !recoverSaveTransaction(storage)) return { ok: false, reason: 'storage-unavailable' };
+  try {
+    const previous = Object.fromEntries(TRANSACTION_KEYS.map(key => [key, storage.getItem(key) ?? null]));
+    const journal = JSON.stringify({ version: 1, previous });
+    storage.setItem(SAVE_TRANSACTION_KEY, journal);
+    if (storage.getItem(SAVE_TRANSACTION_KEY) !== journal) throw new Error('Save journal was not written');
+    for (const key of TRANSACTION_KEYS) {
+      if (values[key] === null) storage.removeItem(key); else storage.setItem(key, values[key]);
+      if (storage.getItem(key) !== values[key]) throw new Error('Save record was not written');
+    }
+    storage.removeItem(SAVE_TRANSACTION_KEY);
+    if (storage.getItem(SAVE_TRANSACTION_KEY) != null) throw new Error('Save transaction was not committed');
+    return { ok: true };
+  } catch {
+    recoverSaveTransaction(storage);
+    return { ok: false, reason: 'storage-unavailable' };
+  }
+}
 
 export function newCheckpoint() {
   return {
@@ -63,7 +123,7 @@ export function normalizeCheckpoint(raw) {
 export function loadCheckpoint(storage) {
   if (!storage || typeof storage.getItem !== 'function') return { ok: false, reason: 'storage-unavailable', checkpoint: null };
   let serialized;
-  try { serialized = storage.getItem(SAVE_KEY); }
+  try { serialized = readSaveItem(storage, SAVE_KEY); }
   catch { return { ok: false, reason: 'storage-unavailable', checkpoint: null }; }
   if (serialized === null || serialized === undefined) return { ok: false, reason: 'missing', checkpoint: null };
   if (typeof serialized !== 'string' || serialized.length > MAX_SAVE_LENGTH) return { ok: false, reason: 'invalid-schema', checkpoint: null };
@@ -79,7 +139,7 @@ export function saveCheckpoint(storage, checkpoint) {
   const safe = normalizeCheckpoint(checkpoint);
   if (!safe) return { ok: false, reason: 'invalid-schema' };
   if (!storage || typeof storage.setItem !== 'function') return { ok: false, reason: 'storage-unavailable' };
-  try { storage.setItem(SAVE_KEY, JSON.stringify(safe)); return { ok: true, reason: null }; }
+  try { if (!recoverSaveTransaction(storage)) return { ok: false, reason: 'storage-unavailable' }; storage.setItem(SAVE_KEY, JSON.stringify(safe)); return { ok: true, reason: null }; }
   catch { return { ok: false, reason: 'storage-unavailable' }; }
 }
 

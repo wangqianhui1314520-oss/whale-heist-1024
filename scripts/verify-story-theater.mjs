@@ -66,7 +66,7 @@ for (const id of ['chapter4-reveal', 'chapter5-preparation', 'epilogue']) {
 }
 for (const style of ['cinematic', 'comic']) {
   qa.style(style);
-  assert.equal(node('scene-art').style.backgroundSize, 'contain', `${style}: complete art is fitted without single-frame stretching`);
+  assert.equal(node('scene-art').style.backgroundSize, 'cover', `${style}: art fills the screen without stretching`);
 }
 assert.equal(writes, 0, 'theater playback never writes storage');
 console.log('PASS dynamic branch selector, complete art fitting, final branch retention and read-only storage');

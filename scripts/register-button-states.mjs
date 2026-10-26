@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 const raw='C:/Users/Administrator/.codex/generated_images/01a17084-fe91-7f83-bd6d-d338c4309fa9/exec-3da7342c-d678-48a7-ab7c-e2ff5a76d9ad.png';
-const file='assets/ui/button-states-v1.png',bytes=await readFile(file),sha256=createHash('sha256').update(bytes).digest('hex');
+const file='assets/ui/button-states-v1.webp',bytes=await readFile(file),sha256=createHash('sha256').update(bytes).digest('hex');
 const meta=JSON.parse(await readFile('assets/ui/button-states-v1.metadata.json','utf8'));
 const regions={normal:[26,118,837,242],focus:[912,118,837,242],pressed:[26,529,837,242],disabled:[912,529,837,242]};
 await writeFile('assets/provenance/button-states-v1.json',JSON.stringify({tool:'image_gen',mode:'built-in',date:'2026-10-25',raw_output_path:raw,prompts:['assets/prompts/button-states-v1.txt'],dimensions:[meta.width,meta.height],sha256,regions,post_processing:'Unmodified generated PNG; CSS samples four measured state rectangles.',visual_qa:{inspected:true,states:['cyan','gold','pressed','disabled']}},null,2)+'\n');

@@ -67,7 +67,7 @@ $('script-list').innerHTML = entries.map(entry => `<article class="script-scene"
 </article>`).join('');
 
 $('gallery-list').innerHTML = STORY_ART_BEATS.map((beat, index) => `<article class="gallery-beat"><div class="gallery-beat-title"><span>${String(index + 1).padStart(2, '0')}</span><h3>${esc(beatNames[beat] || beat)}</h3></div><div class="gallery-row">${Object.entries(styles).map(([style, label]) => {
-  const path = STORY_ART_IMAGES.find(path => path.endsWith(`/${style}/${beat}.png`)) ?? `assets/story/${style}/${beat}.png`;
+  const path = STORY_ART_IMAGES.find(path => path.endsWith(`/${style}/${beat}.webp`)) ?? `assets/story/${style}/${beat}.webp`;
   return `<button class="gallery-card gallery-${style}" type="button" data-art-path="${path}" data-art-beat="${beat}" data-art-style="${style}" aria-label="查看${esc(beatNames[beat])}的${label}原画"><div class="gallery-image"><img src="${path}" alt="${esc(beatNames[beat])} · ${label}" loading="lazy"><span class="image-pending">画面准备中</span></div><div class="gallery-caption"><strong>${label}</strong><span>${style === 'stage' ? '场景底图 + 角色演出' : style === 'comic' ? '连续三格分镜' : '电影叙事关键帧'} ↗</span></div></button>`;
 }).join('')}</div></article>`).join('');
 document.querySelectorAll('.gallery-image img').forEach(image => {
@@ -165,7 +165,7 @@ function render() {
   const scene = current(), line = scene.steps[lineIndex];
   const frame = comicFrameFor({ ...line, sceneId: scene.id, index: lineIndex, total: scene.steps.length });
   $('scene-art').style.backgroundImage = artBackground(scene);
-  $('scene-art').style.backgroundSize = 'contain';
+  $('scene-art').style.backgroundSize = 'cover';
   $('scene-art').style.backgroundPosition = 'center';
   if (storyStyle === 'comic') {
     $('comic-strip-image').src = storyArtFor(scene, 'comic');

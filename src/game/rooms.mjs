@@ -55,6 +55,7 @@ function pair(chapter,a,bRoom,annex) {
   if(annex){
     a.exits.push(exit('to-annex',870,380,annex.id,{x:110,y:600},'支线 · '+annex.name));
     annex.exits.push(exit('from-annex',65,600,a.id,{x:825,y:380},'返回主通道'));
+    if(chapter==='paper-window')annex.exits.push({...exit('maintenance-hatch',1140,600,bRoom.id,{x:85,y:600},'维护舱捷径 · 前往机房'),requiresEvent:'harbor-annex-found'});
   }
   chapterRooms.push(a,bRoom,...(annex?[annex]:[]));
 }
@@ -73,7 +74,7 @@ function pair(chapter,a,bRoom,annex) {
     events:[{id:'harbor-vault-open',trigger:'barrier-broken',subject:'outer-node',action:'record',text:'外侧机柜已打开，原路梯子和下层返程都可用。'}],
   }),s=room(c.id,3,'高处档案夹层','annex',{
     items:at(c.items,[['harbor-extra-1',550,380],['harbor-extra-2',950,270]]),supplies:at(c.supplies,[['harbor-qualifier',750,270]]),
-    events:[{id:'harbor-annex-found',trigger:'item-picked',subject:'harbor-extra-1',action:'record',text:'档案里留下了小队的第一张行动草图。'}],
+    events:[{id:'harbor-annex-found',trigger:'item-picked',subject:'harbor-extra-1',action:'record',text:'档案里留下了小队的第一张行动草图，维护舱捷径随之开启。'}],
   });pair(c.id,a,d,s);
 }
 {

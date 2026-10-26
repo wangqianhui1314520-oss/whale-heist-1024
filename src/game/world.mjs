@@ -8,9 +8,12 @@ const copy=v=>JSON.parse(JSON.stringify(v));
 const overlap=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
 const bodyRect=p=>({x:p.x-p.w/2,y:p.y-p.h,w:p.w,h:p.h});
 const actionTokenCost=plan=>plan.budgetSource==='analysis'||plan.precise?RULES.aiTokenPreciseCost:RULES.aiTokenDefaultCost;
+export const SCAN_WARNING_SECONDS=1.8;
+const DECOY_HOLD_SECONDS=6;
+const DECOY_SPEED=100;
 const DESCRIPTIONS={
   Grok:['沿平台持续冲锋，撞开沿途障碍后停下。','只破指定障碍，在目标后停下。'],
-  Claude:['纸页吸引附近同层最多三名守卫，可能改变另一条路线。','只引开同层距离目标最近的一名守卫。'],
+  Claude:['将同层最多三名守卫引向远离你这一侧的纸页落点，抵达后分心 6 秒。','只引开同层距离目标最近的一名守卫，抵达纸页后分心 6 秒。'],
   GLM:['站定扫描大范围陷阱；波纹碰到警戒器会报警。','只扫描目标方向的窄范围，减少惊动警戒器。'],
 };
 
@@ -65,7 +68,7 @@ export class GameWorld{
     this.guards=copy(map.guards).map(g=>({...g,homeX:g.x,direction:g.direction===-1?'left':'right',luredUntil:0,lure:null}));
     this.traps=copy(map.traps).map(t=>({...t,revealedUntil:0}));this.alarms=copy(map.alarms);
     this.player={...map.spawn,w:28,h:48,vx:0,vy:0,direction:'right',pose:'idle',grounded:true,
-      coyote:.1,jumpBuffer:0,dashCooldown:0,dashTime:0,hurtUntil:0,climbing:false};
+      coyote:.1,jumpBuffer:0,dashCooldown:0,dashTime:0,slideUntil:0,hurtUntil:0,climbing:false};
     this.crew=core.view().chapter.teammates.map((name,i)=>({name,x:map.spawn.x+45+i*50,y:map.spawn.y,
       direction:'right',pose:'idle',status:'following',route:[],task:null,repathAt:0}));
     this.effects=[];this.selected=null;this.commandPreview=null;this.slowRemaining=8;this.slowSession=0;
@@ -192,9 +195,11 @@ export class GameWorld{
   }
   transitionRoom(exitOrId){
     if(!this.expanded)return false;
-    const exit=typeof exitOrId==='string'?this.currentRoom.exits.find(e=>e.id===exitOrId||e.to===exitOrId):exitOrId;
-    if(!exit||!this.currentRoom.exits.some(e=>e.id===exit.id&&e.to===exit.to))return false;
+    const requested=typeof exitOrId==='string'?this.currentRoom.exits.find(e=>e.id===exitOrId||e.to===exitOrId):exitOrId;
+    const exit=requested&&this.currentRoom.exits.find(e=>e.id===requested.id&&e.to===requested.to);
+    if(!exit)return false;
     const room=this.rooms.find(room=>room.id===exit.to);if(!room||room.chapterId!==this.core.view().chapter.id)return false;
+    if(exit.requiresEvent&&!this.eventFlags.has(exit.requiresEvent)){this.toast('维护舱仍然封闭，先取得夹层档案里的行动草图。');return false;}
     if(room.optional&&this.core.view().attempt.evacuationStarted){this.toast('撤离已经开始，支线路口已封存。');return false;}
     if(this.crew.some(a=>a.task&&a.task.stage!=='waiting')){this.toast('队友正在执行，请等回执完成后一起换房。');return false;}
     for(const actor of this.crew)if(actor.task){this.core.cancelCommand(actor.name);actor.task=null;actor.route=[];actor.status='following';}
@@ -270,7 +275,7 @@ export class GameWorld{
     if(!list(value.crew,3)||value.crew.length!==names.length||!unique(value.crew.map(a=>a.name)))return 'invalid-crew-state';
     for(const actor of value.crew){
       if(!names.includes(actor.name)||!point(actor)||!['left','right'].includes(actor.direction)||!route(actor.route)||!finite(actor.repathAt,0,1e9)
-        ||!['idle','walk','jump','skill'].includes(actor.pose)||!['following','travelling','executing','waiting'].includes(actor.status))return 'invalid-crew-state';
+        ||!['idle','walk','jump','fall','skill'].includes(actor.pose)||!['following','travelling','executing','waiting'].includes(actor.status))return 'invalid-crew-state';
       if(actor.task){const t=actor.task,target=currentTargets.find(entry=>entry.id===t.target?.id&&entry.teammate===actor.name);
         if(!object(t)||!target||t.target.x!==target.x||t.target.y!==target.y||!string(t.commandId,120)||!['waiting','travel','execute'].includes(t.stage)
           ||!finite(t.started,0,value.time)||!finite(t.stageTime,0,60)||typeof t.precise!=='boolean')return 'invalid-task-state';
@@ -327,6 +332,11 @@ export class GameWorld{
         }
       }
     }
+    if(this.expanded&&value.chapterId==='paper-window'){
+      const annexState=value.roomStates['paper-window:annex'];
+      const archiveCollected=Boolean(annexState?.items?.some(item=>item.id==='harbor-extra-1'&&item.collected));
+      if(value.eventFlags.includes('harbor-annex-found')!==archiveCollected)return 'invalid-event-flags';
+    }
     return null;
   }
   setPromptCompiler(compiler){this.compilePrompt=compiler;return this;}
@@ -365,6 +375,7 @@ export class GameWorld{
     const insufficientQualifiers=precise&&view.attempt.qualifiers<1;
     const available=!noEffect&&!insufficientTokens&&!insufficientQualifiers&&distance(this.player,target)<900&&remaining===0&&!this.crew.find(c=>c.name===target.teammate)?.task;
     this.commandPreview={teammate:target.teammate,targetId:target.id,x:target.x,y:target.y,label:target.label,
+      lures:target.teammate==='Claude'?this.claudeLures(target,precise):[],
       description:DESCRIPTIONS[target.teammate][precise?1:0],defaultDescription:DESCRIPTIONS[target.teammate][0],
       preciseDescription:DESCRIPTIONS[target.teammate][1],precise,cost:precise?1:0,available,
       reason:noEffect?'这个范围内的障碍和节点已经打开，无需再次消耗 AI Token。':remaining>0?`冷却还剩 ${Math.ceil(remaining)} 秒`:insufficientTokens?`AI Token 不足，需要 ${tokenCost} 枚。`:insufficientQualifiers?'限定词不足，可以使用默认指令。':!available?'靠近目标，或等待队友执行完毕':'',tokenCost,aiTokens:view.attempt.aiTokens,aiTokenMax:view.attempt.aiTokenMax};
@@ -393,9 +404,9 @@ export class GameWorld{
     let result=this.core.prepareCommand({commandId,teammate:actor.name,targetId:target.id,precise,tokenCost});
     if(!result.ok){this.toast(result.reason==='qualifier-unavailable'?'限定词不足，可以使用默认指令。':result.reason==='ai-token-unavailable'?'AI Token 不足，请先收集 Token 或完成分析。':'队友暂时无法执行，请等待冷却。');return false;}
     result=this.core.beginCommand(actor.name);if(!result.ok)return false;
-    actor.task={commandId,target,precise,direction,stage:'travel',started:this.time,stageTime:0};
+    actor.task={commandId,target,precise,direction,stage:'travel',started:this.time,stageTime:0,lures:this.commandPreview.lures||[]};
     actor.route=route;actor.status='travelling';
-    this.emit('sound',{name:'command-confirm'});this.emit('dialogue',{character:actor.name,text:precise?'收到，我会按限定范围执行。':{Grok:'明白，沿这条路撞过去！',Claude:'简历已经准备好了。',GLM:'开始全面复查。'}[actor.name]});
+    this.emit('sound',{name:'command-confirm',teammate:actor.name});this.emit('dialogue',{character:actor.name,text:precise?'收到，我会按限定范围执行。':{Grok:'明白，沿这条路撞过去！',Claude:'简历已经准备好了。',GLM:'开始全面复查。'}[actor.name]});
     this.cancelPreview();return true;
   }
   buildPlan(target,precise=this.promptConfig.precise){
@@ -452,7 +463,7 @@ export class GameWorld{
     const direction=target.x>=actor.x?1:-1,surface=this.nearestSurface(target);
     const goal={x:clamp(target.x-(actor.name==='Grok'?65:30)*direction,surface.x+18,surface.x+surface.w-18),y:target.y};
     const route=this.navigationRoute(actor,goal);
-    if(!route)return {ok:false,reason:'静态梯路尚未连通，请换一个落脚点。'};
+    if(!route)return {ok:false,reason:`${actor.name} 还在障碍的另一侧，正在绕行（约 ${Math.max(1,Math.ceil(distance(actor,target)/195))} 秒）。`};
     // Navigation and its preview reject the same solid crossings. A selected barrier
     // is only exempt during Grok's visible attack, never during travel.
     let previous=actor;
@@ -477,7 +488,8 @@ export class GameWorld{
       geometry.nodeIds=this.nodes.filter(n=>n.hp>0&&Math.abs(n.y-target.y)<48&&n.x>=geometry.bounds.x&&n.x<=geometry.bounds.x+geometry.bounds.w&&(!plan.precise||n.id===target.id||n.itemId===target.itemId)).map(n=>n.id);
       if(!geometry.barrierIds.length&&!geometry.nodeIds.length)return {ok:false,reason:'这个范围内的障碍和节点已经打开，无需再次消耗 AI Token。'};
     }else if(actor.name==='Claude'){
-      geometry.guardIds=this.guards.filter(g=>Math.abs(g.y-target.y)<48&&distance(g,target)<450).sort((a,b)=>distance(a,target)-distance(b,target)).slice(0,plan.precise?1:3).map(g=>g.id);
+      geometry.lures=this.claudeLures(target,plan.precise);
+      geometry.guardIds=geometry.lures.map(lure=>lure.guardId);
       if(!geometry.guardIds.length)return {ok:false,reason:'同层没有可被纸页引开的守卫。'};
       geometry.bounds={x:target.x-450,y:target.y-48,w:900,h:96};
     }else{
@@ -521,7 +533,7 @@ export class GameWorld{
       trainingSpent:plan.budgetSource==='training'&&!waiting,
       conditionDirection:plan.condition?.type==='guard-turn'?this.guards.find(g=>g.id===plan.condition.targetId)?.direction:null};
     actor.route=waiting?[]:copy(geometry.route);actor.status=waiting?'waiting':'travelling';
-    this.emit('sound',{name:'command-confirm'});this.emit('dialogue',{character:actor.name,text:waiting?'收到，条件成立后我再开始。':plan.precise?'收到，只处理限定范围。':'收到，按预览范围执行。'});return true;
+    this.emit('sound',{name:'command-confirm',teammate:actor.name});this.emit('dialogue',{character:actor.name,text:waiting?'收到，条件成立后我再开始。':plan.precise?'收到，只处理限定范围。':'收到，按预览范围执行。'});return true;
   }
   completeTask(actor){
     const task=actor.task;const result=this.event('command-complete',{teammate:actor.name,commandId:task.commandId});
@@ -554,7 +566,7 @@ export class GameWorld{
       const step=Math.min(remaining,d),old={x:actor.x,y:actor.y};actor.x+=dx/d*step;actor.y+=dy/d*step;
       if(this.expanded&&this.solidBodies().some(s=>overlap({x:actor.x-13,y:actor.y-47,w:26,h:46},s))){actor.x=old.x;actor.y=old.y;actor.route=[];actor.pose='idle';return false;}
       if(Math.abs(dx)>1)actor.direction=dx>0?'right':'left';
-      actor.pose=Math.abs(dy)>4?'jump':'walk';remaining-=step;if(step===d)actor.route.shift();
+      actor.pose=Math.abs(dy)>4?(dy<0?'jump':'fall'):'walk';remaining-=step;if(step===d)actor.route.shift();
     }
     if(!actor.route.length)actor.pose='idle';
     return true;
@@ -596,10 +608,21 @@ export class GameWorld{
           if(!this.moveAlong(actor,dt,220)){this.failTask(actor);continue;}
           if(!actor.route.length){task.stage='execute';task.stageTime=0;actor.status='executing';actor.direction=task.direction>0?'right':'left';
             if(actor.name==='Claude'){
-              const candidates=this.guards.filter(g=>Math.abs(g.y-task.target.y)<48&&distance(g,task.target)<450&&(!this.expanded||task.geometry.guardIds.includes(g.id))).sort((a,b)=>distance(a,task.target)-distance(b,task.target));
-              task.lured=candidates.slice(0,task.precise?1:3).map(g=>g.id);task.originals={};
-              for(const g of candidates.filter(g=>task.lured.includes(g.id))){task.originals[g.id]=g.x;g.lure={x:clamp(task.target.x+30*(g.x<task.target.x?1:-1),g.minX,g.maxX),y:g.y};g.luredUntil=this.time+4;if(this.expanded){g.state='reading';g.suspicion=0;}}
-              this.cue('paper-decoy',task.target.x,task.target.y-35);this.emit('sound',{name:'command-confirm'});
+              // Use the confirmed preview, even if the player has since moved.
+              // Older saved tasks have no lure geometry and use the same planner.
+              const lures=task.geometry?.lures||(task.lures?.length?task.lures:this.claudeLures(task.target,task.precise));
+              task.lured=[];
+              for(const lure of lures){
+                const g=this.guards.find(g=>g.id===lure.guardId);if(!g)continue;
+                task.lured.push(g.id);g.lure={x:lure.x,y:g.y};
+                g.luredUntil=this.time+Math.abs(g.x-g.lure.x)/DECOY_SPEED+DECOY_HOLD_SECONDS;
+                if(this.expanded){g.state='reading';g.suspicion=0;}
+                this.cue('paper-decoy',g.lure.x,g.lure.y-35);
+              }
+              this.alarmWarnings=this.alarmWarnings.filter(w=>!task.lured.includes(w.sourceId));
+              this.guardWarnings=this.guardWarnings.filter(w=>!task.lured.includes(w.sourceId));
+              this.toast('Claude：纸页已投向远端，守卫抵达后分心 6 秒。趁纸页标记亮着通过。');
+              this.emit('sound',{name:'command-confirm',teammate:'Claude'});
             }
           }
         }else if(actor.name==='Grok'){
@@ -622,9 +645,9 @@ export class GameWorld{
           }
         }else if(actor.name==='Claude'){
           actor.pose='skill';
-          const changed=(task.lured||[]).some(id=>Math.abs(this.guards.find(g=>g.id===id).x-task.originals[id])>8);
-          if(task.stageTime>1&&changed)this.completeTask(actor);
-          else if(task.stageTime>4)this.failTask(actor);
+          const arrived=task.lured?.length&&task.lured.every(id=>{const g=this.guards.find(g=>g.id===id);return g?.lure&&Math.abs(g.x-g.lure.x)<2;});
+          if(task.stageTime>.35&&arrived)this.completeTask(actor);
+          else if(task.stageTime>10)this.failTask(actor);
         }else{
           actor.pose='skill';
           if(task.stageTime>=2){
@@ -683,6 +706,33 @@ export class GameWorld{
     const centreY=p.y-p.h/2;
     return p.x>=region.x&&p.x<=region.x+region.w&&centreY>=region.y&&centreY<=region.y+region.h;
   }
+  claudeLures(target,precise=false){
+    const guards=this.guards.filter(g=>Math.abs(g.y-target.y)<48&&distance(g,target)<450)
+      .sort((a,b)=>distance(a,target)-distance(b,target)).slice(0,precise?1:3);
+    return guards.map(g=>({guardId:g.id,x:Math.abs(this.player.x-g.maxX)>=Math.abs(this.player.x-g.minX)?g.maxX:g.minX,y:g.y}));
+  }
+  // The renderer and damage check share these exact rectangles. Fixed
+  // platforms block the downward beam; moving lifts are not reliable cover.
+  scanGeometry(warning=this.scanWarning){
+    if(!warning)return {danger:[],cover:[]};
+    const left=warning.x,right=left+warning.w,bottom=600;
+    const roofs=this.platforms.filter(p=>p.kind!=='lift'&&p.y>warning.y&&p.y<bottom&&p.x<right&&p.x+p.w>left);
+    const edges=[...new Set([left,right,...roofs.flatMap(p=>[clamp(p.x,left,right),clamp(p.x+p.w,left,right)])])].sort((a,b)=>a-b);
+    const danger=[],cover=[];
+    for(let i=1;i<edges.length;i++){
+      const x=edges[i-1],w=edges[i]-x,mid=x+w/2;
+      const roof=roofs.filter(p=>mid>=p.x&&mid<=p.x+p.w).sort((a,b)=>a.y-b.y)[0];
+      danger.push({x,y:warning.y,w,h:(roof?roof.y+roof.h:bottom)-warning.y});
+      if(roof&&roof.y+roof.h<bottom)cover.push({x,y:roof.y+roof.h,w,h:bottom-roof.y-roof.h});
+    }
+    return {danger,cover};
+  }
+  scanStatus(warning=this.scanWarning){
+    if(!warning)return 'inactive';
+    const body=bodyRect(this.player),inside=overlap(body,{x:warning.x,y:warning.y,w:warning.w,h:600-warning.y});
+    if(!inside)return 'outside';
+    return this.scanGeometry(warning).danger.some(region=>overlap(body,region))?'exposed':'covered';
+  }
   hurt(amount=20){if(this.time<this.player.hurtUntil)return;const result=this.event('damage',{amount});if(result.ok){this.player.hurtUntil=this.time+.7;this.emit('sound',{name:'impact'});}}
   movePlayer(dt,input,view){
     const p=this.player;p.dashCooldown=Math.max(0,p.dashCooldown-dt);p.coyote=p.grounded?.11:Math.max(0,p.coyote-dt);
@@ -691,7 +741,11 @@ export class GameWorld{
       &&(!input.up||p.y>l.y+.5)&&(!input.down||p.y<l.y+l.h-.5));
     const climb=ladder&&(input.up||input.down);
     if(climb){
-      p.climbing=true;p.vx=0;p.vy=0;p.x+=(ladder.x-p.x)*Math.min(1,dt*15);
+      // Climbing is a movement mode of its own.  If the player reaches a
+      // ladder during the short dash window (for example while pressing up,
+      // jump and dash together), the dash must not resume when they leave the
+      // ladder at the upper platform.
+      p.climbing=true;p.dashTime=0;p.vx=0;p.vy=0;p.x+=(ladder.x-p.x)*Math.min(1,dt*15);
       const previousY=p.y;
       p.y=clamp(p.y+(input.down?160:-160)*dt,ladder.y,ladder.y+ladder.h);
       for(const solid of this.solidBodies())if(overlap(bodyRect(p),solid)){
@@ -703,10 +757,14 @@ export class GameWorld{
       p.climbing=false;
       const axis=(input.right?1:0)-(input.left?1:0),speed=235*(1-view.attempt.inventory.length*.05);
       if(axis)p.direction=axis>0?'right':'left';
-      if(input.dashPressed&&p.dashCooldown===0){p.dashTime=.22;p.dashCooldown=2.8;p.vy=0;p.attackId=this.unique('dash');this.cue('water-dash',p.x,p.y-20,p.direction);this.emit('sound',{name:'dash'});}
+      if(input.dashPressed&&p.dashCooldown===0){p.dashTime=.22;p.dashCooldown=2.8;p.slideUntil=this.time+.18;p.vy=0;p.attackId=this.unique('dash');this.cue('water-dash',p.x,p.y-20,p.direction);this.emit('sound',{name:'dash'});}
       if(p.dashTime>0){p.vx=(p.direction==='right'?1:-1)*840;p.vy=0;p.dashTime-=dt;}
       else{
-        const wanted=axis*speed,maxChange=(axis?2500:3000)*dt;
+        // A dash used to coast ~117px past its landing point, which threw the
+        // player off narrow walkways. Keep the burst, but brake hard for the
+        // first 0.18s after it so the stop point is predictable.
+        const braking=this.time<(p.slideUntil||0);
+        const wanted=axis*speed,maxChange=(braking?9000:(axis?2500:3000))*dt;
         p.vx+=clamp(wanted-p.vx,-maxChange,maxChange);
         if(p.jumpBuffer>0&&(p.coyote>0||this.time-this.lastClimb<.12)){
           p.vy=-590;p.grounded=false;p.coyote=0;p.jumpBuffer=0;this.lastClimb=-10;this.emit('sound',{name:'jump'});
@@ -766,7 +824,11 @@ export class GameWorld{
     }
     if(this.expanded){
       const exit=this.currentRoom.exits.find(e=>distance(e,p)<48);
-      if(exit)return {id:'exit-'+exit.id,type:'room-exit',label:exit.label,duration:.18,action:()=>this.transitionRoom(exit)};
+      if(exit){
+        if(exit.requiresEvent&&!this.eventFlags.has(exit.requiresEvent))return {id:'exit-locked-'+exit.id,type:'room-exit-locked',label:'维护舱封闭 · 取得夹层档案开启',duration:.25,
+          action:()=>this.toast('维护舱仍然封闭，先取得夹层档案里的行动草图。')};
+        return {id:'exit-'+exit.id,type:'room-exit',label:exit.label,duration:.18,action:()=>this.transitionRoom(exit)};
+      }
     }
     if(this.map.broadcast&&distance(p,this.map.broadcast)<55){
       return {id:'broadcast',type:'broadcast',label:view.attempt.broadcastOn?'关闭公开广播':'开启公开广播',duration:.8,
@@ -822,7 +884,7 @@ export class GameWorld{
     this.movePlayer(dt,input,view);
     for(const g of this.guards){
       const old=g.x;
-      if(g.luredUntil>this.time&&g.lure){g.x+=clamp(g.lure.x-g.x,-100*dt,100*dt);if(this.expanded)g.state='reading';}
+      if(g.luredUntil>this.time&&g.lure){g.x+=clamp(g.lure.x-g.x,-DECOY_SPEED*dt,DECOY_SPEED*dt);if(this.expanded)g.state='reading';}
       else{g.x+=(g.direction==='right'?1:-1)*g.speed*dt;if(g.x>=g.maxX){g.x=g.maxX;g.direction='left';}if(g.x<=g.minX){g.x=g.minX;g.direction='right';}}
       g.x=clamp(g.x,g.minX,g.maxX);
       if(g.x!==old)g.direction=g.x>old?'right':'left';
@@ -833,9 +895,13 @@ export class GameWorld{
           if(g.suspicion>=1.2){this.warnAlarm(g.id,g.x,g.y);g.suspicion=0;g.state='searching';}
         }
       }
-      if(Math.abs(g.x-this.player.x)<34&&Math.abs(g.y-this.player.y)<48){
+      // A distracted guard is committed to the paper decoy. Its body no
+      // longer damages the player while it walks to the far end of its route;
+      // otherwise the player can be hit during the very crossing Claude was
+      // asked to make safe.
+      if(g.luredUntil<=this.time&&Math.abs(g.x-this.player.x)<34&&Math.abs(g.y-this.player.y)<48){
         if(this.expanded&&view.chapter.number===5){
-          this.warnGuard(g);
+          if(this.guardSeesPlayer(g))this.warnGuard(g);
         }else{this.hurt(20);this.triggerAlarm(g.id);}
       }
     }
@@ -843,23 +909,52 @@ export class GameWorld{
     for(const plate of this.plates){plate.pressed=plate.latched||Math.abs(this.player.y-plate.y)<8&&this.player.x>plate.x&&this.player.x<plate.x+plate.w;
       const gate=this.gates.find(g=>g.id===plate.gateId);if(gate)gate.open=!gate.disabled&&Boolean(plate.pressed||plate.latched);}
     for(const trap of this.traps){
-      trap.active=!this.expanded||(this.time+(trap.x%5))%4<2.5;
+      const cycle=(this.time+(trap.x%5))%4;
+      trap.active=!this.expanded||cycle<2.5;
+      // Telegraph the next power-up 0.45s early. Damage and timing are untouched;
+      // the player finally gets the same warning language as alarm sensors.
+      trap.warning=this.expanded&&cycle>=3.55;
+      if(trap.warning&&!trap.warned){trap.warned=true;this.cue('scan-grid',trap.x+trap.w/2,trap.y-6);this.emit('sound',{name:'guard-warning'});}
+      if(!trap.warning)trap.warned=false;
       if(trap.active&&Math.abs(this.player.y-trap.y)<12&&this.player.x>trap.x&&this.player.x<trap.x+trap.w){this.hurt(20);this.triggerAlarm(trap.id);}
     }
     for(const alarm of this.alarms)if(distance(this.player,alarm)<58){if(this.expanded)this.warnAlarm(alarm.id,alarm.x,alarm.y);else this.triggerAlarm(alarm.id);}
     this.collectNearby(view);view=this.core.view();this.interact(dt,input,view);
     if(this.commandPreview){const target=this.map.targets.find(t=>t.id===this.commandPreview.targetId);if(target)this.previewTarget(target,this.commandPreview.precise);}
     if(view.attempt.scanIntervalMs&&this.time>this.nextScan&&!this.scanWarning){
-      this.scanWarning={x:clamp(this.player.x-65,5,1135),y:95,w:140,remaining:1.2};this.emit('sound',{name:'alarm'});
+      this.scanWarning={x:clamp(this.player.x-70,5,1135),y:95,w:140,remaining:SCAN_WARNING_SECONDS};
+      this.emit('sound',{name:'alarm'});
+      this.toast('调查扫描：1.8 秒后判定，红区已固定。向两侧离开，或全身躲到固定平台下的蓝色遮挡区。');
     }
-    if(this.scanWarning){this.scanWarning.remaining-=dt;if(this.scanWarning.remaining<=0){if(this.player.x>this.scanWarning.x&&this.player.x<this.scanWarning.x+this.scanWarning.w)this.hurt(20);this.scanWarning=null;this.nextScan=this.time+(view.attempt.scanIntervalMs||10000)/1000;}}
-    for(const warning of this.alarmWarnings){warning.remaining-=dt;if(warning.remaining<=0&&warning.roomId===this.currentRoom?.id){this.triggerAlarm(warning.sourceId);if(!this.scanWarning)this.scanWarning={x:clamp(warning.x-70,5,1135),y:95,w:140,remaining:1.2};}}
+    if(this.scanWarning){
+      this.scanWarning.remaining-=dt;
+      if(this.scanWarning.remaining<=0){
+        const status=this.scanStatus();
+        if(status==='exposed'){
+          this.hurt(20);
+          this.toast('调查扫描命中：你仍在红色扫描区内。向两侧移动，或躲到上层平台下。');
+        }else if(status==='covered'){
+          this.toast('扫描掠过掩体：你在平台下方，暂时安全。');
+        }
+        this.scanWarning=null;this.nextScan=this.time+(view.attempt.scanIntervalMs||10000)/1000;
+      }
+    }
+    for(const warning of this.alarmWarnings){
+      warning.remaining-=dt;
+      if(warning.remaining<=0&&warning.roomId===this.currentRoom?.id){
+        this.triggerAlarm(warning.sourceId);
+        if(!this.scanWarning){
+          this.scanWarning={x:clamp(warning.x-70,5,1135),y:95,w:140,remaining:SCAN_WARNING_SECONDS};
+          this.toast('调查员抵达：1.8 秒后扫描固定红区，向两侧离开，或全身躲进平台下的蓝色遮挡区。');
+        }
+      }
+    }
     this.alarmWarnings=this.alarmWarnings.filter(w=>w.remaining>0);
     for(const warning of this.guardWarnings){
       warning.remaining-=dt;
       if(warning.remaining<=0&&warning.roomId===this.currentRoom?.id){
         const guard=this.guards.find(g=>g.id===warning.sourceId);
-        const close=guard&&Math.abs(guard.x-this.player.x)<44&&Math.abs(guard.y-this.player.y)<54;
+        const close=guard&&guard.luredUntil<=this.time&&Math.abs(guard.x-this.player.x)<44&&Math.abs(guard.y-this.player.y)<54;
         if(close&&this.time>=this.evacuationSafeUntil){this.hurt(15);this.triggerAlarm(warning.sourceId);}
         if(guard&&guard.state==='suspicious')guard.state='searching';
       }

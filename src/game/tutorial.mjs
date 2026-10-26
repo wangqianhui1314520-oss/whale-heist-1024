@@ -14,11 +14,11 @@ export const TUTORIALS = {
     lesson('board', '交货后先松开，再次按住互动登艇。', ['board', 'board-complete', 'chapter-result'], ['交货与登艇是两次独立互动。', '先松开互动键，看到登艇提示后再次按住。', '路线示范：确认任务完成，松开互动，再按住直到登艇进度结束。']),
   ],
   'resume-storm': [
-    lesson('claude-decoy', '在安全演练区，让 Claude 的默认诱饵实际引开守卫。', ['decoy-effective', 'claude-decoy', 'command-complete'], ['默认诱饵会影响附近同层的多名守卫。', '选择 Claude 和诱饵标记，查看范围后执行；默认方案不耗限定词，但消耗 AI Token。', '路线示范：在安全观察台发出默认指令，等守卫确实转向纸页。']),
+    lesson('claude-decoy', '在安全演练区，让 Claude 的默认诱饵实际引开守卫。', ['decoy-effective', 'claude-decoy', 'command-complete'], ['默认诱饵把同层多名守卫引到远端纸页，抵达后分心 6 秒。', '选择 Claude 和诱饵标记，查看范围后执行；默认方案不耗限定词，但消耗 AI Token。', '路线示范：在安全观察台发令；纸页标记亮着时，通过原通道不会被吸引中的守卫碰伤。']),
     lesson('claude-constraint', '使用一枚训练限定词，比较只引一人的效果。', ['constraint-effective', 'claude-constraint', 'command-complete'], ['训练限定词与正式资源分开标记。', '为 Claude 装上“只引一人”，确认后观察另一名守卫。', '路线示范：选单名守卫卡，使用训练预算，等只影响一人的回执。']),
   ],
   'review-quietly': [
-    lesson('glm-scan', '让 GLM 完成扫描，查看显出的陷阱与范围。', ['scan-complete', 'glm-scan', 'command-complete'], ['扫描揭示陷阱；广域范围可能触碰警戒器。', '选 GLM 和校验桥，比较不耗限定词的广域与限定窄区；两者都消耗 AI Token。', '路线示范：在安全台查看预览，确认扫描，等陷阱周期显出后再前进。']),
+    lesson('glm-scan', '让 GLM 完成扫描，查看显出的陷阱与范围。', ['scan-complete', 'glm-scan', 'command-complete'], ['GLM 扫描揭示陷阱；触碰警戒器后会出现敌方红色扫描区。', '选 GLM 和校验桥，比较不耗限定词的广域与限定窄区；两者都消耗 AI Token。', '路线示范：若出现调查扫描，在 1.8 秒内向两侧离开固定红区，或全身藏到平台下的蓝区。']),
   ],
   'public-report': [],
   'close-hatch': [],

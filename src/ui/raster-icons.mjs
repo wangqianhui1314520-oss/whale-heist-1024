@@ -1,6 +1,6 @@
 // Source rectangles measured from the unmodified generated PNG. The sheet is
 // deliberately not assumed to have mathematically identical cells.
-export const OPERATION_ICON_SHEET = Object.freeze({ file:'assets/ui/operation-icons-v1.png', width:1285, height:1224 });
+export const OPERATION_ICON_SHEET = Object.freeze({ file:'assets/ui/operation-icons-v1.webp', width:1285, height:1224 });
 export const OPERATION_ICON_RECTS = Object.freeze({
   left:[39,39,259,235], right:[369,39,258,235], up:[693,22,235,254], down:[1007,22,238,255],
   jump:[10,296,284,294], dash:[308,315,362,266], interact:[694,295,257,298], pause:[1020,322,210,233],
@@ -17,9 +17,9 @@ export function rasterIconStyle(name) {
     const [x,y,w,h] = rect, {width:iw,height:ih,file} = OPERATION_ICON_SHEET;
     return `background-image:url('${file}');background-size:${iw/w*100}% ${ih/h*100}%;background-position:${x/(iw-w)*100}% ${y/(ih-h)*100}%;border-radius:0;`;
   }
-  if(id==='axe') return "background-image:url('assets/portraits/grok-portrait.png');background-size:contain;background-position:center;border-radius:0;";
+  if(id==='axe') return "background-image:url('assets/portraits/grok-portrait.webp');background-size:contain;background-position:center;border-radius:0;";
   const [x,y,w,h] = badgeRects[id] || badgeRects.token;
-  return `background-image:url('assets/ui/hud-icon-badges.png');background-size:${2172/w*100}% ${724/h*100}%;background-position:${x/(2172-w)*100}% ${y/(724-h)*100}%;border-radius:0;`;
+  return `background-image:url('assets/ui/hud-icon-badges.webp');background-size:${2172/w*100}% ${724/h*100}%;background-position:${x/(2172-w)*100}% ${y/(724-h)*100}%;border-radius:0;`;
 }
 export function rasterIconHTML(name, className='', label='') {
   const id = String(name || 'map').replace(/[^a-z0-9_-]/gi,'');

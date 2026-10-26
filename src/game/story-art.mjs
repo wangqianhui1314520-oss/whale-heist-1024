@@ -1,7 +1,7 @@
 /** Shared narrative art routes. Each beat has three separately authored images. */
 export const STORY_ART_BEATS = Object.freeze(['opening', 'grok', 'claude', 'glm', 'broadcast', 'evacuation', 'epilogue']);
 const STYLES = Object.freeze(['cinematic', 'stage', 'comic']);
-export const STORY_ART_IMAGES = Object.freeze(STYLES.flatMap(style => STORY_ART_BEATS.map(beat => `assets/story/${style}/${beat}.png`)));
+export const STORY_ART_IMAGES = Object.freeze(STYLES.flatMap(style => STORY_ART_BEATS.map(beat => `assets/story/${style}/${beat}.webp`)));
 
 const SCENES = Object.freeze({
   prologue: 'opening', intro: 'opening',
@@ -33,7 +33,7 @@ export function storyBeatFor(storyOrBackdrop = {}) {
   const backdrop = String(story.backdrop || sceneId || '');
   if (STORY_ART_BEATS.includes(backdrop)) return backdrop;
   if (SCENES[backdrop] || BACKDROPS[backdrop]) return SCENES[backdrop] || BACKDROPS[backdrop];
-  const imageBeat = backdrop.match(/\/(?:cinematic|stage|comic)\/([\w-]+)\.png$/)?.[1];
+  const imageBeat = backdrop.match(/\/(?:cinematic|stage|comic)\/([\w-]+)\.(?:png|webp)$/)?.[1];
   if (STORY_ART_BEATS.includes(imageBeat)) return imageBeat;
   if (/prologue|opening/.test(backdrop)) return 'opening';
   if (/evacuation|rendezvous/.test(backdrop)) return 'evacuation';
@@ -44,7 +44,7 @@ export function storyBeatFor(storyOrBackdrop = {}) {
 }
 
 export function storyArtFor(storyOrBackdrop, style = 'cinematic') {
-  return `assets/story/${STYLES.includes(style) ? style : 'cinematic'}/${storyBeatFor(storyOrBackdrop)}.png`;
+  return `assets/story/${STYLES.includes(style) ? style : 'cinematic'}/${storyBeatFor(storyOrBackdrop)}.webp`;
 }
 
 /** A generated comic strip has three equal panels: observation, action, result. */

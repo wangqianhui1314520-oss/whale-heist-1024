@@ -1,11 +1,17 @@
-$ErrorActionPreference = 'Stop'
+# Continue (not Stop): a native command writing to stderr inside a pipeline
+# becomes an ErrorRecord, and Stop would abort the whole chain on the first
+# script that merely prints a warning. Failures are still captured per-script
+# via exit codes and the summary below.
+$ErrorActionPreference = 'Continue'
 $gameRoot = Split-Path -Parent $PSScriptRoot
 $gameOutput = Join-Path $gameRoot 'output\qa-2026-10-25'
 $null = New-Item -ItemType Directory -Path $gameOutput -Force
 $gameScripts = Get-ChildItem -LiteralPath $PSScriptRoot -File | Where-Object {
     $_.Name -match '^(verify-|fuzz-).*\.mjs$' -and $_.Name -ne 'verify-build.mjs'
 } | Sort-Object Name | ForEach-Object { 'scripts/' + $_.Name }
-$gameChecks = @('src/core/verify-core.mjs') + @($gameScripts) + @('scripts/build-game.mjs', 'scripts/verify-build.mjs')
+# mobile-adapt-qa.cjs is appended after build/verify-build: it exercises the
+# freshly built dist in a real browser at phone parameters (DPR 2-3).
+$gameChecks = @('src/core/verify-core.mjs') + @($gameScripts) + @('scripts/build-game.mjs', 'scripts/verify-build.mjs', 'scripts/mobile-adapt-qa.cjs')
 $gameResults = @()
 Push-Location -LiteralPath $gameRoot
 try {

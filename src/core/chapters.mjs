@@ -118,4 +118,4 @@ export const CHAPTERS = freeze([
 export const STORY_FLAGS = freeze(['briefing-published', 'broadcast-discovered', 'return-beacon-ready']);
 export const getChapter = (id) => CHAPTERS.find((chapter) => chapter.id === id) ?? null;
 export const chapterGrade = (score) => score >= 90 ? 'S' : score >= 75 ? 'A' : 'B';
-export const campaignGrade = (score) => score >= 450 ? 'S' : score >= 375 ? 'A' : 'B';
+export const campaignGrade = (score) => score >= 450 ? 'S' : score >= 360 ? 'A' : 'B';

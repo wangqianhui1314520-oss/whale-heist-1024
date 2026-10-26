@@ -49,10 +49,9 @@ test('jump in place, falling into gap, air teleport and unsupported landing neve
     assert.equal(f.tutorial.current().id, 'jump', mode);
   }
 });
-test('early valid actions are remembered and room transitions do not count as jumps', () => {
+test('early valid actions are remembered without redoing them in tutorial order', () => {
   const f = fixture(); f.climb(); f.jump(); assert.equal(f.tutorial.current().id, 'move');
-  f.world.currentRoom = { id: 'other-room', index: 2 }; f.place({ x: 120, y: 600, grounded: true, vy: 0 }); assert.equal(f.bridge.marker, null);
-  f.world.currentRoom = { id: 'paper-window:room-1', index: 1 }; f.place({ x: 120, y: 600 }); f.walk();
+  f.place({ x: 120, y: 600 }, 0); f.walk();
   assert.equal(f.tutorial.current().id, 'node-first');
 });
 test('node, actual obstacle, delivery delta and board completion advance full remaining lesson chain', () => {

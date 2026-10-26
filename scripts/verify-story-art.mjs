@@ -9,6 +9,14 @@ import { STORY_ART_BEATS, STORY_ART_IMAGES, storyBeatFor, storyArtFor, comicFram
 
 const project = fileURLToPath(new URL('../', import.meta.url));
 const styles = ['cinematic', 'stage', 'comic'];
+/** Canvas size from a WebP container (VP8X extended, VP8L lossless, VP8 lossy). */
+function webpSize(bytes) {
+  const chunk = bytes.toString('ascii', 12, 16);
+  if (chunk === 'VP8X') return { width: (bytes.readUIntLE(24, 3) & 0xffffff) + 1, height: (bytes.readUIntLE(27, 3) & 0xffffff) + 1 };
+  if (chunk === 'VP8L') { const header = bytes.readUInt32LE(21); return { width: (header & 0x3fff) + 1, height: ((header >> 14) & 0x3fff) + 1 }; }
+  if (chunk === 'VP8 ') return { width: bytes.readUInt16LE(26) & 0x3fff, height: bytes.readUInt16LE(28) & 0x3fff };
+  assert.fail('unsupported WebP chunk: ' + chunk);
+}
 const expectedBeats = {
   prologue: 'opening', 'chapter1-briefing': 'grok', 'grok-join': 'grok',
   'claude-join': 'claude', 'chapter2-briefing': 'claude',
@@ -22,7 +30,7 @@ assert.equal(new Set(STORY_ART_BEATS).size, 7, 'beat identities are unique');
 assert.equal(STORY_ART_IMAGES.length, 21, 'one image per beat and treatment');
 assert.equal(new Set(STORY_ART_IMAGES).size, 21, 'image routes never alias another treatment');
 for (const style of styles) for (const beat of STORY_ART_BEATS) {
-  const route = `assets/story/${style}/${beat}.png`;
+  const route = `assets/story/${style}/${beat}.webp`;
   assert(STORY_ART_IMAGES.includes(route), `${route}: canonical image route`);
   assert.equal(storyArtFor(beat, style), route);
 }
@@ -111,12 +119,13 @@ if (missing.length) {
   console.log(`PENDING ${missing.map(entry => entry.route).join(', ')}`);
 } else {
   for (const route of STORY_ART_IMAGES) {
-    const png = await readFile(path.join(project, route));
-    assert.deepEqual([...png.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], `${route}: PNG signature`);
-    assert.equal(png.toString('ascii', 12, 16), 'IHDR', `${route}: native PNG dimensions`);
-    const width = png.readUInt32BE(16), height = png.readUInt32BE(20);
+    const file = await readFile(path.join(project, route));
+    // Delivered scenes ship as WebP; the authored PNG stays next to it.
+    assert.equal(file.toString('ascii', 0, 4), 'RIFF', `${route}: RIFF container`);
+    assert.equal(file.toString('ascii', 8, 12), 'WEBP', `${route}: WebP signature`);
+    const { width, height } = webpSize(file);
     assert(width >= 512 && height >= 256, `${route}: useful generated scene resolution`);
     if (route.includes('/comic/')) assert(width > height, `${route}: horizontal comic sheet (equal panel composition requires visual review)`);
   }
-  console.log('PASS all 21 generated scene PNGs exist with valid native headers and landscape comic sheets; panel composition requires visual review');
+  console.log('PASS all 21 generated scene images exist as WebP with valid native headers and landscape comic sheets; panel composition requires visual review');
 }

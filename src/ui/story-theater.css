@@ -9,22 +9,22 @@
 
 /* Narrative showcase uses the same authored chrome as the game. Scene art
  * stays uncovered; only the subtitle needs an opaque reading surface. */
-body { background:#061725 url('../../assets/backgrounds/menu-background.png') center top/100% auto fixed no-repeat; }
+body { background:#061725 url('../../assets/backgrounds/menu-background.webp') center top/100% auto fixed no-repeat; }
 button,.quiet-button,.transport .primary,.script-cover button {
   border:0; border-radius:0; color:#e0f3ff;
-  background:transparent url('../../assets/ui/button-rail.png') center top/100% 190% no-repeat;
+  background:transparent url('../../assets/ui/button-rail.webp') center top/100% 190% no-repeat;
 }
 button:hover,a.quiet-button:hover { background-color:transparent; filter:brightness(1.15); }
 .transport .primary { color:#ffe1a2; }
 .theater { border:0; border-radius:0; box-shadow:0 16px 50px #0007; }
 .subtitle,.style-comic .subtitle {
   border:12px solid transparent; border-radius:0; background:#061a2ae8;
-  border-image:url('../../assets/ui/panel-card.png') 40 55 65 45 fill / 12px stretch;
+  border-image:url('../../assets/ui/panel-card.webp') 40 55 65 45 fill / 12px stretch;
   box-shadow:none; padding:14px 18px;
 }
 .progress,.progress i { border:0; border-radius:0; box-shadow:none; }
 .progress { background:#041421; }
-.progress i { background:#7bdced url('../../assets/fx/water-dash-atlas.png') 0 0/200% 200% no-repeat; }
+.progress i { background:#7bdced url('../../assets/fx/water-dash-atlas.webp') 0 0/200% 200% no-repeat; }
 .scene-nav button { background:#061d2dcc; border:0; border-radius:0; padding:14px; }
 .scene-nav button[aria-current=true] { background:#173a4cd9; color:#ffe1a2; }
 .script-scene { background:#061c2dca; border:0; border-radius:0; }
@@ -32,7 +32,7 @@ button:hover,a.quiet-button:hover { background-color:transparent; filter:brightn
 .variant { padding-top:18px; padding-bottom:22px; }
 .variant h4 { margin-top:0; }
 .script-line { line-height:1.75; }
-.art-preview { border:12px solid transparent; border-radius:0; background:#061c2df5; border-image:url('../../assets/ui/panel-card.png') 40 55 65 45 fill / 12px stretch; }
+.art-preview { border:12px solid transparent; border-radius:0; background:#061c2df5; border-image:url('../../assets/ui/panel-card.webp') 40 55 65 45 fill / 12px stretch; }
 @media(max-width:760px) { .subtitle,.style-comic .subtitle { border-width:8px; border-image-width:8px; padding:9px 11px; } }
 
 /* Original art keeps its aspect ratio; captions occupy their own row. */
@@ -40,7 +40,7 @@ button:hover,a.quiet-button:hover { background-color:transparent; filter:brightn
 .scene-visual { position:relative; flex:1; min-height:0; overflow:hidden; }
 .stage-canvas { object-fit:contain; }
 .scene-art,.style-stage .scene-art,.style-comic .scene-art {
-  inset:0; background-size:contain; background-position:center;
+  inset:0; background-size:cover; background-position:center;
   background-repeat:no-repeat; animation:none; transition:none;
 }
 .screen-shade,.style-stage .screen-shade,.style-comic .screen-shade { background:transparent; }

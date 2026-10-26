@@ -430,7 +430,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
  * cell ratio inside the square badge; the surrounding transparent padding is
  * cropped while the glyph stays round and does not reveal a neighbour. */
 .hud-badge-art{display:block;position:relative;overflow:hidden;flex-shrink:0;width:1.85cqw;height:1.85cqw;min-width:22px;min-height:22px;filter:drop-shadow(0 0 4px #54e3ff66)}
-.hud-badge-art::before{content:"";position:absolute;left:7.5%;top:-35%;width:85%;height:170%;background-image:url('../../assets/ui/hud-icon-badges.png');background-repeat:no-repeat;background-size:600% 100%;background-position:var(--hud-art-position,0%) center}
+.hud-badge-art::before{content:"";position:absolute;left:7.5%;top:-35%;width:85%;height:170%;background-image:url('../../assets/ui/hud-icon-badges.webp');background-repeat:no-repeat;background-size:600% 100%;background-position:var(--hud-art-position,0%) center}
 .hud-art-token{--hud-art-position:0%}.hud-art-alert{--hud-art-position:20%}.hud-art-qualifier{--hud-art-position:40%}.hud-art-cargo{--hud-art-position:60%}.hud-art-broadcast{--hud-art-position:80%}.hud-art-objective{--hud-art-position:100%}
 .hud-resource-strip .hud-alert{margin:0;color:#e6d5ab;font-size:.62cqw}
 .hud-resource-strip .hud-alert .alert-label,.hud-resource-strip .qualifier-label,.hud-resource-strip .ai-token-label{display:none}

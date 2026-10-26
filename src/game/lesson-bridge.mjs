@@ -36,7 +36,12 @@ export class LessonBridge {
     if (this.tutorial.chapter === 'paper-window') {
       const continuation = this.#objectiveContinuation(viewOf(world));
       if (continuation) return continuation.marker ? { ...continuation.marker, guideStep: continuation.guide } : null;
-      const marker = MARKERS[current.id]; if (!marker) return null;
+      let marker = MARKERS[current.id]; if (!marker) return null;
+      if (['node-first', 'node-open'].includes(current.id) && Array.isArray(world?.nodes)) {
+        const node = current.id === 'node-open' ? world.nodes.find(entry => entry.id === this.tutorial.memory.nodeId && entry.hp > 0)
+          : world.nodes.filter(entry => entry.hp >= 2).sort((a, b) => Math.abs(a.x - (world.player?.x ?? 0)) - Math.abs(b.x - (world.player?.x ?? 0)))[0];
+        if (node) marker = { ...marker, x: node.x, y: node.y };
+      }
       // Point to the local return exit instead of through an unloaded room.
       if (world?.currentRoom && world.currentRoom.index !== 1) {
         const exit = world.map?.exits?.find(entry => entry.to === 'paper-window:room-1');
@@ -101,7 +106,24 @@ export class LessonBridge {
       '路线示范：回到教学码头，让队友完成剩余有效指令；所有本章目标完成后再登艇。');
   }
   #syncObjectiveGuide(view = viewOf(this.world)) {
+    this.#retireOutgrownLesson(view);
     this.tutorial.setObjectiveGuide?.(this.#objectiveContinuation(view)?.guide ?? null);
+  }
+  /** Free play can make a one-time exercise unavailable. Retire it without inventing completion evidence. */
+  #retireOutgrownLesson(view) {
+    const current = this.tutorial.current?.(), world = this.world;
+    if (!current || !world) return;
+    if (view?.phase === 'chapter-result') { this.tutorial.skip(); return; }
+    const firstChapter = this.tutorial.chapter === 'paper-window';
+    if (firstChapter && ['delivery', 'board'].includes(current.id)) return;
+    const leftTrainingRoom = world.currentRoom && world.currentRoom.index !== 1;
+    const earlyAction = firstChapter && (
+      world.barriers?.some(barrier => barrier.id === 'paper-window' && barrier.broken)
+      || (current.id !== 'grok-obstacle' && ((view?.attempt?.inventory?.length ?? 0) > 0 || (view?.attempt?.deliveredIds?.length ?? 0) > 0)));
+    const unavailableNode = firstChapter && Array.isArray(world.nodes) && world.nodes.length > 0 && (
+      current.id === 'node-first' && !world.nodes.some(node => node.hp >= 2)
+      || current.id === 'node-open' && !world.nodes.some(node => node.id === this.tutorial.memory.nodeId && node.hp > 0));
+    if (leftTrainingRoom || earlyAction || unavailableNode) this.tutorial.skip();
   }
 
   /** A route is a demonstration, shown only after two actual failures or an explicit request. */
@@ -220,8 +242,10 @@ export class LessonBridge {
       if (this.jump && current.grounded) {
         const from = this.jump.from, to = support;
         const rightGap = to && to.x - (from.x + from.w), leftGap = to && from.x - (to.x + to.w);
-        const crossedRight = rightGap >= 20 && this.jump.startX <= from.x + from.w + 3 && current.x >= to.x + 2;
-        const crossedLeft = leftGap >= 20 && this.jump.startX >= from.x - 3 && current.x <= to.x + to.w - 2;
+        // Crossing the gap is the lesson, not the exact takeoff pixel: jumping
+        // from anywhere on the west pier and landing on the far side counts.
+        const crossedRight = rightGap >= 20 && current.x >= to.x + 2;
+        const crossedLeft = leftGap >= 20 && current.x <= to.x + to.w - 2;
         if (to && to.id !== from.id && Math.abs(to.y - from.y) <= 4 && Math.abs(to.y - MARKERS.jump.y) <= 4
           && this.jump.minY < from.y - 12 && this.jump.airborneSamples >= 2 && (crossedRight || crossedLeft)) {
           this.#submit('jump', { eventId: this.#eventId('jump'), grounded: true, crossedGap: true, fromPlatform: from.id, toPlatform: to.id }, events);
@@ -238,6 +262,10 @@ export class LessonBridge {
   handleEvent(type, payload = {}) {
     if (type && typeof type === 'object') { payload = { ...type, ...type.payload }; type = type.type; }
     if (!payload || typeof payload !== 'object' || payload.ok === false || payload.failed === true || payload.success === false || payload.preview === true) return inactive('not-a-successful-event');
+    if (type === 'room-change' || type === 'pickup') {
+      this.#syncObjectiveGuide();
+      return { ok: true, state: this.tutorial.getState() };
+    }
     if (['node-hit', 'node-first', 'node-open', 'node-opened', 'obstacle-broken'].includes(type)) return this.#submit(type, payload);
     if (type === 'command-receipt') {
       if (payload.status && !['completed', 'complete'].includes(payload.status)) return inactive('command-not-completed');

@@ -15,7 +15,7 @@
  * tooltips, keyboard users, and screen readers. The badge sheet is the same
  * raster UI atlas already used by the HUD, so these controls do not invent a
  * second procedural icon language. */
-.art-mark { display:inline-block; position:relative; width:1.65em; height:1.65em; min-width:22px; min-height:22px; flex:0 0 auto; border-radius:50%; background-image:url('../../assets/ui/hud-icon-badges.png'); background-repeat:no-repeat; background-size:600% 100%; background-position:var(--art-mark-position, 0%) center; filter:drop-shadow(0 0 5px #56dfff66); }
+.art-mark { display:inline-block; position:relative; width:1.65em; height:1.65em; min-width:22px; min-height:22px; flex:0 0 auto; border-radius:50%; background-image:url('../../assets/ui/hud-icon-badges.webp'); background-repeat:no-repeat; background-size:600% 100%; background-position:var(--art-mark-position, 0%) center; filter:drop-shadow(0 0 5px #56dfff66); }
 .art-mark--map,.art-mark--home { --art-mark-position:100%; }
 .art-mark--pause { --art-mark-position:0%; }
 .art-mark--settings,.art-mark--checkpoint { --art-mark-position:80%; }
@@ -40,7 +40,7 @@
 .result-metrics>span, .score-lines>span { align-items:center; justify-items:center; }
 .result-metrics>span { grid-template-columns:auto; }
 .result-metrics>span small, .score-lines>span small { font-size:.58cqw; color:#86adbf; }
-.metric-art { display:block; width:1.55cqw; height:1.55cqw; min-width:18px; min-height:18px; border-radius:50%; background-image:url('../../assets/ui/hud-icon-badges.png'); background-repeat:no-repeat; background-size:600% 100%; background-position:var(--metric-position, 0%) center; filter:drop-shadow(0 0 4px #56dfff55); }
+.metric-art { display:block; width:1.55cqw; height:1.55cqw; min-width:18px; min-height:18px; border-radius:50%; background-image:url('../../assets/ui/hud-icon-badges.webp'); background-repeat:no-repeat; background-size:600% 100%; background-position:var(--metric-position, 0%) center; filter:drop-shadow(0 0 4px #56dfff55); }
 .metric-art-time, .metric-art-objective { --metric-position:100%; }
 .metric-art-alert, .metric-art-stealth { --metric-position:20%; }
 .metric-art-retry, .metric-art-explore { --metric-position:40%; }
@@ -77,7 +77,7 @@
 
 /* Chapter cards use narrative keyframes as real art instead of a repeated
  * gameplay backdrop. The HTML title and status remain live and selectable. */
-.chapter-card-art { background-image:var(--chapter-art, url('../../assets/backgrounds/gameplay-backdrop.png')) !important; background-position:center; background-size:cover; overflow:hidden; }
+.chapter-card-art { background-image:var(--chapter-art, url('../../assets/backgrounds/gameplay-backdrop.webp')) !important; background-position:center; background-size:cover; overflow:hidden; }
 .chapter-card-art::after { content:""; position:absolute; inset:0; background:#05182766; pointer-events:none; }
 .chapter-card-art>span,.chapter-card-art>i { z-index:1; }
 
@@ -91,7 +91,7 @@
 .v3-title-brand {
   width: min(48%, 600px); padding: 1.45cqw 2.1cqw 1.7cqw;
   border-left: 2px solid #8de5fa5c;
-  background:#061b2ac9 url('../../assets/ui/panel-large.png') center/100% 100% no-repeat;
+  background:#061b2ac9 url('../../assets/ui/panel-large.webp') center/100% 100% no-repeat;
   box-shadow: -26px 0 72px #03101dcc, inset 0 0 36px #6bdcff08;
 }
 .v3-title-brand .title-overline { letter-spacing: .24cqw; font-size: .65cqw; }
@@ -112,11 +112,11 @@
 
 
 
-.title-crew-rail { position: absolute; z-index: 4; left: 5.5%; bottom: 5%; width: min(37%, 540px); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .55cqw; padding: .7cqw; border: 1px solid #74bcd24c; border-radius: .75cqw; background:#092338dc url('../../assets/ui/panel-card.png') center/100% 100% no-repeat; box-shadow: 0 16px 38px #0009, inset 0 0 22px #65d5f30d; backdrop-filter: blur(8px); }
+.title-crew-rail { position: absolute; z-index: 4; left: 5.5%; bottom: 5%; width: min(37%, 540px); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .55cqw; padding: .7cqw; border: 1px solid #74bcd24c; border-radius: .75cqw; background:#092338dc url('../../assets/ui/panel-card.webp') center/100% 100% no-repeat; box-shadow: 0 16px 38px #0009, inset 0 0 22px #65d5f30d; backdrop-filter: blur(8px); }
 .title-crew-rail-head { grid-column: 1 / -1; display: flex; justify-content: space-between; color: #9ccddd; font-size: .58cqw; letter-spacing: .16cqw; }
 .title-crew-rail-head small { color: #73c0ce; letter-spacing: .04cqw; }
 .title-crew-chip { position: relative; display: flex; align-items: center; gap: .35cqw; min-width: 0; padding: .35cqw; border: 1px solid #47758c77; border-radius: .45cqw; background: #0a2538b8; animation: visual-chip-in .55s both; animation-delay: calc(var(--crew-index) * 90ms); }
-.title-crew-chip.is-lead { border-color: #d0ae686e; background:#4a3a1e66 url('../../assets/ui/panel-card.png') center/100% 100% no-repeat; }
+.title-crew-chip.is-lead { border-color: #d0ae686e; background:#4a3a1e66 url('../../assets/ui/panel-card.webp') center/100% 100% no-repeat; }
 .title-crew-chip img { width: 2.45cqw; height: 2.45cqw; min-width: 2.45cqw; border-radius: 50%; object-fit: cover; border: 1px solid #6fcde2aa; background: #092338; box-shadow: 0 0 0 2px #051827, 0 4px 10px #0008; }
 .title-crew-chip.is-lead img { border-color: var(--visual-gold); }
 .title-crew-chip span { min-width: 0; display: grid; }
@@ -131,10 +131,10 @@
 
 /* Shared authored shells: these are used by panels and resource cards where
  * a generated PNG shell is available, while HTML stays accessible/selectable. */
-.v3-panel, .menu-panel { background-image:url('../../assets/ui/panel-large.png'); background-size:100% 100%; }
-.command-options>button, .v3-chapter-card, .contract-card { background-image:url('../../assets/ui/panel-card.png'); background-size:100% 100%; }
-.mission-hud { background-image:url('../../assets/ui/hud-pill.png'); background-size:100% 100%; }
-.hud-resource-strip .hud-badge { background-image:url('../../assets/ui/hud-square.png'); background-size:100% 100%; }
+.v3-panel, .menu-panel { background-image:url('../../assets/ui/panel-large.webp'); background-size:100% 100%; }
+.command-options>button, .v3-chapter-card, .contract-card { background-image:url('../../assets/ui/panel-card.webp'); background-size:100% 100%; }
+.mission-hud { background-image:url('../../assets/ui/hud-pill.webp'); background-size:100% 100%; }
+.hud-resource-strip .hud-badge { background-image:url('../../assets/ui/hud-square.webp'); background-size:100% 100%; }
 
 
 @keyframes visual-breathe { to { filter: saturate(1.16) brightness(1.04); } }
@@ -164,7 +164,7 @@
 /* Command deck art pass: use the authored chrome as a frame and keep the
  * controls as real HTML so the command flow remains keyboard and touch safe. */
 .v3-command-panel {
-  background-image:url('../../assets/ui/panel-large.png');
+  background-image:url('../../assets/ui/panel-large.webp');
   background-size:100% 100%;
   border-color: #7ee8fa;
   box-shadow: 0 18px 60px #000d, 0 0 0 1px #9cecff36, inset 0 0 34px #55d9ff12;
@@ -176,23 +176,23 @@
 .command-step-rail span.is-active i { border-color:#f1d18b; color:#13283b; background:#f1d18b; box-shadow:0 0 10px #f1d18b77; }
 .command-step-rail span.is-complete i { border-color:#82e5d2; color:#072c3d; background:#82e5d2; }
 .command-step-rail b { flex:1; height:1px; min-width:14px; background:#56859b; }
-.command-target-control { align-items:center; gap:1cqw; padding:.25cqw .35cqw; border:1px solid #548ba0; border-radius:.55cqw; background:#0a2940 url('../../assets/ui/panel-card.png') center/100% 100% no-repeat; }
+.command-target-control { align-items:center; gap:1cqw; padding:.25cqw .35cqw; border:1px solid #548ba0; border-radius:.55cqw; background:#0a2940 url('../../assets/ui/panel-card.webp') center/100% 100% no-repeat; }
 .command-target-visual { display:flex; align-items:center; gap:.4cqw; min-width:11cqw; }
-.command-target-ring { position:relative; display:grid; place-items:center; width:3.1cqw; height:3.1cqw; min-width:36px; min-height:36px; border-radius:50%; background:url('../../assets/ui/ring.png') center/cover; filter:drop-shadow(0 0 8px #5bdfff66); }
+.command-target-ring { position:relative; display:grid; place-items:center; width:3.1cqw; height:3.1cqw; min-width:36px; min-height:36px; border-radius:50%; background:url('../../assets/ui/ring.webp') center/cover; filter:drop-shadow(0 0 8px #5bdfff66); }
 .command-target-ring img { width:72%; height:72%; object-fit:contain; border-radius:50%; }
 .command-target-pulse{display:none}
 .command-target-visual>span:last-child { display:grid; gap:.1cqw; min-width:0; }
 .command-target-visual small { color:#719fb3; font-size:.5cqw; }
 .command-target-visual b { max-width:8cqw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#dff6ff; font-size:.68cqw; font-weight:500; }
 .command-target-control>label { min-width:0; }
-.command-target-control select { background-image:url('../../assets/ui/hud-pill.png'); background-size:100% 100%; border-color:#73cee8; box-shadow:inset 0 0 10px #4bd4fa18; }
-.v3-command-panel .command-preview-card { background-image:url('../../assets/ui/panel-card.png'); background-size:100% 100%; border-color:#70cee3; box-shadow:inset 0 0 18px #48d7f418; }
+.command-target-control select { background-image:url('../../assets/ui/hud-pill.webp'); background-size:100% 100%; border-color:#73cee8; box-shadow:inset 0 0 10px #4bd4fa18; }
+.v3-command-panel .command-preview-card { background-image:url('../../assets/ui/panel-card.webp'); background-size:100% 100%; border-color:#70cee3; box-shadow:inset 0 0 18px #48d7f418; }
 .v3-command-panel .command-preview-card strong { color:#f4e4b0; }
-.v3-command-panel .command-options>button { position:relative; overflow:hidden; display:grid; grid-template-columns:auto 1fr; column-gap:.55cqw; align-items:start; background-image:url('../../assets/ui/panel-card.png'); background-size:100% 100%; }
+.v3-command-panel .command-options>button { position:relative; overflow:hidden; display:grid; grid-template-columns:auto 1fr; column-gap:.55cqw; align-items:start; background-image:url('../../assets/ui/panel-card.webp'); background-size:100% 100%; }
 .v3-command-panel .command-options>button .command-option-heading,
 .v3-command-panel .command-options>button p,
 .v3-command-panel .command-options>button>strong { grid-column:2; }
-.command-option-art { position:relative; display:grid; place-items:center; grid-column:1; grid-row:1 / span 3; width:3.5cqw; height:3.5cqw; min-width:42px; min-height:42px; border-radius:50%; background:url('../../assets/ui/ring.png') center/cover; color:#8cecff; filter:drop-shadow(0 0 8px #55dfff55); }
+.command-option-art { position:relative; display:grid; place-items:center; grid-column:1; grid-row:1 / span 3; width:3.5cqw; height:3.5cqw; min-width:42px; min-height:42px; border-radius:50%; background:url('../../assets/ui/ring.webp') center/cover; color:#8cecff; filter:drop-shadow(0 0 8px #55dfff55); }
 .command-option-art .ui-icon { position:relative; z-index:2; width:1.45cqw; height:1.45cqw; filter:drop-shadow(0 0 5px currentColor); }
 .command-fx-atlas { position:absolute; inset:0; border-radius:50%; opacity:.52; background-image:var(--command-fx-url); background-size:200% 200%; background-position:0 0; background-repeat:no-repeat; mix-blend-mode:screen; transform:scale(1.25); }
 .v3-command-panel .command-options>button:hover .command-fx-atlas,
@@ -203,11 +203,11 @@
 .command-receipt-avatar img { width:100%; height:100%; object-fit:contain; }
 .command-receipt>span:nth-child(2) { white-space:nowrap; }
 .v3-command-panel .command-forecast-toggle { display:flex!important; }
-.v3-command-panel .command-submit>.game-button { background-image:url('../../assets/ui/button-rail.png'); background-size:100% 100%; border:0; border-radius:0; color:#08253a; text-shadow:0 1px 3px #fff8; filter:saturate(1.12); }
+.v3-command-panel .command-submit>.game-button { background-image:url('../../assets/ui/button-rail.webp'); background-size:100% 100%; border:0; border-radius:0; color:#08253a; text-shadow:0 1px 3px #fff8; filter:saturate(1.12); }
 .v3-command-panel .command-submit>.game-button:not(:disabled) { animation:command-button-breathe 2.6s ease-in-out infinite; }
-.v3-command-panel .command-submit>span { padding:.32cqw .55cqw; border-radius:.35cqw; background:url('../../assets/ui/hud-pill.png') center/cover; color:#e7d39c; }
+.v3-command-panel .command-submit>span { padding:.32cqw .55cqw; border-radius:.35cqw; background:url('../../assets/ui/hud-pill.webp') center/cover; color:#e7d39c; }
 .v3-command-panel.has-forecast .command-forecast { animation:command-forecast-in .2s ease-out both; }
-.v3-command-panel .command-advanced-wrap .command-more { background-image:url('../../assets/ui/hud-square.png'); background-size:100% 100%; }
+.v3-command-panel .command-advanced-wrap .command-more { background-image:url('../../assets/ui/hud-square.webp'); background-size:100% 100%; }
 @keyframes command-target-pulse { 50% { transform:scale(1.18); opacity:.2; } }
 @keyframes command-fx-frame { 0% { background-position:0 0; } 25% { background-position:100% 0; } 50% { background-position:0 100%; } 75%,100% { background-position:100% 100%; } }
 @keyframes command-button-breathe { 50% { filter:brightness(1.08) saturate(1.18); } }
@@ -230,7 +230,7 @@
 /* Target thumbnails and result boards keep the same authored sprite language as
  * the scene renderer. The target remains a CSS sprite crop so labels stay live
  * HTML and can update as the player changes rooms. */
-.command-target-art { display:block; width:72%; height:72%; border-radius:50%; background-image:var(--target-art-url, url('../../assets/ui/whale-emblem.png')); background-size:var(--target-art-size, cover); background-position:var(--target-art-position, center); background-repeat:no-repeat; filter:drop-shadow(0 0 8px #8cecff66); }
+.command-target-art { display:block; width:72%; height:72%; border-radius:50%; background-image:var(--target-art-url, url('../../assets/ui/whale-emblem.webp')); background-size:var(--target-art-size, cover); background-position:var(--target-art-position, center); background-repeat:no-repeat; filter:drop-shadow(0 0 8px #8cecff66); }
 .v3-results { width:72%; }
 .result-visual-hero { position:relative; min-height:12cqw; display:flex; align-items:center; gap:1.2cqw; padding:1cqw; overflow:hidden; border:1px solid #6fa9bd77; border-radius:.8cqw; background:#071a2cf2; }
 .result-visual-backdrop { position:absolute; inset:0; background-image:var(--result-bg); background-size:cover; background-position:center; opacity:.88; }
@@ -240,12 +240,12 @@
 .result-visual-copy strong { font:600 3.4cqw Georgia,serif; color:#f4d597; text-shadow:0 2px 14px #000; }
 .result-visual-copy strong small { font:500 1cqw sans-serif; color:#a8c6d6; }
 .result-visual-copy p { margin:0; font-size:.8cqw; color:#d4e5eb; }
-.grade-seal { position:relative; z-index:2; display:grid; place-items:center; width:5.7cqw; height:5.7cqw; min-width:62px; min-height:62px; border:1px solid #f7df9a; border-radius:50%; background:#4c3c22cc url('../../assets/ui/ring.png') center/100% 100% no-repeat; color:#ffe7a8; font:600 3.2cqw Georgia,serif; box-shadow:0 0 0 5px #edc97c1b,0 0 24px #e8bd6566; }
+.grade-seal { position:relative; z-index:2; display:grid; place-items:center; width:5.7cqw; height:5.7cqw; min-width:62px; min-height:62px; border:1px solid #f7df9a; border-radius:50%; background:#4c3c22cc url('../../assets/ui/ring.webp') center/100% 100% no-repeat; color:#ffe7a8; font:600 3.2cqw Georgia,serif; box-shadow:0 0 0 5px #edc97c1b,0 0 24px #e8bd6566; }
 .result-crew-strip { display:flex; gap:.55cqw; margin-top:1cqw; }
 .result-crew-strip span { display:flex; align-items:center; gap:.3cqw; padding:.25cqw .45cqw; border:1px solid #4d7b9177; border-radius:999px; background:#082338cc; color:#b9d9e5; font-size:.65cqw; }
 .result-crew-strip img { width:1.5cqw; height:1.5cqw; min-width:22px; min-height:22px; border-radius:50%; object-fit:cover; border:1px solid #82dbea; }
 .v3-campaign { width:78%; }
-.v3-campaign-backdrop { position:absolute; inset:0; background:#041a2caa url('../../assets/backgrounds/results-background.png') center/cover; animation:visual-breathe 8s ease-in-out infinite alternate; }
+.v3-campaign-backdrop { position:absolute; inset:0; background:#041a2caa url('../../assets/backgrounds/results-background.webp') center/cover; animation:visual-breathe 8s ease-in-out infinite alternate; }
 .campaign-visual-hero { position:relative; min-height:15cqw; display:flex; align-items:center; gap:1.5cqw; padding:1cqw 1.5cqw; overflow:hidden; border-bottom:1px solid #6ca9bc55; }
 .campaign-visual-hero>img { position:absolute; right:-2%; bottom:-15%; width:46%; max-height:18cqw; object-fit:contain; filter:drop-shadow(0 14px 22px #000d); animation:crew-float 6s ease-in-out infinite; }
 .campaign-visual-hero>div:last-child { position:relative; z-index:1; display:grid; gap:.3cqw; }
@@ -257,11 +257,11 @@
 .campaign-chapter-rail { display:grid; grid-template-columns:repeat(5,1fr); gap:.55cqw; margin-top:1cqw; }
 .campaign-chapter-rail span { display:grid; grid-template-columns:auto 1fr; align-items:center; gap:.25cqw .45cqw; padding:.35cqw 0; color:#7198ad; }
 .campaign-chapter-rail span.is-complete { color:#b8e8dc; }
-.campaign-chapter-rail span::before { content:''; grid-column:1 / -1; display:block; height:2.7cqw; background:center/cover no-repeat url('../../assets/story/prologue-paper-window.png'); }
-.campaign-chapter-rail span:nth-child(2)::before { background-image:url('../../assets/story/grok-paper-window.png'); }
-.campaign-chapter-rail span:nth-child(3)::before { background-image:url('../../assets/story/broadcast-reveal.png'); }
-.campaign-chapter-rail span:nth-child(4)::before { background-image:url('../../assets/story/evacuation-beacon.png'); }
-.campaign-chapter-rail span:nth-child(5)::before { background-image:url('../../assets/story/investigation-epilogue.png'); }
+.campaign-chapter-rail span::before { content:''; grid-column:1 / -1; display:block; height:2.7cqw; background:center/cover no-repeat url('../../assets/story/prologue-paper-window.webp'); }
+.campaign-chapter-rail span:nth-child(2)::before { background-image:url('../../assets/story/grok-paper-window.webp'); }
+.campaign-chapter-rail span:nth-child(3)::before { background-image:url('../../assets/story/broadcast-reveal.webp'); }
+.campaign-chapter-rail span:nth-child(4)::before { background-image:url('../../assets/story/evacuation-beacon.webp'); }
+.campaign-chapter-rail span:nth-child(5)::before { background-image:url('../../assets/story/investigation-epilogue.webp'); }
 .campaign-chapter-rail i { font:600 1.4cqw Georgia,serif; color:#cfba82; font-style:normal; }
 .campaign-chapter-rail b { font-size:.62cqw; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 @media (max-width:800px), (max-height:480px) {
@@ -295,7 +295,7 @@
 .v3-panel,.menu-panel {
   background:#071b2df2!important;
   border:clamp(10px,1.2cqw,18px) solid transparent;
-  border-image-source:url('../../assets/ui/panel-card.png');
+  border-image-source:url('../../assets/ui/panel-card.webp');
   border-image-slice:40 55 65 45 fill;
   border-image-width:clamp(10px,1.2cqw,18px);
   border-image-repeat:stretch;
@@ -322,7 +322,7 @@
 .game-button,.v3-title-brand .title-actions .game-button.primary,
 .v3-command-panel .command-submit>.game-button {
   border:0; border-radius:0;
-  background:transparent url('../../assets/ui/button-rail.png') center top/100% 190% no-repeat!important;
+  background:transparent url('../../assets/ui/button-rail.webp') center top/100% 190% no-repeat!important;
   box-shadow:none; color:#e3f7ff; text-shadow:0 2px 4px #031321;
 }
 .game-button.primary,.v3-command-panel .command-submit>.game-button {
@@ -349,32 +349,32 @@
  * every number used to hide the icons and make the HUD feel boxed in. */
 .mission-hud {
   background:#061b2de8!important; border:6px solid transparent;
-  border-image:url('../../assets/ui/panel-card.png') 40 55 65 45 fill / 6px stretch;
+  border-image:url('../../assets/ui/panel-card.webp') 40 55 65 45 fill / 6px stretch;
   box-shadow:none; border-radius:0;
 }
 .ui-root .bottom-hud { background:#041827a8!important; border:0; box-shadow:none; }
 .hud-resource-strip .hud-badge,.ai-token-meter {
-  background:transparent url('../../assets/ui/hud-pill.png') center 40%/108% 159% no-repeat!important;
+  background:transparent url('../../assets/ui/hud-pill.webp') center 40%/108% 159% no-repeat!important;
   border:0; border-radius:0; box-shadow:none; padding:.22cqw .55cqw;
 }
 .hud-pause,.icon-button {
-  border:0; border-radius:0; background:transparent url('../../assets/ui/hud-square.png') center/100% 100% no-repeat;
+  border:0; border-radius:0; background:transparent url('../../assets/ui/hud-square.webp') center/100% 100% no-repeat;
   box-shadow:none;
 }
 .ui-root .objective-panel,.interaction-hint,.evacuation-banner,
 .tutorial-card,.story-dialogue,.story-history {
   background:#061c2eea!important;
   border:8px solid transparent; border-radius:0; box-shadow:none;
-  border-image:url('../../assets/ui/panel-card.png') 40 55 65 45 fill / 8px stretch;
+  border-image:url('../../assets/ui/panel-card.webp') 40 55 65 45 fill / 8px stretch;
 }
 .ui-root .objective-panel { border-left-width:8px; }
 .ui-root .objective-toggle,.hud-map-button {
-  background:transparent url('../../assets/ui/hud-pill.png') center 40%/108% 159% no-repeat;
+  background:transparent url('../../assets/ui/hud-pill.webp') center 40%/108% 159% no-repeat;
   border:0; border-radius:0; box-shadow:none;
 }
 .ui-root .objective-toggle::before { content:none; display:none; }
 .interaction-hint .keycap {
-  background:transparent url('../../assets/ui/hud-square.png') center/100% 100% no-repeat;
+  background:transparent url('../../assets/ui/hud-square.webp') center/100% 100% no-repeat;
   color:#e5f8ff; border:0; border-radius:0; box-shadow:none;
 }
 .interaction-hint,.evacuation-banner.is-warning,.evacuation-banner.is-critical,
@@ -383,7 +383,7 @@
 /* Data bars reveal authored water texture; JS still supplies the exact width.
  * Danger is a colour grade of that same art, not a separately drawn shape. */
 .health-rail,.loading-rail,.evacuation-progress,.story-progress,.tutorial-rail {
-  background:#041423 url('../../assets/ui/button-rail.png') center top/100% 190% no-repeat;
+  background:#041423 url('../../assets/ui/button-rail.webp') center top/100% 190% no-repeat;
   border:0; border-radius:0; box-shadow:none; overflow:hidden; padding:0;
 }
 .health-rail i,.loading-rail i,.evacuation-progress i,.story-progress>i,.tutorial-rail>i,
@@ -391,30 +391,30 @@
 .evacuation-banner.is-prep .evacuation-progress i,
 .evacuation-banner.is-critical .evacuation-progress i {
   display:block; height:100%; border:0; border-radius:0; box-shadow:none;
-  background:#7bdced url('../../assets/fx/water-dash-atlas.png') 0 0/200% 200% no-repeat;
+  background:#7bdced url('../../assets/fx/water-dash-atlas.webp') 0 0/200% 200% no-repeat;
 }
 .health-rail i.is-low,.evacuation-banner.is-critical .evacuation-progress i {
   filter:hue-rotate(155deg) saturate(1.3);
 }
 .interact-hold {
-  background:url('../../assets/fx/water-dash-atlas.png') 0 0/200% 200% no-repeat;
+  background:url('../../assets/fx/water-dash-atlas.webp') 0 0/200% 200% no-repeat;
   box-shadow:none;
 }
 .crew-portrait,.crew-button.is-selected .crew-portrait,
 .ui-root .bottom-hud .crew-portrait {
   border:0; box-shadow:none;
-  background:#092638 url('../../assets/ui/ring.png') center/100% 100% no-repeat;
+  background:#092638 url('../../assets/ui/ring.webp') center/100% 100% no-repeat;
   padding:7%;
 }
 .crew-button.is-selected .crew-portrait { filter:brightness(1.2) saturate(1.15); }
 .crew-portrait img { border-radius:50%; }
 .crew-key,.crew-ready,.cargo-slot,.qualifiers {
-  background:transparent url('../../assets/ui/hud-square.png') center/100% 100% no-repeat;
+  background:transparent url('../../assets/ui/hud-square.webp') center/100% 100% no-repeat;
   border:0; border-radius:0; box-shadow:none;
 }
 .cargo-slot.is-filled { background-color:transparent; box-shadow:none; }
 .touch-controls button,.touch-controls button:active {
-  background:transparent url('../../assets/ui/ring.png') center/100% 100% no-repeat;
+  background:transparent url('../../assets/ui/ring.webp') center/100% 100% no-repeat;
   border:0; border-radius:0; box-shadow:none;
 }
 .touch-controls button:active { filter:brightness(1.25); }
@@ -433,12 +433,12 @@
 .room-node { overflow:hidden; padding-left:8.6cqw; min-height:6cqw; }
 .room-node::before {
   content:''; position:absolute; left:0; top:0; bottom:0; width:7.4cqw;
-  background:url('../../assets/backgrounds/gameplay-backdrop.png') center/cover no-repeat;
+  background:url('../../assets/backgrounds/gameplay-backdrop.webp') center/cover no-repeat;
   opacity:.72;
 }
-.room-node:nth-child(2)::before { background-image:url('../../assets/story/prologue-paper-window.png'); }
-.room-node:nth-child(3)::before { background-image:url('../../assets/story/broadcast-reveal.png'); }
-.room-node:nth-child(4)::before { background-image:url('../../assets/story/evacuation-beacon.png'); }
+.room-node:nth-child(2)::before { background-image:url('../../assets/story/prologue-paper-window.webp'); }
+.room-node:nth-child(3)::before { background-image:url('../../assets/story/broadcast-reveal.webp'); }
+.room-node:nth-child(4)::before { background-image:url('../../assets/story/evacuation-beacon.webp'); }
 .room-node.is-current::before { opacity:1; }
 .room-node:not(:last-child)::after { content:none; display:none; }
 .room-node.is-current { background:#103c52b8!important; box-shadow:none; }
@@ -456,7 +456,7 @@
 .analysis-clue>.clue-art { flex:0 0 2.8cqw; width:2.8cqw; height:2.8cqw; }
 .analysis-clue p { line-height:1.65; max-width:55ch; }
 .briefing-chart {
-  border:0; background:transparent url('../../assets/story/evacuation-beacon.png') center/cover no-repeat!important;
+  border:0; background:transparent url('../../assets/story/evacuation-beacon.webp') center/cover no-repeat!important;
 }
 .briefing-chart img { width:9cqw; height:9cqw; }
 .briefing-chart>span { padding:.45em .7em; background:#031321b8; }
@@ -472,17 +472,17 @@
 }
 .command-step-rail i {
   border:0; border-radius:0;
-  background:transparent url('../../assets/ui/ring.png') center/100% 100% no-repeat;
+  background:transparent url('../../assets/ui/ring.webp') center/100% 100% no-repeat;
 }
 .command-step-rail span.is-active i,.command-step-rail span.is-complete i {
-  color:#ffe4a4; background:transparent url('../../assets/ui/ring.png') center/100% 100% no-repeat; box-shadow:none;
+  color:#ffe4a4; background:transparent url('../../assets/ui/ring.webp') center/100% 100% no-repeat; box-shadow:none;
 }
-.command-step-rail b { background:url('../../assets/ui/button-rail.png') center top/100% 190% no-repeat; height:3px; }
+.command-step-rail b { background:url('../../assets/ui/button-rail.webp') center top/100% 190% no-repeat; height:3px; }
 .command-option-art { box-shadow:none!important; }
-.command-receipt-avatar { border:0; box-shadow:none; background:url('../../assets/ui/ring.png') center/cover no-repeat; }
+.command-receipt-avatar { border:0; box-shadow:none; background:url('../../assets/ui/ring.webp') center/cover no-repeat; }
 .v3-command-panel .command-submit>span { background:transparent; }
-.grade-seal { border:0; border-radius:0; background:transparent url('../../assets/ui/ring.png') center/100% 100% no-repeat; box-shadow:none; }
-.archive-card-state { border:0; background:url('../../assets/ui/ring.png') center/100% 100% no-repeat; }
+.grade-seal { border:0; border-radius:0; background:transparent url('../../assets/ui/ring.webp') center/100% 100% no-repeat; box-shadow:none; }
+.archive-card-state { border:0; background:url('../../assets/ui/ring.webp') center/100% 100% no-repeat; }
 
 /* Story effects use the authored four-frame sheets rather than ellipses,
  * skewed blocks or a CSS scan line. Existing story cues still own timing. */
@@ -491,10 +491,10 @@
   left:10%; top:8%; right:auto; bottom:auto; width:38%; height:68%;
   background-position:0 0; background-size:200% 200%; background-repeat:no-repeat;
 }
-.story-fx-page { background-image:url('../../assets/fx/paper-decoy-atlas.png'); }
-.story-fx-water { background-image:url('../../assets/fx/water-dash-atlas.png'); }
-.story-fx-impact { background-image:url('../../assets/fx/axe-impact-atlas.png'); }
-.story-fx-scan { background-image:url('../../assets/fx/scan-grid-atlas.png'); }
+.story-fx-page { background-image:url('../../assets/fx/paper-decoy-atlas.webp'); }
+.story-fx-water { background-image:url('../../assets/fx/water-dash-atlas.webp'); }
+.story-fx-impact { background-image:url('../../assets/fx/axe-impact-atlas.webp'); }
+.story-fx-scan { background-image:url('../../assets/fx/scan-grid-atlas.webp'); }
 .story-stage[data-fx~=page] .story-fx-page,.story-stage[data-fx~=decoy] .story-fx-page,
 .story-stage[data-fx~=water] .story-fx-water,.story-stage[data-fx~=impact] .story-fx-impact,
 .story-stage[data-fx~=scan] .story-fx-scan {

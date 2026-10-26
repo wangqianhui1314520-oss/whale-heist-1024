@@ -15,12 +15,19 @@ export class GameInput{
         event.preventDefault();if(!event.repeat)onAction('prompt-cycle',{direction:event.code==='ArrowRight'?1:-1});return;}
       if(screen==='command'&&event.code==='Enter'&&!event.target?.closest?.('button')){event.preventDefault();if(!event.repeat)onAction('command-confirm');return;}
       const action=this.actionFor(event.code);
-      if(action&&!event.target?.closest?.('button')){event.preventDefault();if(!this.keys.has(event.code))this.edges.add(action);this.keys.add(event.code);
+      // Movement keys must keep working even when a menu button still owns the
+      // focus (story/menu close leaves focus on a stale button). Space stays
+      // native so a focused button can still be activated by keyboard.
+      const movement=Boolean(action)&&['left','right','up','down','dash','interact'].includes(action);
+      if(action&&(movement||!event.target?.closest?.('button'))){event.preventDefault();if(!this.keys.has(event.code))this.edges.add(action);this.keys.add(event.code);
         if(action==='interact'&&!event.repeat&&this.settings.interactionMode==='toggle')this.interactToggle=!this.interactToggle;}
       if(!event.repeat&&event.code==='Escape'){event.preventDefault();onAction('pause');}
       if(!event.repeat&&['Digit1','Digit2','Digit3'].includes(event.code))onAction('command-select',{teammate:['Grok','Claude','GLM'][Number(event.code.at(-1))-1]});
     });
-    window.addEventListener('keyup',event=>this.keys.delete(event.code));
+    window.addEventListener('keyup',event=>{this.keys.delete(event.code);
+      // Release is authoritative: a held interaction must end the moment the key
+      // is let go, even if a frame boundary was skipped while an overlay closed.
+      if(this.actionFor(event.code)==='interact')onAction('interact-released',{});});
     document.addEventListener('pointerdown',event=>{
       const control=event.target?.closest?.('[data-control]');if(!control||control.disabled)return;
       event.preventDefault();const action=control.dataset.control;this.pointers.set(event.pointerId,action);this.edges.add(action);control.classList.add('held');
@@ -29,11 +36,13 @@ export class GameInput{
     },{passive:false});
     const release=event=>{const action=this.pointers.get(event.pointerId);this.pointers.delete(event.pointerId);if(action&&!Array.from(this.pointers.values()).includes(action))document.querySelectorAll(`[data-control="${action}"]`).forEach(e=>e.classList.remove('held'));};
     document.addEventListener('pointerup',release);document.addEventListener('pointercancel',release);document.addEventListener('lostpointercapture',release);
-    window.addEventListener('blur',()=>{this.clear();onAction('lost-focus');});
-    window.addEventListener('pagehide',()=>{this.clear();onAction('lost-focus');});
-    document.addEventListener('visibilitychange',()=>{if(document.hidden){this.clear();onAction('lost-focus');}});
+    // These four are genuine focus-loss cases: no keyup will ever arrive, so the
+    // held-key set has to be dropped or a key would stay stuck down forever.
+    window.addEventListener('blur',()=>{this.reset();onAction('lost-focus');});
+    window.addEventListener('pagehide',()=>{this.reset();onAction('lost-focus');});
+    document.addEventListener('visibilitychange',()=>{if(document.hidden){this.reset();onAction('lost-focus');}});
     const orientation=window.matchMedia('(orientation: portrait)');
-    const rotated=event=>{if(event.matches){this.clear();onAction('lost-focus');}};
+    const rotated=event=>{if(event.matches){this.reset();onAction('lost-focus');}};
     if(orientation.addEventListener)orientation.addEventListener('change',rotated);
     else orientation.addListener(rotated);
   }
@@ -46,10 +55,16 @@ export class GameInput{
     if(mapped)return mapped;
     return ({...KEYMAP,ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'})[code];
   }
-  configure(settings){this.clear();this.settings=settings||{};}
-  listenForBinding(action){this.clear();this.bindingAction=action;}
+  configure(settings){this.reset();this.settings=settings||{};}
+  listenForBinding(action){this.reset();this.bindingAction=action;}
   releaseInteraction(){this.interactToggle=false;}
-  clear(){this.keys.clear();this.pointers.clear();this.edges.clear();this.interactToggle=false;document.querySelectorAll('.held').forEach(e=>e.classList.remove('held'));}
+  // Overlay, story, pause and command transitions must NOT drop physically held
+  // keys: a key that is already down never fires another keydown, so clearing
+  // the held set left the character frozen once the overlay closed until the
+  // player released and pressed it again. Physical key state is only unknowable
+  // on genuine focus loss, which is exactly what reset() is for.
+  clear(){this.pointers.clear();this.edges.clear();this.interactToggle=false;document.querySelectorAll('.held').forEach(e=>e.classList.remove('held'));}
+  reset(){this.keys.clear();this.clear();}
   sample(){const held=new Set([...Array.from(this.keys).map(k=>this.actionFor(k)),...this.pointers.values()]);
     return {left:held.has('left'),right:held.has('right'),up:held.has('up'),down:held.has('down'),jump:held.has('jump'),dash:held.has('dash'),interact:this.settings.interactionMode==='toggle'?this.interactToggle:held.has('interact'),jumpPressed:this.edges.has('jump'),dashPressed:this.edges.has('dash')};}
   consume(){this.edges.clear();}

@@ -7,7 +7,7 @@ const arg=process.argv.indexOf('--port'),port=arg>=0?Number(process.argv[arg+1])
 const rootArg=process.argv.indexOf('--root');
 const root=path.resolve(rootArg>=0?String(process.argv[rootArg+1]||projectRoot):projectRoot);
 if(!Number.isInteger(port)||port<1024||port>65535)throw new Error('Invalid port');
-const mime={'.html':'text/html; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.css':'text/css; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml'};
+const mime={'.html':'text/html; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.css':'text/css; charset=utf-8','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.svg':'image/svg+xml','.mp3':'audio/mpeg'};
 http.createServer((request,response)=>{
   if(!['GET','HEAD'].includes(request.method)){response.writeHead(405);response.end();return;}
   let pathname;try{pathname=decodeURIComponent(new URL(request.url,'http://localhost').pathname);}catch{response.writeHead(400);response.end();return;}

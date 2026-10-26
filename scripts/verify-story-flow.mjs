@@ -18,6 +18,7 @@ import * as promptModule from '../src/game/prompts.mjs';
 import * as contractModule from '../src/game/contracts.mjs';
 import * as mapModule from '../src/game/maps.mjs';
 import * as recordTriageModule from '../src/game/record-triage.mjs';
+import * as storyArtModule from '../src/game/story-art.mjs';
 import { sceneImageKeys } from '../src/render/scene-renderer.mjs';
 
 const sourceUrl = new URL('../src/main.mjs', import.meta.url);
@@ -51,12 +52,22 @@ class FakeInput {
   releaseInteraction() {}
 }
 class FakeAudio {
-  muted = false; paused = false; sounds = [];
+  muted = false; paused = false; alertHigh = false; sounds = []; music = []; ambience = []; voices = [];
   configure() {}
   unlock() {}
   setScene() {}
   setPaused(value) { this.paused = value; }
   play(name) { this.sounds.push(name); }
+  playMusic(id) { this.music.push(id); }
+  playAmbience(id) { this.ambience.push(id); }
+  stopAmbience(id) { this.ambience.push('stop:' + id); }
+  playVoice(role, kind) { this.voices.push(kind ? `${role}_${kind}` : role); }
+  setAlertHigh(high) { this.alertHigh = Boolean(high); }
+}
+class FakeImage {
+  constructor() { this.complete = true; this.decoding = 'async'; }
+  addEventListener() {}
+  decode() { return Promise.resolve(); }
 }
 class FakeWorld {
   records = []; receipts = []; barriers = []; crew = []; updates = 0;
@@ -78,8 +89,8 @@ const context = vm.createContext({
   ...coreModule, ...chapterModule, ...storageModule, ...experienceModule,
   ...sessionModule, ...preferencesModule, ...storyModule, ...tutorialModule,
   ...lessonModule, ...promptModule, ...contractModule, ...mapModule,
-  ...recordTriageModule, sceneImageKeys,
-  GameUI: FakeUI, GameInput: FakeInput, GameAudio: FakeAudio, GameWorld: FakeWorld, GameRenderer: FakeRenderer,
+  ...recordTriageModule, ...storyArtModule, sceneImageKeys,
+  GameUI: FakeUI, GameInput: FakeInput, GameAudio: FakeAudio, GameWorld: FakeWorld, GameRenderer: FakeRenderer, Image: FakeImage,
   browserStorage: () => memory, document, window, console, URL, Blob, performance: { now: () => 1000 },
   requestAnimationFrame() {}, setTimeout() {}, __memory: memory,
 });

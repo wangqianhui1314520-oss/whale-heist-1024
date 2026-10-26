@@ -36,20 +36,20 @@ for(const item of Object.values(catalog.audio||{})){
 await copyFile('assets/runtime-catalog.json');
 // Supplemental HUD art is intentionally outside the runtime catalog: it is a
 // CSS sprite sheet used by HTML status badges, not a Canvas sprite region.
-await copyFile('assets/ui/hud-icon-badges.png');
+await copyFile('assets/ui/hud-icon-badges.webp');
 // Authored chrome shells used by the visual direction stylesheet. They stay
 // outside the sprite catalog because CSS consumes them as scalable surfaces.
-await copyFile('assets/ui/panel-large.png');
-await copyFile('assets/ui/panel-card.png');
-await copyFile('assets/ui/hud-pill.png');
-await copyFile('assets/ui/hud-square.png');
-await copyFile('assets/ui/button-rail.png');
-await copyFile('assets/ui/ring.png');
-await copyFile('assets/ui/title-ornament-v1.png');
+await copyFile('assets/ui/panel-large.webp');
+await copyFile('assets/ui/panel-card.webp');
+await copyFile('assets/ui/hud-pill.webp');
+await copyFile('assets/ui/hud-square.webp');
+await copyFile('assets/ui/button-rail.webp');
+await copyFile('assets/ui/ring.webp');
+await copyFile('assets/ui/title-ornament-v1.webp');
 // Menu key art layers are supplemental runtime assets: they are not sprites in
 // the gameplay catalog, but are referenced by the title screen composition.
-await copyFile('assets/foreground/whale-crew-hero-v2.png');
-await copyFile('assets/foreground/dock-rail-overlay-v3.png');
+await copyFile('assets/foreground/whale-crew-hero-v2.webp');
+await copyFile('assets/foreground/dock-rail-overlay-v3.webp');
 // Narrative keyframes, including each presentation style, are copied by the
 // catalog loop above. Keep a single source of truth as story art expands.
 console.log(JSON.stringify({status:'built',directory:out,clean:true,productionImages:Object.keys(catalog.images).length,audioAssets:Object.keys(catalog.audio||{}).length,viewport:[1280,720],moduleExtension:'.js'}));

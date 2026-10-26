@@ -1,4 +1,13 @@
 import assert from 'node:assert/strict';
+
+/** Canvas size from a WebP container (VP8X extended, VP8L lossless, VP8 lossy). */
+function webpSize(bytes) {
+  const chunk = bytes.toString('ascii', 12, 16);
+  if (chunk === 'VP8X') return { width: (bytes.readUIntLE(24, 3) & 0xffffff) + 1, height: (bytes.readUIntLE(27, 3) & 0xffffff) + 1 };
+  if (chunk === 'VP8L') { const header = bytes.readUInt32LE(21); return { width: (header & 0x3fff) + 1, height: ((header >> 14) & 0x3fff) + 1 }; }
+  if (chunk === 'VP8 ') return { width: bytes.readUInt16LE(26) & 0x3fff, height: bytes.readUInt16LE(28) & 0x3fff };
+  assert.fail('unsupported WebP chunk: ' + chunk);
+}
 import { readFile, stat } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -38,14 +47,25 @@ for(const [key, entry] of Object.entries(catalog.images)) {
   const filename=path.resolve(assets,entry.file);
   assert(filename.startsWith(assets+path.sep),key+': image escaped asset directory');
   const bytes=await readFile(filename);
-  equal([...bytes.subarray(0,8)], [137,80,78,71,13,10,26,10],key+': PNG signature');
-  assert.equal(bytes.toString('ascii',12,16),'IHDR',key+': first PNG chunk');
-  const width=bytes.readUInt32BE(16),height=bytes.readUInt32BE(20),colorType=bytes[25];
+  const webp=bytes.toString('ascii',0,4)==='RIFF'&&bytes.toString('ascii',8,12)==='WEBP';
+  let width,height,colorType=6;
+  if(webp) {
+    // Delivered art ships as WebP to keep phone first-load small. The generated
+    // PNG stays on disk and keeps the provenance contract below.
+    ({width,height}=webpSize(bytes));
+    assert.equal(bytes.length,entry.delivered_bytes,key+': WebP byte length');
+    assert.equal(sha(bytes),entry.delivered_sha256,key+': WebP checksum');
+    colorType=4;
+  } else {
+    equal([...bytes.subarray(0,8)], [137,80,78,71,13,10,26,10],key+': PNG signature');
+    assert.equal(bytes.toString('ascii',12,16),'IHDR',key+': first PNG chunk');
+    width=bytes.readUInt32BE(16);height=bytes.readUInt32BE(20);colorType=bytes[25];
+    assert.equal(entry.bytes,bytes.length,key+': physical byte length');
+    assert.equal(entry.sha256,sha(bytes),key+': source checksum');
+  }
   equal([entry.width,entry.height],[width,height],key+': native dimensions');
-  assert.equal(entry.bytes,bytes.length,key+': physical byte length');
-  assert.equal(entry.sha256,sha(bytes),key+': source checksum');
   if(entry.transparent) {
-    assert([4,6].includes(colorType),key+': PNG has alpha color type');
+    assert([4,6].includes(colorType),key+': image carries an alpha channel');
     assert(entry.alpha.has_channel && entry.alpha.fully_transparent_pixels>0,key+': real transparent pixels');
   }
   const prov=await readJSON(path.resolve(assets,entry.provenance));

@@ -162,12 +162,12 @@ console.log('PASS complete comic artwork in short/dynamic scenes; art bounds fol
   controller.renderMap(); assert(body.includes('可选支线')); assert(body.includes('分析支线证据')); assert(body.includes('1/2'));
   assert(footer.includes('章首简报')); assert(footer.includes('data-scene-id="chapter1-briefing"'), 'current map exposes its own chapter briefing');
   controller.view.core.chapter.number = 5; controller.renderMap(); assert(footer.includes('data-scene-id="chapter5-briefing"'));
-  assert.equal(storyBackdrop('remote-beacon'), 'assets/backgrounds/gameplay-backdrop.png');
-  assert.equal(storyBackdrop('story-prologue'), 'assets/story/prologue-paper-window.png');
-  assert.equal(storyBackdrop('story-grok'), 'assets/story/grok-paper-window.png');
-  assert.equal(storyBackdrop('story-broadcast'), 'assets/story/broadcast-reveal.png');
-  assert.equal(storyBackdrop('story-evacuation'), 'assets/story/evacuation-beacon.png');
-  assert.equal(storyBackdrop('story-epilogue'), 'assets/story/investigation-epilogue.png');
+  assert.equal(storyBackdrop('remote-beacon'), 'assets/backgrounds/gameplay-backdrop.webp');
+  assert.equal(storyBackdrop('story-prologue'), 'assets/story/prologue-paper-window.webp');
+  assert.equal(storyBackdrop('story-grok'), 'assets/story/grok-paper-window.webp');
+  assert.equal(storyBackdrop('story-broadcast'), 'assets/story/broadcast-reveal.webp');
+  assert.equal(storyBackdrop('story-evacuation'), 'assets/story/evacuation-beacon.webp');
+  assert.equal(storyBackdrop('story-epilogue'), 'assets/story/investigation-epilogue.webp');
   console.log('PASS optional tasks appear separately in briefings and map; remote preparation uses gameplay backdrop');
 }
 

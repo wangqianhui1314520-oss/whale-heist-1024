@@ -86,3 +86,17 @@ for(let i=0;i<1000;i++){
   doc.fire('pointerup',{pointerId:i+100});win.fire('keyup',{code:'KeyD'});
 }
 console.log('PASS story/briefing shortcuts and 1,000 focus/page-hide/visibility interruption cycles.');
+
+// Overlay, story, pause and command transitions call clear(). They must NOT
+// drop physically held keys: a key that is already down never fires another
+// keydown, so clearing the held set froze the character once the overlay
+// closed until the player released and pressed it again (frontend full
+// playthrough regression, 2026-10-25). Genuine focus loss — the interruption
+// cycle block above — still has to drop everything.
+win.fire('keydown',{code:'KeyD',target:{closest:()=>null}});
+input.consume();
+input.clear();
+assert(input.sample().right,'overlay clear() keeps physically held keys');
+win.fire('keyup',{code:'KeyD'});
+assert(!input.sample().right,'keyup after an overlay still ends the hold');
+console.log('PASS overlay clear() preserves held keys; only real focus loss resets them.');

@@ -1,5 +1,6 @@
 import { renderResolution } from '../render/resolution.mjs';
 import { sampleCharacterMotion, drawCharacterMotionFX } from '../render/character-motion.mjs';
+import { SCAN_WARNING_SECONDS } from '../game/world.mjs';
 
 const TAU = Math.PI * 2;
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -207,6 +208,7 @@ export class GameRenderer {
   }
   #mechanisms(world, time) {
     this.#sprite('scene-mfa-door-fixed', 1220, 475, { width: 60, height: 125, stretch: true, anchor: [0, 0] });
+    this.#groundLabel(1250, 435, 'MFA · 禁行', '#efb99f', 11, false, 'sealed-exit');
     for (const barrier of world.barriers) this.#sprite(barrier.broken ? 'scene-paper-barrier-broken' : 'scene-paper-barrier-intact', barrier.x, barrier.y, { width: barrier.w, height: barrier.h, stretch: true, anchor: [0, 0], opacity: barrier.broken ? .55 : 1 });
     for (const gate of world.gates) this.#sprite(gate.open ? 'scene-gate-open' : 'scene-gate-closed', gate.x - 3, gate.y, { width: gate.w + 6, height: gate.h, stretch: true, anchor: [0, 0] });
     for (const plate of world.plates) {
@@ -266,11 +268,26 @@ export class GameRenderer {
     for (const exit of room.exits) {
       const destination = world.rooms.find(r => r.id === exit.to), optional = destination?.optional;
       const sealed = optional && world.core.view().attempt.evacuationStarted;
-      const near = Math.hypot(world.player.x - exit.x, world.player.y - exit.y) < 90;
-      this.#sprite(sealed ? 'scene-gate-closed' : 'scene-gate-open', exit.x, exit.y, { width: 45, height: 85, opacity: sealed ? .45 : .85 });
-      this.#sprite(optional ? 'prop-resume-decoy' : 'ui-whale-emblem', exit.x, exit.y - 45, { width: 21, height: 24, anchor: [.5, .5], opacity: sealed ? .3 : .9 });
-      const active = near && world.nearby?.type === 'room-exit';
-      if (active || sealed && near) this.#groundLabel(exit.x, exit.y - 101, sealed ? '已封存' : 'E · ' + exit.label, optional ? '#eac88c' : '#82e4e6', 11, active);
+      const unlocked = world.eventFlags?.has?.(exit.requiresEvent) || world.eventFlags?.includes?.(exit.requiresEvent);
+      const locked = exit.requiresEvent && !unlocked;
+      const closed = locked || sealed;
+      // The atlas cells are almost square. Fit-to-box silently reduced the old
+      // 45×85 exit to 45×45; give every room doorway an explicit, actor-sized
+      // frame instead. Its feet stay on the interaction point's platform.
+      this.ctx.save();
+      this.ctx.shadowColor = closed ? '#e3a279' : optional ? '#f6cb79' : '#75e7f6';
+      this.ctx.shadowBlur = 10;
+      this.#sprite(closed ? 'scene-gate-closed' : 'scene-gate-open', exit.x, exit.y, {
+        width: 92, height: 104, stretch: true, anchor: [.5, 1], opacity: 1,
+      });
+      this.ctx.restore();
+      if (!closed) this.#wake(exit.x, exit.y + 2, 92, 14, .75);
+      const direction = exit.x < 140 ? '← ' : exit.x > 1100 ? '→ ' : '';
+      const name = String(exit.label || destination?.name || '通道').replace(/^支线\s*[·:：]\s*/, '');
+      const text = locked ? '封闭 · 取得夹层档案开启'
+        : sealed ? '支线已封存' : direction + (optional ? '支线 · ' : '') + name;
+      this.#groundLabel(exit.x, exit.y - 123, text, closed ? '#f0bd9a' : optional ? '#ffe0a0' : '#b8f4ff', 12,
+        false, closed ? 'sealed-exit' : optional ? 'optional-exit' : 'room-exit');
     }
   }
   #tutorialMarker(world) {
@@ -358,11 +375,20 @@ export class GameRenderer {
       this.#range({ x: centre.x - radius, y: centre.y - 22 - radius, w: radius * 2, h: radius * 2 }, { circle: true, opacity: .1 });
     } else if (preview.precise) this.#range({ x: target.x - (direction < 0 ? 210 : 0), y: target.y - 95, w: 210, h: 120 });
     else this.#range({ x: target.x - 280, y: target.y - 305, w: 560, h: 560 }, { circle: true, opacity: .1 });
+    const destinations=new Set();
+    for (const lure of preview.geometry?.lures || preview.lures || []) {
+      const guard=world.guards.find(g=>g.id===lure.guardId);
+      if (guard) this.#route([{x:guard.x,y:guard.y-28},{x:lure.x,y:lure.y-28}],.65,4);
+      const key=`${lure.x}:${lure.y}`;if(destinations.has(key))continue;destinations.add(key);
+      this.#sprite('prop-resume-decoy',lure.x,lure.y-30,{width:29,height:34});
+      this.#groundLabel(lure.x,lure.y-135,'诱饵落点 · 停留 6 秒','#ffd08a',11,true);
+    }
     ctx.restore();
     if (preview.geometry?.alarmIds?.length) this.#groundLabel(target.x, target.y - 110, `警戒器 × ${preview.geometry.alarmIds.length}`, '#edb29a', 10);
   }
 
   #guards(world, time) {
+    const destinations=new Set();
     for (const guard of world.guards) {
       const bob = Math.sin(time * 3 + guard.x * .015) * 2, lured = guard.luredUntil > world.time;
       const direction = guard.direction === 'right' ? 1 : -1;
@@ -374,14 +400,28 @@ export class GameRenderer {
       }
       this.#sprite('enemy-guard', guard.x, guard.y - 9 + bob, { width: 58, height: 60, flipX: guard.direction === 'right' });
       if (lured) this.#sprite('prop-resume-decoy', guard.x, guard.y - 78 + bob, { width: 16, height: 18 });
+      if (lured && guard.lure) {
+        const key=`${guard.lure.x}:${guard.lure.y}`;
+        if (!destinations.has(key)) {
+          destinations.add(key);
+          this.#sprite('prop-resume-decoy',guard.lure.x,guard.lure.y-28,{width:26,height:31});
+          const arrived=Math.abs(guard.x-guard.lure.x)<2;
+          this.#groundLabel(guard.lure.x,guard.lure.y-108,arrived?`分心 ${Math.max(0,guard.luredUntil-world.time).toFixed(1)}s · 可通行`:'前往诱饵 · 可通行','#ffd08a',11,true);
+        }
+      }
     }
   }
   #actor(actor, world, time, reduceMotion) {
     const ctx = this.ctx, motion = sampleCharacterMotion(actor, world, { time, reduceMotion });
     if (this.reduceFlashes) { motion.flash = 0; motion.opacity = 1; }
     const x = Math.round(actor.x) + motion.xOffset, y = Math.round(actor.y) + motion.yOffset;
-    for (const trail of motion.trail) this.assets.drawActor(ctx, actor.name, motion.pose, actor.direction || 'right', x + trail.xOffset, y + trail.yOffset, { opacity: trail.opacity });
-    this.assets.drawActor(ctx, actor.name, motion.pose, actor.direction || 'right', x, y, { opacity: motion.opacity, rotation: motion.rotation, scaleX: motion.scaleX, scaleY: motion.scaleY });
+    const direction = actor.direction || 'right';
+    for (const trail of motion.trail) this.assets.drawActor(ctx, actor.name, motion.pose, direction, x + trail.xOffset, y + trail.yOffset, {
+      opacity: trail.opacity, rotation: motion.rotation, scaleX: motion.scaleX, scaleY: motion.scaleY,
+    });
+    this.assets.drawActor(ctx, actor.name, motion.pose, direction, x, y, {
+      opacity: motion.opacity, rotation: motion.rotation, scaleX: motion.scaleX, scaleY: motion.scaleY,
+    });
     drawCharacterMotionFX(ctx, actor, world, motion, this.assets);
     if (!actor.isPlayer && world.selected === actor.name) this.#wake(actor.x, actor.y - 2, 48, 14, .7);
   }
@@ -392,8 +432,12 @@ export class GameRenderer {
     for (const pending of world.alarmWarnings || []) this.#groundLabel(pending.x, pending.y - 65, `${Math.max(0, pending.remaining).toFixed(1)}s`, '#f1ab95', 10, true);
     const warning = world.scanWarning;
     if (!warning) return;
-    this.#range({ x: warning.x, y: warning.y, w: warning.w, h: 600 - warning.y }, { opacity: .11 + clamp(1 - warning.remaining / 1.2, 0, 1) * .05, danger: true });
-    this.#groundLabel(warning.x + warning.w / 2, warning.y + 20, '调查扫描', '#ffbdab', 12, true);
+    const geometry=world.scanGeometry(warning),status=world.scanStatus(warning);
+    for(const region of geometry.danger)this.#range(region,{opacity:.16+clamp(1-warning.remaining/SCAN_WARNING_SECONDS,0,1)*.06,danger:true});
+    for(const region of geometry.cover)this.#range(region,{opacity:.16});
+    const instruction=`调查扫描 ${Math.max(0,warning.remaining).toFixed(1)}s · ${status==='exposed'?'危险：立即离开红区':status==='covered'?'安全：平台已遮挡':'安全：已离开红区'}\n红区固定 · 向两侧离开，或全身藏入平台下的蓝区`;
+    this.#groundLabel(640,145,instruction,status==='exposed'?'#ffbdab':'#a9efda',14,true,'scan-instruction');
+    for(const region of geometry.cover.filter(region=>region.w>=65&&region.h>=65))this.#groundLabel(region.x+region.w/2,Math.min(570,region.y+35),'平台遮挡区','#a9efda',10);
     this.#sprite('enemy-investigator', warning.x + warning.w / 2, warning.y + 92, { width: 54, height: 61, opacity: .9 });
   }
 
@@ -423,7 +467,7 @@ export class GameRenderer {
     }
   }
 
-  #groundLabel(x, y, text, color = '#b4d7e8', size = 10, active = false) {
+  #groundLabel(x, y, text, color = '#b4d7e8', size = 10, active = false, variant = '') {
     if (this.labelRoot) {
       const index = this.labelCount++;
       let label = this.labelPool[index];
@@ -431,8 +475,16 @@ export class GameRenderer {
       label.hidden = false;
       if (label.textContent !== text) label.textContent = text;
       label.classList.toggle('is-active', active);
-      label.style.left = `${clamp(Math.round(x), 65, 1215) / 12.8}%`; label.style.top = `${Math.round(y) / 7.2}%`;
-      label.style.color = color; label.style.fontSize = `max(9px, ${size / 12.8}cqw)`;
+      label.classList.toggle('optional-exit', variant === 'optional-exit');
+      const doorway = ['room-exit', 'optional-exit', 'sealed-exit'].includes(variant);
+      label.classList.toggle('room-exit', doorway);
+      label.classList.toggle('floor-exit', doorway && y > 400);
+      label.classList.toggle('sealed-exit', variant === 'sealed-exit');
+      label.classList.toggle('scan-instruction', variant === 'scan-instruction');
+      const edge = doorway && (x < 140 ? 'left' : x > 1100 ? 'right' : '');
+      label.style.left = `${(edge === 'left' ? 18 : edge === 'right' ? 1262 : clamp(Math.round(x), 65, 1215)) / 12.8}%`; label.style.top = `${Math.round(y) / 7.2}%`;
+      label.style.transform = `translate(${edge === 'left' ? '0' : edge === 'right' ? '-100%' : '-50%'}, -50%)`;
+      label.style.color = color; label.style.fontSize = `max(${variant==='scan-instruction'?11:doorway?10:9}px, ${size / 12.8}cqw)`;
       return;
     }
     const ctx = this.ctx;

@@ -159,12 +159,23 @@ def render_shot(shot, out_png, im=None, note=None, badge=None):
 
 
 async def _tts(text, out):
+    """配音按 (文本,音色,语速) 做缓存:同样的文案不重复联网合成,中断后重跑可续。"""
     import edge_tts
+    key = hashlib.sha1(f"{text}|{sb.VOICE}|{sb.RATE}".encode()).hexdigest()[:16]
+    cache_dir = os.path.join(os.path.dirname(out), "tts_cache")
+    os.makedirs(cache_dir, exist_ok=True)
+    cached = os.path.join(cache_dir, key + ".mp3")
+    if os.path.exists(cached) and os.path.getsize(cached) > 1024:
+        with open(cached, "rb") as src, open(out, "wb") as dst:
+            dst.write(src.read())
+        return
     last = None
     for _ in range(4):
         try:
             await edge_tts.Communicate(text, sb.VOICE, rate=sb.RATE).save(out)
             if os.path.getsize(out) > 1024:
+                with open(out, "rb") as src, open(cached, "wb") as dst:
+                    dst.write(src.read())
                 return
         except Exception as e:  # noqa: BLE001
             last = e
@@ -295,6 +306,7 @@ def main():
     ap.add_argument("--only", default="")
     ap.add_argument("--no-tts", action="store_true")
     ap.add_argument("--clips", default="", help="record.cjs 的输出目录(含 move/command/cancel 子目录)")
+    ap.add_argument("--prefetch", action="store_true", help="只合成并缓存全部配音,不编码(长任务分步用)")
     args = ap.parse_args()
 
     work = os.path.join(args.out, "work")
@@ -303,6 +315,20 @@ def main():
     shots = [s for s in sb.SHOTS if not only or s.id in only]
     if any(isinstance(s, sb.ClipShot) for s in shots) and not args.clips:
         sys.exit("分镜含录屏镜头,请用 --clips 指定 record.cjs 的输出目录")
+
+    if args.prefetch:
+        count = 0
+        for n, shot in enumerate(shots, 1):
+            if isinstance(shot, sb.ClipShot):
+                facts = load_meta(args.clips, shot.clip)["facts"]
+                texts = [fill_facts(s.text, facts) for s in shot.segs]
+            else:
+                texts = [shot.say or shot.line]
+            for i, text in enumerate(texts):
+                asyncio.run(_tts(text, os.path.join(work, f"prefetch_{n:02d}_{i}.mp3")))
+                count += 1
+        print(f"配音已缓存 {count} 条")
+        return
 
     units = []          # (视频段, 音频段, 说明)
     for n, shot in enumerate(shots, 1):

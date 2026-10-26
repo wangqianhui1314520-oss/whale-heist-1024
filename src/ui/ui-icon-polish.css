@@ -9,7 +9,7 @@
   vertical-align: middle;
   overflow: hidden;
   color: currentColor;
-  background-image: url('../../assets/ui/hud-icon-badges.png');
+  background-image: url('../../assets/ui/hud-icon-badges.webp');
   background-repeat: no-repeat;
   background-size: 600% 100%;
   background-position: var(--ui-badge-position, 0%) center;

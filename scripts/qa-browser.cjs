@@ -1,6 +1,7 @@
-/* Real production-browser acceptance. Requires an installed Playwright module
- * and Edge/Chromium; no game state, world coordinates or event handlers are
- * patched. Each run owns its HTTP server and isolated browser storage. */
+/* Real production-browser acceptance. Requires Playwright and Edge/Chromium.
+ * Each run owns its HTTP server and isolated browser storage. Targeted save
+ * regressions explicitly seed synthetic fixtures and inject storage failures;
+ * the gameplay acceptance flows use ordinary inputs. */
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -9,7 +10,7 @@ const { promisify } = require('node:util');
 const crypto = require('node:crypto');
 const runFile = promisify(execFile);
 const root = path.resolve(__dirname, '..');
-const out = path.join(root, 'output/final-acceptance');
+const out = path.resolve(root, process.env.QA_OUT || 'output/final-acceptance');
 fs.mkdirSync(out, { recursive: true });
 const playwright = require(process.env.PLAYWRIGHT_MODULE || 'C:/Users/Administrator/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
 const port = Number(process.env.QA_PORT || 8773);
@@ -132,6 +133,48 @@ async function finishPrologue(page) {
       await shot(page,'desktop-contracts');
       await act(page,'challenge-start').click(); await screen(page,'none'); await page.locator('.loading-screen').waitFor({state:'hidden'});
       assert.equal((await page.locator('[data-field="hud-qualifiers"]').innerText()).trim(),'1');
+      await ctx.close();
+    });
+    await test('Bug fixes: completed save recovery, export, failed imports and tutorial review', async () => {
+      // Explicit synthetic fixtures in this test's isolated browser context.
+      const {syntheticCampaignSave} = await import('./lib/synthetic-campaign.mjs');
+      const complete=syntheticCampaignSave(5),previous=syntheticCampaignSave(4);
+      const {ctx,page} = await context();
+      await page.evaluate(({complete,previous})=>{
+        localStorage.setItem('whale-heist:campaign:v1',JSON.stringify(complete.campaign));
+        localStorage.setItem('whale-heist:experience:v2',JSON.stringify({version:2,savedAt:'2026-10-25T00:00:00Z',
+          chapterId:'close-hatch',campaign:previous.campaign,current:null,checkpoint:null,checkpointLabel:'synthetic old checkpoint'}));
+      },{complete,previous});
+      await page.reload({waitUntil:'networkidle'}); await screen(page,'title');
+      assert.match(await page.locator('.title-status').innerText(),/返航|完成/);
+      await act(page,'settings-open').click(); await page.locator('[data-tab="system"]').click();
+      await page.locator('.save-tools summary').click();
+      const downloadPromise=page.waitForEvent('download'); await act(page,'save-export').click();
+      const download=await downloadPromise,exported=JSON.parse(fs.readFileSync(await download.path(),'utf8'));
+      assert.equal(exported.campaign.campaign.completed,true); assert.equal(exported.experience.chapterId,'campaign-complete');
+      const before=await page.evaluate(()=>JSON.stringify(localStorage));
+      await page.evaluate(()=>{window.syntheticOriginalSet=Storage.prototype.setItem;Storage.prototype.setItem=function(){throw new DOMException('Synthetic quota failure','QuotaExceededError');};});
+      await page.locator('[data-import-text]').fill(JSON.stringify(previous)); await act(page,'save-import').click();
+      await page.waitForFunction(()=>document.querySelector('#toast-root').textContent.includes('导入失败'));
+      assert.equal(await page.locator('#ui-root').getAttribute('data-screen'),'settings');
+      assert.equal(await page.evaluate(()=>JSON.stringify(localStorage)),before);
+      await shot(page,'save-import-failure');
+      await page.evaluate(()=>{Storage.prototype.setItem=window.syntheticOriginalSet;delete window.syntheticOriginalSet;});
+      await act(page,'settings-back').click(); await screen(page,'title');
+      assert.match(await page.locator('.title-status').innerText(),/航程已完成/);
+      assert.equal(await act(page,'resume').count(),0);
+      assert.equal(await page.locator('.title-actions [data-action="chapter-select"]').innerText(),'再次出发');
+      await shot(page,'completed-campaign');
+      await demo(page,'paper-window'); await act(page,'pause').click(); await act(page,'help').click();
+      await act(page,'tutorial-restart').click(); await screen(page,'help');
+      assert.equal(await page.locator('.tutorial-review li').count(),11);
+      assert.match(await page.locator('.v3-panel-heading h2').innerText(),/教程回顾/);
+      await page.locator('.tutorial-review details summary').first().click();
+      assert.equal(await page.locator('.tutorial-review details').first().getAttribute('open'),'');
+      await shot(page,'tutorial-review');
+      await act(page,'tutorial-restart').click(); assert.equal(await page.locator('.tutorial-review').count(),0);
+      await act(page,'overlay-back').click(); await screen(page,'pause');
+      await act(page,'resume-play').click(); await screen(page,'none');
       await ctx.close();
     });
     await test('Five production chapters, cancel via Enter, one charge on double confirm, map, records, guide, story replay', async () => {

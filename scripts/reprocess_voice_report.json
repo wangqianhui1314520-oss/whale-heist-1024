@@ -1,0 +1,646 @@
+{
+  "processed": 20,
+  "failures": [],
+  "assets": [
+    {
+      "id": "voice_hero_confirm",
+      "category": "voice",
+      "source_duration": 1.2,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": 0.0,
+        "applied_gain_db": -12.0
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_hero_confirm.mp3",
+      "duration_s": 0.969,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 12582,
+      "pcm_duration_s": 0.969,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.2,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 192078,
+      "download_duration_s": 1.2
+    },
+    {
+      "id": "voice_hero_charge",
+      "category": "voice",
+      "source_duration": 0.8,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": 0.0,
+        "applied_gain_db": -12.0
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_hero_charge.mp3",
+      "duration_s": 0.566,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 7567,
+      "pcm_duration_s": 0.566,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -11.9,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 128078,
+      "download_duration_s": 0.8
+    },
+    {
+      "id": "voice_hero_scan",
+      "category": "voice",
+      "source_duration": 1.5,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -1.2,
+        "applied_gain_db": -10.8
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_hero_scan.mp3",
+      "duration_s": 1.179,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 15090,
+      "pcm_duration_s": 1.179,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.5,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 240078,
+      "download_duration_s": 1.5
+    },
+    {
+      "id": "voice_hero_encourage",
+      "category": "voice",
+      "source_duration": 1.5,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -0.0,
+        "applied_gain_db": -12.0
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_hero_encourage.mp3",
+      "duration_s": 1.209,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 15404,
+      "pcm_duration_s": 1.209,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.1,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 240078,
+      "download_duration_s": 1.5
+    },
+    {
+      "id": "voice_hero_evacuate",
+      "category": "voice",
+      "source_duration": 1.88,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -0.9,
+        "applied_gain_db": -11.1
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_hero_evacuate.mp3",
+      "duration_s": 1.601,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 20106,
+      "pcm_duration_s": 1.601,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.4,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 300878,
+      "download_duration_s": 1.88
+    },
+    {
+      "id": "voice_grok_confirm",
+      "category": "voice",
+      "source_duration": 1.78,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": 0.0,
+        "applied_gain_db": -12.0
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_grok_confirm.mp3",
+      "duration_s": 1.469,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 18538,
+      "pcm_duration_s": 1.469,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -11.1,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 284878,
+      "download_duration_s": 1.78
+    },
+    {
+      "id": "voice_grok_charge",
+      "category": "voice",
+      "source_duration": 1.6,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -0.0,
+        "applied_gain_db": -12.0
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_grok_charge.mp3",
+      "duration_s": 1.296,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 16344,
+      "pcm_duration_s": 1.296,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.3,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 256078,
+      "download_duration_s": 1.6
+    },
+    {
+      "id": "voice_grok_pickup",
+      "category": "voice",
+      "source_duration": 1.1,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": 0.0,
+        "applied_gain_db": -12.0
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_grok_pickup.mp3",
+      "duration_s": 0.847,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 11015,
+      "pcm_duration_s": 0.847,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -11.8,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 176078,
+      "download_duration_s": 1.1
+    },
+    {
+      "id": "voice_grok_evacuate",
+      "category": "voice",
+      "source_duration": 1.7,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -0.0,
+        "applied_gain_db": -12.0
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_grok_evacuate.mp3",
+      "duration_s": 1.375,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 17284,
+      "pcm_duration_s": 1.375,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.3,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 272078,
+      "download_duration_s": 1.7
+    },
+    {
+      "id": "voice_grok_cheer",
+      "category": "voice",
+      "source_duration": 1.5,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -0.0,
+        "applied_gain_db": -12.0
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_grok_cheer.mp3",
+      "duration_s": 1.245,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 15717,
+      "pcm_duration_s": 1.245,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.4,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 240078,
+      "download_duration_s": 1.5
+    },
+    {
+      "id": "voice_claude_confirm",
+      "category": "voice",
+      "source_duration": 2.0,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -2.1,
+        "applied_gain_db": -9.9
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_claude_confirm.mp3",
+      "duration_s": 1.634,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 20419,
+      "pcm_duration_s": 1.634,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.5,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 320078,
+      "download_duration_s": 2.0
+    },
+    {
+      "id": "voice_claude_analyze",
+      "category": "voice",
+      "source_duration": 2.0,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -4.5,
+        "applied_gain_db": -7.5
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_claude_analyze.mp3",
+      "duration_s": 1.668,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 20733,
+      "pcm_duration_s": 1.668,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.5,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 320078,
+      "download_duration_s": 2.0
+    },
+    {
+      "id": "voice_claude_careful",
+      "category": "voice",
+      "source_duration": 2.5,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -2.6,
+        "applied_gain_db": -9.4
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_claude_careful.mp3",
+      "duration_s": 2.082,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 25748,
+      "pcm_duration_s": 2.082,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.5,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 400078,
+      "download_duration_s": 2.5
+    },
+    {
+      "id": "voice_claude_record",
+      "category": "voice",
+      "source_duration": 2.0,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -5.8,
+        "applied_gain_db": -6.2
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_claude_record.mp3",
+      "duration_s": 1.545,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 19479,
+      "pcm_duration_s": 1.545,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.2,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 320078,
+      "download_duration_s": 2.0
+    },
+    {
+      "id": "voice_claude_alert",
+      "category": "voice",
+      "source_duration": 2.5,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -5.1,
+        "applied_gain_db": -6.9
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_claude_alert.mp3",
+      "duration_s": 2.158,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 26688,
+      "pcm_duration_s": 2.158,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.6,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 400078,
+      "download_duration_s": 2.5
+    },
+    {
+      "id": "voice_glm_confirm",
+      "category": "voice",
+      "source_duration": 1.6,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -7.3,
+        "applied_gain_db": -4.7
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_glm_confirm.mp3",
+      "duration_s": 1.145,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 14463,
+      "pcm_duration_s": 1.145,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.4,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 256078,
+      "download_duration_s": 1.6
+    },
+    {
+      "id": "voice_glm_scan",
+      "category": "voice",
+      "source_duration": 2.0,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -0.0,
+        "applied_gain_db": -12.0
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_glm_scan.mp3",
+      "duration_s": 1.735,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 21673,
+      "pcm_duration_s": 1.735,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.3,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 320078,
+      "download_duration_s": 2.0
+    },
+    {
+      "id": "voice_glm_warn",
+      "category": "voice",
+      "source_duration": 2.78,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -2.8,
+        "applied_gain_db": -9.2
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_glm_warn.mp3",
+      "duration_s": 2.334,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 28883,
+      "pcm_duration_s": 2.334,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.5,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 444878,
+      "download_duration_s": 2.78
+    },
+    {
+      "id": "voice_glm_public",
+      "category": "voice",
+      "source_duration": 3.0,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -4.7,
+        "applied_gain_db": -7.3
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_glm_public.mp3",
+      "duration_s": 2.588,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 32017,
+      "pcm_duration_s": 2.588,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.4,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 480078,
+      "download_duration_s": 3.0
+    },
+    {
+      "id": "voice_glm_route",
+      "category": "voice",
+      "source_duration": 2.4,
+      "loop": false,
+      "normalize": {
+        "mode": "peak",
+        "target_db": -12.0,
+        "measured_peak_db": -4.8,
+        "applied_gain_db": -7.2
+      },
+      "file": "D:\\Vibe coding\\1024切磋大会\\游戏-鲸鱼魔盗团\\assets\\audio\\voice\\voice_glm_route.mp3",
+      "duration_s": 1.98,
+      "bitrate_kbps": 96.0,
+      "channels": 1,
+      "sample_rate": 44100,
+      "codec": "mp3",
+      "bytes": 24494,
+      "pcm_duration_s": 1.98,
+      "truncation_check": {
+        "pass": true,
+        "drift_s": 0.0
+      },
+      "final_max_db": -12.5,
+      "silence_check": {
+        "pass": true,
+        "threshold_db": -25.0
+      },
+      "status": "ok",
+      "download_bytes": 384078,
+      "download_duration_s": 2.4
+    }
+  ]
+}

@@ -90,10 +90,10 @@ def build_filter(category, asset_id, dur, loop, fade_tail):
         )
         return fc, 0.55
     if category == "voice":
+        # 只裁剪开头静音；保留句尾自然停顿（stop_periods 会误伤 TTS 句内停顿/尾音）
         fc = (
             "[0:a]aresample=44100,aformat=channel_layouts=mono,"
-            "silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03:"
-            "stop_periods=1:stop_threshold=-45dB:stop_silence=0.03,"
+            "silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03,"
             "atrim=0:3.2,asetpts=N/SR/TB,afade=t=in:d=0.03,areverse,afade=t=in:d=0.05,areverse"
         )
         return fc, 3.2
