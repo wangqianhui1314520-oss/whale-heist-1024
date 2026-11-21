@@ -4,7 +4,7 @@ const STYLES = Object.freeze(['cinematic', 'stage', 'comic']);
 export const STORY_ART_IMAGES = Object.freeze(STYLES.flatMap(style => STORY_ART_BEATS.map(beat => `assets/story/${style}/${beat}.webp`)));
 
 const SCENES = Object.freeze({
-  prologue: 'opening', intro: 'opening',
+  prologue: 'opening', intro: 'opening', departure: 'opening',
   'chapter1-briefing': 'grok', 'grok-join': 'grok',
   'chapter2-briefing': 'claude', 'claude-join': 'claude', 'claude-intro': 'claude',
   'chapter3-briefing': 'glm', 'glm-join': 'glm', 'glm-intro': 'glm',

@@ -79,15 +79,23 @@ function pair(chapter,a,bRoom,annex) {
 }
 {
   const c=MAPS[1],a=room(c.id,1,'招聘观察前厅','dock',{
-    items:at(c.items,[['resume-data-1',300,490],['resume-data-2',510,490],['resume-data-3',760,490]]),
+    items:at(c.items,[['resume-data-1',300,490],['resume-data-2',560,490],['resume-data-3',760,490]]),
     targets:at(c.targets,[['patrol-west',430,490]]),
-    guards:[{id:'resume-west-guard',x:400,y:490,minX:290,maxX:520,speed:38},{id:'resume-observer',x:470,y:490,minX:290,maxX:520,speed:33}],
+    // One dock patrol walks a 90px band (410-500) that a single running jump
+    // clears, and every dock pickup (300 / 560 / 760) still sits more than a
+    // body-width outside it. The second patrol watches the observation deck a
+    // storey above, so the two can never clump into the same contact zone and
+    // turn one crossing into a 40-damage double hit.
+    guards:[{id:'resume-west-guard',x:440,y:490,minX:410,maxX:500,speed:38},{id:'resume-observer',x:600,y:380,minX:560,maxX:680,speed:33}],
     events:[{id:'resume-first-decoy',trigger:'target-completed',subject:'patrol-west',action:'record',text:'纸页确实把同层巡逻引向了招聘板，检查口空出来了。'}],
   }),d=room(c.id,2,'简历分拣机房','sorting',{
-    items:at(c.items,[['resume-data-4',740,490],['resume-data-5',850,380],['resume-data-6',1070,380]]),
-    barriers:[b('cargo-divider',650,490)],targets:at(c.targets,[['cargo-divider',672,490],['patrol-east',1000,380]]),
+    items:at(c.items,[['resume-data-4',740,490],['resume-data-5',850,380],['resume-data-6',1100,380]]),
+    barriers:[b('cargo-divider',650,490)],targets:at(c.targets,[['cargo-divider',672,490],['patrol-east',1000,490]]),
     gates:[{id:'sorting-gate',x:900,y:418,w:30,h:72,plateId:'east-pressure'}],plates:[{id:'east-pressure',x:1005,y:374,w:54,h:6,gateId:'sorting-gate'}],
-    guards:[{id:'resume-east-guard',x:1030,y:380,minX:930,maxX:1100,speed:48}],traps:[{id:'resume-floor-trap',x:720,y:592,w:68}],
+    // The east patrol walks the lower sorting deck while the remote shelf and
+    // its pickup stay a storey above, and its band stops 40px short of the
+    // 1050 ladder so climbing up is never a blind contact.
+    guards:[{id:'resume-east-guard',x:980,y:490,minX:950,maxX:1010,speed:40}],traps:[{id:'resume-floor-trap',x:720,y:592,w:68}],
     events:[{id:'sorting-return-latched',trigger:'plate-latched',subject:'east-pressure',action:'record',text:'回程闸门锁定开启，再经过这里无需重新踩板。'}],
   }),s=room(c.id,3,'误投简历档案室','annex',{
     items:at(c.items,[['resume-extra-1',550,380],['resume-extra-2',950,270]]),supplies:at(c.supplies,[['resume-qualifier',750,270]]),
@@ -102,9 +110,10 @@ function pair(chapter,a,bRoom,annex) {
     events:[{id:'review-cycle-revealed',trigger:'target-completed',subject:'trap-bridge',action:'record',text:'扫描标出了陷阱周期；上层梯路可以完全绕开它。'}],
   }),d=room(c.id,2,'复查服务管廊','gallery',{
     items:at(c.items,[['review-data-4',450,490],['review-data-5',850,380],['review-data-6',900,270]]),
+    supplies:at(c.supplies,[['review-first-aid',1040,600]]),
     barriers:[b('return-divider',750,490)],targets:at(c.targets,[['return-divider',772,490],['alarm-fan',860,270]]),
-    traps:[{id:'review-floor-trap',x:710,y:592,w:65},{id:'review-west-trap',x:650,y:372,w:65}],alarms:[{id:'review-upper-alarm',x:1000,y:270}],
-    guards:[{id:'review-east-guard',x:1030,y:490,minX:950,maxX:1100,speed:42}],
+    traps:[{id:'review-floor-trap',x:712,y:592,w:65},{id:'review-west-trap',x:650,y:372,w:65}],alarms:[{id:'review-upper-alarm',x:1000,y:270}],
+    guards:[{id:'review-east-guard',x:955,y:490,minX:900,maxX:1010,speed:42}],
     events:[{id:'review-return-bridge',trigger:'barrier-broken',subject:'return-divider',action:'open-bridge',platform:p('review-return-bridge',550,490,100,'thin'),text:'回程隔板落下成为桥面，原来的静态梯路仍然畅通。'}],
   }),s=room(c.id,3,'高处审计柜','annex',{
     items:at(c.items,[['review-extra-1',550,380],['review-extra-2',950,270]]),supplies:at(c.supplies,[['review-qualifier-b',750,270]]),
@@ -139,6 +148,14 @@ function pair(chapter,a,bRoom,annex) {
   });pair(c.id,a,d);
 }
 
+// The outward trip earns a physical return route. These doors never skip a
+// pickup, delivery or chapter gate, and the final timed evacuation keeps its route.
+for (const [chapter, itemId] of [['resume-storm','resume-data-6'],['review-quietly','review-data-6'],['public-report','report-task-2']]) {
+  const action = chapterRooms.find(room => room.id === mainId(chapter, 2));
+  const id = chapter + '-return-hatch';
+  action.events.push({ id, trigger:'item-picked', subject:itemId, action:'record', text:'远端资料已取出，底层返航维护舱亮起。可以从右侧直接回到鲸艇旁。' });
+  action.exits.push({ ...exit('return-hatch',1090,600,mainId(chapter,1),{x:140,y:600},'返航维护舱 · 直达鲸艇'), requiresEvent:id, optionalShortcut:true, lockedLabel:'取得远端任务资料后，返航维护舱才会开启。' });
+}
 for(const room of chapterRooms)for(const gate of room.gates)gate.optionalShortcut=true;
 export const ROOMS = chapterRooms;
 export const getChapterRooms = chapterId => ROOMS.filter(room=>room.chapterId===chapterId);

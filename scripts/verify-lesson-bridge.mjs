@@ -5,6 +5,7 @@ import { LessonBridge } from '../src/game/lesson-bridge.mjs';
 import { GameCore } from '../src/core/state.mjs';
 import { GameWorld } from '../src/game/world.mjs';
 import { getMap } from '../src/game/maps.mjs';
+import { chapterCheckpoint } from '../src/game/session.mjs';
 const failures = []; let passed = 0;
 const test = (name, callback) => { try { callback(); passed++; console.log('PASS ' + name); } catch (error) { failures.push(name); console.error('FAIL ' + name + '\n' + error.stack); } };
 const fixture = (chapter = 1) => {
@@ -163,6 +164,21 @@ test('a full backpack returns for delivery while a restored partial chapter rebu
   assert.equal(restored.guideView().index, 8); assert(restored.guideView().text.includes('背包已满'));
   assert.equal(bridge.marker.x, 85); assert.equal(restored.guideView().control, 'interact');
   assert(!Object.hasOwn(restored.serialize(), 'objectiveGuide'), 'derived world guidance does not alter save format');
+});
+
+test('alternate main routes retire obsolete training without inventing tutorial completion or changing the game', () => {
+  for (const [chapter, targetId] of [['resume-storm', 'cargo-divider'], ['review-quietly', 'return-divider']]) {
+    const core = new GameCore({ checkpoint: chapterCheckpoint(chapter), persist: false });
+    const world = new GameWorld(core, getMap(chapter), { expanded: true });
+    const tutorial = new TutorialDirector({ chapter });
+    assert(core.prepareCommand({ commandId: 'alternate-route', teammate: 'Grok', targetId }).ok);
+    assert(core.beginCommand('Grok').ok); assert(core.completeCommand('Grok', 'alternate-route').ok);
+    const before = core.exportRuntime(), bridge = new LessonBridge({ tutorial, world });
+    assert(tutorial.getState().skipped); assert.deepEqual(tutorial.completed, []);
+    assert.deepEqual(tutorial.verifiedEvents, {}); assert.equal(bridge.marker, null);
+    assert.deepEqual(core.exportRuntime(), before, 'Teaching reconciliation cannot alter mission state or resources');
+    assert.equal(core.board().ok, false, 'Required cargo must still be delivered');
+  }
 });
 
 if (failures.length) { console.error(`Lesson bridge: ${passed} passed, ${failures.length} failed: ${failures.join(', ')}`); process.exitCode = 1; }

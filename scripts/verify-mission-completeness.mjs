@@ -30,6 +30,7 @@ for (const chapter of CHAPTERS) {
     ok(core.collectVulnerabilityEvidence(clue.id));ok(core.analyzeVulnerability(clue.id));
   }
   ok(core.selectVulnerabilityRepair(core.vulnerabilityState().caseFile.repairs[0].id));
+  if (chapter.number === 4) ok(core.setBroadcast(false));
   assert(core.optionalObjectives().every(goal => goal.complete));
   assert.equal(core.view().campaign.totalScore, initialScore, 'Optional progress never directly awards score');
   const restored = fixture();ok(restored.restoreRuntime(JSON.parse(JSON.stringify(core.exportRuntime()))));
@@ -42,7 +43,9 @@ for (const chapter of CHAPTERS) {
     ok(main.prepareCommand({commandId:'main-command',teammate:target.teammate,targetId:target.id}));
     ok(main.beginCommand(target.teammate));ok(main.completeCommand(target.teammate,'main-command'));
   }
-  if (chapter.number === 4) {ok(main.setBroadcast(false));ok(main.activateReturnBeacon());}
+  // Chapter four's broadcast is optional by design: the main-only run boards
+  // with the ledger still public, so only the beacon gate is satisfied here.
+  if (chapter.number === 4) ok(main.activateReturnBeacon());
   if (chapter.number === 5) {
     for (const item of chapter.requiredItems) ok(main.pickup(item.id));
     for (const name of chapter.teammates) ok(main.rendezvous(name, chapter.rendezvousTarget));

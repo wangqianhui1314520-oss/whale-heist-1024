@@ -1,6 +1,6 @@
 export const SETTINGS_KEY='whale-heist:settings:v3';
 export const DEFAULT_SETTINGS=Object.freeze({masterVolume:.65,sfxVolume:.8,musicVolume:.25,ambienceVolume:.8,voiceVolume:.8,subtitleScale:1,
-  reduceMotion:false,reduceFlashes:false,tacticalPause:true,tutorialHints:true,touchSize:1,touchOpacity:.75,
+  reduceMotion:false,reduceFlashes:false,tacticalPause:true,tutorialHints:true,touchSize:1,touchOpacity:.55,
   leftHanded:false,interactionMode:'hold',textSpeed:32,autoDialogue:false,skipSeenStory:true,storyStyle:'cinematic',quality:'standard',
   bindings:Object.freeze({left:'KeyA',right:'KeyD',up:'KeyW',down:'KeyS',jump:'Space',dash:'ShiftLeft',interact:'KeyE'})});
 const ranges={masterVolume:[0,1],sfxVolume:[0,1],musicVolume:[0,1],ambienceVolume:[0,1],voiceVolume:[0,1],subtitleScale:[.85,1.6],touchSize:[.85,1.5],touchOpacity:[.3,1],textSpeed:[12,80]};

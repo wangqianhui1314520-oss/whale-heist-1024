@@ -211,7 +211,7 @@ test('a two-person relay executes in order with real effects and two receipts',(
 test('challenge contract affects every room reproducibly and keeps the static fallback when bridges are closed',()=>{
   const contract=createContract('dense-patrol',{seed:'expanded-check',chapter:'resume-storm'});
   const a=fixture(1,{contract}),b=fixture(1,{contract});assert.deepEqual(a.world.guards,b.world.guards);
-  assert.equal(a.world.guards[0].speed,38*1.2);a.world.transitionRoom('to-action');b.world.transitionRoom('to-action');assert.deepEqual(a.world.guards,b.world.guards);assert.equal(a.world.guards[0].speed,48*1.2);
+  assert.equal(a.world.guards[0].speed,38*1.2);a.world.transitionRoom('to-action');b.world.transitionRoom('to-action');assert.deepEqual(a.world.guards,b.world.guards);assert.equal(a.world.guards[0].speed,40*1.2);
   const {world}=fixture(0,{contract:createContract('closed-shortcuts',{chapter:'paper-window'})});go(world,{x:390,y:490});advance(world,1);world.selectTeammate('Grok');world.selectTarget('paper-window');assert(world.confirmCommand());waitTask(world,'Grok');
   assert(!world.platforms.some(p=>p.id==='powered-return-bridge'));assert(world.navigationRoute(world.crew[0],{x:85,y:600}));
 });
@@ -245,6 +245,96 @@ test('an in-progress command survives a JSON checkpoint and completes exactly on
   const {world,core}=fixture();go(world,{x:390,y:490});advance(world,1);world.selectTeammate('Grok');world.selectTarget('paper-window');assert(world.confirmCommand());advance(world,.1);
   const state=JSON.parse(JSON.stringify(world.exportState()));const restored=new GameWorld(core,getMap('paper-window'),{expanded:true});
   assert.equal(restored.restoreState(state).ok,true);assert.deepEqual(restored.exportState(),state);waitTask(restored,'Grok');assert.equal(restored.receipts.length,1);assert(restored.barriers[0].broken);
+});
+
+test('MFA gate costs one full hold and a real room scan, then stays sealed',()=>{
+  const {world,core}=fixture(2);go(world,{x:1200,y:600});
+  const near=world.getInteraction(core.view());assert.equal(near?.id,'mfa-door');assert.match(near.label,/2\.4/);
+  const alert=core.view().attempt.alert,health=core.view().attempt.health;
+  interact(world,3.2);
+  assert(core.view().attempt.alert>alert,'forcing the MFA gate must raise alert');
+  assert(core.view().attempt.health<health,'the scan must punish staying in the door zone');
+  assert(world.mfaTried.has(world.currentRoom.id));
+  assert(world.solidBodies().some(s=>s.id==='mfa-door-fixed'),'the MFA door must stay sealed');
+  assert.equal(world.getInteraction(core.view())?.id,'mfa-door-sealed');
+});
+
+test('data pickups emit the pickup event that arms the post-pickup checkpoint',()=>{
+  const {world,core,events}=fixture(2);
+  const node=world.nodes.find(entry=>entry.itemId==='review-data-1');
+  assert(node,'chapter 3 room 1 must host review-data-1');
+  world.strikeNodes(node.x-1,node.x+1,node.y,'test-attack',2);
+  assert.equal(node.hp,0);
+  world.player.x=node.x;world.player.y=node.y;world.player.vx=0;world.player.vy=0;
+  advance(world,.2);
+  assert(world.items.find(entry=>entry.id==='review-data-1').collected);
+  assert(events.some(entry=>entry.type==='pickup'&&entry.payload.itemId==='review-data-1'),
+    'a collected data piece must notify the checkpoint layer');
+  assert.equal(core.view().attempt.inventory.includes('review-data-1'),true);
+});
+
+test('the corridor first-aid survives a full-health touch instead of being wasted',()=>{
+  const {world,core,events}=fixture(2);
+  walk(world,1170);interact(world);
+  assert.equal(world.currentRoom.index,2);
+  const aid=world.supplies.find(entry=>entry.id==='review-first-aid');
+  assert(aid,'chapter 3 room 2 must carry the corridor first-aid');
+  // Stand on the pocket at full health: a heal-only supply must stay available.
+  world.player.x=1040;world.player.y=600;world.player.vx=0;world.player.vy=0;
+  advance(world,.25);
+  assert.equal(core.view().attempt.health,100);
+  assert.equal(aid.collected,false,'a full-health player must not consume the first-aid');
+  assert(events.some(e=>e.type==='checkpoint'&&e.payload.label==='东侧走廊 · 中途检查点'),'the east corridor checkpoint must fire once');
+});
+
+test('the corridor first-aid heals a hurt player once and is then spent',()=>{
+  const {world,core}=fixture(2);
+  walk(world,1170);interact(world);
+  assert.equal(world.currentRoom.index,2);
+  // Two solid hits leave 60; the pocket must restore +50 to 100.
+  // Take the damage away from the pocket, then walk onto it.
+  world.hurt(20);advance(world,3.4);world.hurt(20);advance(world,3.4);
+  assert.equal(core.view().attempt.health,60);
+  world.player.x=1040;world.player.y=600;world.player.vx=0;world.player.vy=0;
+  advance(world,.3);
+  assert.equal(core.view().attempt.health,100,'the first-aid must heal a hurt player');
+  const aid=world.supplies.find(entry=>entry.id==='review-first-aid');
+  assert.equal(aid.collected,true,'a used first-aid is spent');
+  world.player.x=600;world.player.y=600;
+  world.hurt(20);advance(world,3.4);
+  assert.equal(core.view().attempt.health,80,'a spent first-aid must not heal twice');
+});
+
+test('chapter 2 pickups stay outside every patrol band and the east shelf arms a mid checkpoint',()=>{
+  const {world,events}=fixture(1);
+  const dock=world.rooms[0];
+  for(const id of ['resume-data-1','resume-data-2']){
+    const item=dock.items.find(entry=>entry.id===id);
+    assert(item,'the dock must host '+id);
+    // Only guards sharing the pickup's storey can reach or see it; a patrol on the
+    // observation deck is separated by |dy| > 48 and cannot contribute a hit.
+    for(const guard of dock.guards.filter(entry=>Math.abs(entry.y-item.y)<=48))
+      assert(item.x<guard.minX-34||item.x>guard.maxX+34,
+        `${id} must keep a body-width of clearance from ${guard.id}`);
+  }
+  walk(world,1170);interact(world);
+  assert.equal(world.currentRoom.index,2);
+  const guard=world.guards.find(entry=>entry.id==='resume-east-guard');
+  const item=world.items.find(entry=>entry.id==='resume-data-6');
+  assert(guard&&item,'chapter 2 room 2 must host the east guard and its remote data');
+  // The east patrol now walks the lower sorting deck; the shelf pickup sits a
+  // full storey above it, so contact (|dy| < 48) and same-level sight are both
+  // structurally impossible instead of relying on timing.
+  assert(Math.abs(item.y-guard.y)>48,
+    'the shelf pickup must sit clear of the patrol contact height');
+  assert(!(item.y-24>=guard.y-48&&item.y-24<=guard.y),
+    'the shelf pickup must stay outside the patrol sight band');
+  world.player.x=1100;world.player.y=380;world.player.vx=0;world.player.vy=0;
+  advance(world,.2);
+  assert(events.some(e=>e.type==='checkpoint'&&e.payload.label==='东侧货架 · 中途检查点'),
+    'the east shelf checkpoint must fire once');
+  assert.equal(world.items.find(entry=>entry.id==='resume-data-6').collected,false,
+    'an unopened data node cannot be collected by walking over it');
 });
 
 console.log(`Expanded world: ${passed.length} physical interaction/state checks passed. Geometry coverage is reported separately from traversal; this script does not claim a full V3 campaign clear or a measured human completion time.`);

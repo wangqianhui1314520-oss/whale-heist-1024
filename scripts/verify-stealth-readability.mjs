@@ -28,18 +28,23 @@ function test(name,fn){fn();checks.push(name);console.log('PASS '+name);}
 
 test('default decoy previews a remote destination, physically clears the lane, and permits an unharmed round trip',()=>{
   const {world,core}=fixture(),preview=prepareDecoy(world);
-  assert.equal(preview.lures.length,2);assert(preview.lures.every(l=>l.x===520&&l.y===490));
+  // Only guards sharing the paper's storey can be pulled; the second patrol
+  // watches the observation deck, so one lure has to clear the whole dock lane.
+  const dockGuards=world.guards.filter(g=>Math.abs(g.y-490)<1);
+  assert.equal(dockGuards.length,1,'the dock lane keeps exactly one patrol');
+  assert.equal(preview.lures.length,dockGuards.length);
+  assert(preview.lures.every(l=>l.x===500&&l.y===490));
   assert(world.confirmCommand(false));
   assert.deepEqual(world.crew.find(c=>c.name==='Claude').task.geometry.lures,preview.lures);
-  until(world,()=>world.guards.every(g=>g.lure));
+  until(world,()=>dockGuards.every(g=>g.lure));
   walk(world,545);walk(world,260);
   assert.equal(core.view().attempt.health,100,'Crossing distracted guards must not hurt');
   assert.equal(core.view().attempt.alarmIds.length,0,'Distracted guards must not report the crossing');
-  assert(world.guards.every(g=>g.x===520&&g.luredUntil>world.time));
-  assert.equal(world.receipts[0].affectedCount,2);
-  const expires=Math.max(...world.guards.map(g=>g.luredUntil));
+  assert(dockGuards.every(g=>g.x===500&&g.luredUntil>world.time));
+  assert.equal(world.receipts[0].affectedCount,dockGuards.length);
+  const expires=Math.max(...dockGuards.map(g=>g.luredUntil));
   advance(world,expires-world.time+.15);
-  assert(world.guards.every(g=>g.x<520&&g.luredUntil<=world.time),'Patrol must resume after the visible window');
+  assert(dockGuards.every(g=>g.x<520&&g.luredUntil<=world.time),'Patrol must resume after the visible window');
 });
 
 test('precise decoy affects one guard, cancels its pending detection, and leaves the other patrol active',()=>{
@@ -54,10 +59,10 @@ test('precise decoy affects one guard, cancels its pending detection, and leaves
 
 test('a guard already at the paper destination completes successfully without requiring fake movement',()=>{
   const {world}=fixture();prepareDecoy(world);
-  for(const g of world.guards){g.x=520;g.direction='left';}
+  for(const g of world.guards.filter(entry=>Math.abs(entry.y-490)<1)){g.x=500;g.direction='left';}
   assert(world.confirmCommand(false));
   until(world,()=>!world.crew.find(c=>c.name==='Claude').task,1.2);
-  assert.equal(world.receipts.length,1);assert.equal(world.receipts[0].affectedCount,2);
+  assert.equal(world.receipts.length,1);assert.equal(world.receipts[0].affectedCount,1);
 });
 
 test('confirmed lure destinations survive player repositioning and a JSON checkpoint, with six seconds after arrival',()=>{
@@ -66,10 +71,10 @@ test('confirmed lure destinations survive player repositioning and a JSON checkp
   const saved=JSON.parse(JSON.stringify(world.exportState()));
   const restored=new GameWorld(core,getMap('resume-storm'),{expanded:true,compilePrompt});
   assert(restored.restoreState(saved).ok);
-  until(restored,()=>restored.guards.every(g=>g.lure));
-  assert.deepEqual(restored.guards.map(g=>g.lure.x),preview.lures.map(l=>l.x));
-  until(restored,()=>restored.guards.every(g=>Math.abs(g.x-g.lure.x)<.01));
-  assert(restored.guards.every(g=>g.luredUntil-restored.time>5.2),'Travel must not consume the holding window');
+  until(restored,()=>restored.guards.every(g=>g.lure||Math.abs(g.y-490)>48));
+  assert.deepEqual(restored.guards.filter(g=>g.lure).map(g=>g.lure.x),preview.lures.map(l=>l.x));
+  until(restored,()=>restored.guards.filter(g=>g.lure).every(g=>Math.abs(g.x-g.lure.x)<.01));
+  assert(restored.guards.filter(g=>g.lure).every(g=>g.luredUntil-restored.time>5.2),'Travel must not consume the holding window');
 });
 
 test('periodic scan locks its position, gives 1.8 seconds, and can be escaped with ordinary walking',()=>{

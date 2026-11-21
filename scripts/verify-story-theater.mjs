@@ -42,8 +42,8 @@ const expected = qa.entries.flatMap((entry, si) => entry.variants.flatMap((varia
 const reached = [];
 while (qa.playing() && reached.length < 500) { reached.push(qa.position().join(':')); qa.next(); }
 assert.deepEqual(reached, Array.from(expected), 'continuous play reaches every line of every branch exactly once');
-assert.equal(qa.entries.length, 12);
-assert.equal(qa.entries.reduce((n, entry) => n + entry.variants.length, 0), 20);
+assert.equal(qa.entries.length, 13);
+assert.equal(qa.entries.reduce((n, entry) => n + entry.variants.length, 0), 21);
 assert.equal(node('progress').style.width, '100%');
 const finalPosition = qa.position().join(':'); qa.next();
 assert.equal(qa.position().join(':'), finalPosition, 'the last branch stays selected on completion');

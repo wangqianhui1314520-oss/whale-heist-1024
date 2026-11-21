@@ -7,6 +7,10 @@ const step = (speaker, text, pose = 'idle', backdrop = 'boat-interior', duration
 const scene = (id, title, chapter, steps, extra = {}) => ({ id, title, chapter, steps, duration: steps.reduce((n, s) => n + s.duration, 0), events: [], ...extra });
 
 export const STORY_SCENES = freeze({
+  departure: scene('departure', '出航 · 纸窗入港', 1, [
+    step('DeepSeek', '第一单：带回四份资料。先从码头的小梯子出发。', 'point', 'story-prologue', 4, { camera: 'push-in', enter: 'slide-right', fx: ['beacon'] }),
+    step('Grok', '你能冲开蓝色节点，纸窗交给我！背包满三格，记得回艇交付。', 'ready', 'harbor-dock', 4, { camera: 'hold', enter: 'fade', fx: ['water'] }),
+  ], { requiresStart: true }),
   // Interactive opening (30 seconds of animation plus the player's choices).
   // The choices are
   // deliberately about observation and coordination inside the fictional map;
@@ -82,6 +86,7 @@ const recordText = record => {
   if (/alarm/.test(record.type)) return `${prefix}警报来源：${record.sourceId ?? record.source ?? '记录未注明'}`;
   if (/rendezvous/.test(record.type)) return `${prefix}${record.teammate ?? '队友'}在信标集结`;
   if (/evacuation/.test(record.type)) return `${prefix}${/confirm|start/.test(record.type) ? '已主动确认撤离' : '撤离事件'}`;
+  if (record.type === 'broadcast-leak') return `${prefix}公开广播持续外泄`;
   if (/broadcast/.test(record.type)) return `${prefix}公开广播${record.on === false || record.broadcastOn === false ? '关闭' : record.on === true || record.broadcastOn === true ? '开启' : '状态更新'}`;
   return `${prefix}${record.outcome ?? record.label ?? record.type}`;
 };

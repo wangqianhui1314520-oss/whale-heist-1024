@@ -27,14 +27,14 @@ function transport(core, ids) {
   if (core.view().attempt.inventory.length) ok(core.deliver(unique('delivery')));
 }
 
-function finishStandardChapter(core, { optional = false, collaboration = true } = {}) {
+function finishStandardChapter(core, { optional = false, collaboration = true, keepBroadcast = false } = {}) {
   const { chapter } = core.view();
   assert.notEqual(chapter.number, 5);
   if (collaboration) chapter.commandTargets.filter((target) => target.collaboration).forEach((target) => execute(core, target));
   transport(core, chapter.requiredItems.map((item) => item.id));
   if (optional) transport(core, chapter.optionalItems.map((item) => item.id));
   if (chapter.number === 4) {
-    ok(core.setBroadcast(false));
+    if (!keepBroadcast) ok(core.setBroadcast(false));
     ok(core.activateReturnBeacon());
   }
   ok(core.board());
@@ -69,6 +69,26 @@ function finishStandardChapter(core, { optional = false, collaboration = true } 
   const loaded = GameCore.resume({ storage });
   assert.equal(loaded.view().chapter.number, 2);
   assert.equal(loaded.view().campaign.totalScore, 100);
+}
+
+// Settlement "retry" total counts real terminations once, even after a
+// checkpoint resume or a manual restart following the death screen.
+{
+  const core = new GameCore();
+  const snapshot = core.exportRuntime();
+  ok(core.damage(100));
+  assert.equal(core.view().failuresThisChapter.length, 1);
+  ok(core.restoreRuntime(snapshot));
+  assert.equal(core.view().failuresThisChapter.length, 1, 'Checkpoint resume must not erase a termination');
+  ok(core.damage(100));
+  assert.equal(core.view().failuresThisChapter.length, 2);
+  ok(core.retryChapter('manual', { count: false }));
+  assert.equal(core.view().failuresThisChapter.length, 2, 'Manual restart after a death is not another death');
+  finishStandardChapter(core);
+  assert.equal(core.view().pendingResult.failedAttempts, 2);
+  ok(core.continueCampaign());
+  assert.equal(core.view().chapter.number, 2);
+  assert.equal(core.view().failuresThisChapter.length, 0, 'Next chapter starts its own retry total');
 }
 
 // No resource charge for invalid or cancelled previews; exact costs start once execution begins.
@@ -130,7 +150,7 @@ function finishStandardChapter(core, { optional = false, collaboration = true } 
     assert.equal(core.view().chapter.id, CHAPTERS[i].id);
     assert.equal(core.view().attempt.broadcastOn, false);
     assert.equal(core.view().attempt.qualifiers, CHAPTERS[i].qualifiers);
-    if (i === 3) assert.equal(core.view().objectives.find((goal) => goal.id === 'broadcast-off').complete, true);
+    if (i === 3) assert.equal(core.view().optionalObjectives.find((goal) => goal.id === 'broadcast-off').complete, true);
     finishStandardChapter(core, { optional: true });
     assert.equal(core.view().pendingResult.score, 100);
     ok(core.continueCampaign());
@@ -167,6 +187,43 @@ function finishStandardChapter(core, { optional = false, collaboration = true } 
   assert.equal(core.view().campaign.grade, 'S');
   assert.equal(core.view().campaign.historyExposure, 0);
   assert.equal(GameCore.resume({ storage }).view().phase, 'campaign-complete');
+}
+
+// Chapter four accepts a public broadcast run: no gate, but leaked records,
+// extra exposure and a 10-point settlement penalty. Closing freezes the ledger.
+{
+  const storage = memoryStorage();
+  const core = new GameCore({ storage });
+  for (let i = 0; i < 3; i += 1) { finishStandardChapter(core); ok(core.continueCampaign()); }
+  assert.equal(core.view().chapter.id, 'public-report');
+  assert.equal(core.view().attempt.broadcastOn, true, 'Campaign enters chapter four while still public');
+  assert.equal(core.view().objectives.some((goal) => goal.id === 'broadcast-off'), false,
+    'Broadcast is a choice, never a boarding gate');
+  assert.equal(core.view().optionalObjectives.find((goal) => goal.id === 'broadcast-off').complete, false);
+  ok(core.advanceTime(60_000));
+  assert.equal(core.view().attempt.broadcastLeaks, 5, 'Public ledger accrues every 12 s');
+  assert.equal(core.view().attempt.exposureDelta, 10, 'Leaked records count toward exposure');
+  finishStandardChapter(core, { optional: true, keepBroadcast: true });
+  const result = core.view().pendingResult;
+  assert.equal(result.broadcastOn, true);
+  assert.equal(result.breakdown.broadcast, -10);
+  assert.equal(result.score, 90, 'Public run still clears but scores 10 less than closed');
+  assert.ok(result.events.publicLeaks >= 5);
+  assert.ok(result.exposureDelta >= 14, 'Public deliveries stack with leaked records');
+  ok(core.continueCampaign());
+  assert.equal(core.view().chapter.number, 5, 'Public broadcast run still advances');
+  assert.equal(GameCore.resume({ storage }).view().chapter.number, 5, 'Public chapter-four result saves and reloads');
+}
+{
+  const core = new GameCore();
+  for (let i = 0; i < 3; i += 1) { finishStandardChapter(core); ok(core.continueCampaign()); }
+  ok(core.advanceTime(30_000));
+  assert.equal(core.view().attempt.broadcastLeaks, 2);
+  ok(core.setBroadcast(false));
+  ok(core.advanceTime(120_000));
+  assert.equal(core.view().attempt.broadcastLeaks, 2, 'Closing the broadcast stops new public records');
+  assert.equal(core.view().attempt.exposureDelta, 4, 'Earlier leaked records remain');
+  assert.equal(core.view().optionalObjectives.find((goal) => goal.id === 'broadcast-off').complete, true);
 }
 
 // Timeout restores the fifth-chapter entry, including already committed history/broadcast.

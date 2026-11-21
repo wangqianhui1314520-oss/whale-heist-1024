@@ -2,12 +2,12 @@
 export class AssetLibrary {
   constructor(catalog, baseURL) {
     this.catalog = catalog;
-    this.baseURL = new URL(baseURL, globalThis.document?.baseURI ?? import.meta.url);
+    this.baseURL = new URL(baseURL, globalThis.document?.baseURI ?? globalThis.location?.href ?? 'file:///');
     this.images = new Map();
   }
 
-  static async load(catalogURL = new URL('../../assets/runtime-catalog.json', import.meta.url)) {
-    const resolvedURL = new URL(catalogURL, globalThis.document?.baseURI ?? import.meta.url);
+  static async load(catalogURL = new URL('assets/runtime-catalog.json', globalThis.document?.baseURI ?? globalThis.location?.href ?? 'file:///')) {
+    const resolvedURL = new URL(catalogURL, globalThis.document?.baseURI ?? globalThis.location?.href ?? 'file:///');
     const response = await fetch(resolvedURL);
     if (!response.ok) throw new Error(`Asset catalog: HTTP ${response.status}`);
     const library = new AssetLibrary(await response.json(), resolvedURL);
@@ -22,7 +22,10 @@ export class AssetLibrary {
       const entry = this.catalog.images[key];
       if (!entry) throw new Error(`Unknown image: ${key}`);
       const image = new Image();
-      image.src = new URL(entry.file, this.baseURL).href;
+      // The self-contained build embeds assets as data URIs; prefer those so a
+      // copied HTML file has no dependency on a sibling assets/ folder.
+      image.src = globalThis.__ASSET_DATA__?.[`assets/${String(entry.file).replace(/^\.?\//, '')}`]
+        ?? new URL(entry.file, this.baseURL).href;
       await image.decode();
       this.images.set(key, image);
       onProgress(++completed / needed.length);

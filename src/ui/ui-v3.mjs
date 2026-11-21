@@ -10,10 +10,9 @@ let storyAssetsPromise;
 function loadStoryAssets() {
   if (typeof globalThis.Image !== 'function' || typeof globalThis.fetch !== 'function') return null;
   if (!storyAssetsPromise) storyAssetsPromise = (async () => {
-    const catalogURL = new URL('../../assets/runtime-catalog.json', import.meta.url);
-    const response = await fetch(catalogURL);
-    if (!response.ok) throw new Error(`Story atlas: HTTP ${response.status}`);
-    const library = new AssetLibrary(await response.json(), catalogURL);
+    const catalogURL = new URL('assets/runtime-catalog.json', globalThis.document?.baseURI || globalThis.location?.href || 'file:///');
+    const catalog = globalThis.__CATALOG__ ?? await (await fetch(catalogURL)).json();
+    const library = new AssetLibrary(catalog, catalogURL);
     await library.preload(['deepseek-actions', 'grok-actions', 'claude-actions', 'glm-actions', 'water-dash-atlas', 'axe-impact-atlas', 'paper-decoy-atlas', 'scan-grid-atlas']);
     return library;
   })().catch(() => null);
@@ -23,12 +22,26 @@ function loadStoryAssets() {
 export const escapeHTML = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const esc = escapeHTML;
 // URLs substituted into CSS custom properties resolve at the consuming style
-// sheet. Make them absolute so nested UI sheets cannot relocate the asset.
-export const cssAssetURL = path => new URL(path, globalThis.document?.baseURI || new URL('../../index.html', import.meta.url)).href;
+// sheet. The single-file build embeds every asset, so prefer the data URIs and
+// fall back to a document-relative URL for the folder build.
+export const cssAssetURL = path => {
+  const embedded = globalThis.__ASSET_DATA__?.[String(path)];
+  if (embedded) return embedded;
+  return new URL(path, globalThis.document?.baseURI || globalThis.location?.href || 'file:///').href;
+};
 const TEAM = ['Grok', 'Claude', 'GLM'];
 const JOBS = { Grok: '破障', Claude: '诱饵', GLM: '扫描', DeepSeek: '行动队长' };
+// World records for system events carry no player-facing text, only their
+// internal type. Map every type before falling back so English ids such as
+// "alarm" or "world-event" can never surface in the instruction log.
+const RECORD_TYPE_LABELS = {
+  delivery: '交付任务资料', alarm: '触发警戒', broadcast: '公开广播',
+  rendezvous: '队友接应', 'remote-prepare': '远端资料装载', 'evacuation-confirm': '确认撤离',
+  'evidence-collected': '收集调查证据', 'emergency-ai-token': '应急补给',
+  'world-event': '现场事件', command: '小队指令',
+};
 const LABELS = { left: '向左', right: '向右', up: '爬梯向上', down: '爬梯向下', jump: '跳跃', dash: '冲刺', interact: '互动' };
-export const SETTINGS_DEFAULTS = Object.freeze({ masterVolume: .65, sfxVolume: .8, musicVolume: .25, subtitleScale: 1, reduceMotion: false, reduceFlashes: false, tacticalPause: true, tutorialHints: true, touchSize: 1, touchOpacity: .75, leftHanded: false, interactionMode: 'hold', textSpeed: 32, autoDialogue: false, skipSeenStory: true, storyStyle: 'cinematic', quality: 'standard', bindings: { left: 'KeyA', right: 'KeyD', up: 'KeyW', down: 'KeyS', jump: 'Space', dash: 'ShiftLeft', interact: 'KeyE' } });
+export const SETTINGS_DEFAULTS = Object.freeze({ masterVolume: .65, sfxVolume: .8, musicVolume: .25, subtitleScale: 1, reduceMotion: false, reduceFlashes: false, tacticalPause: true, tutorialHints: true, touchSize: 1, touchOpacity: .55, leftHanded: false, interactionMode: 'hold', textSpeed: 32, autoDialogue: false, skipSeenStory: true, storyStyle: 'cinematic', quality: 'standard', bindings: { left: 'KeyA', right: 'KeyD', up: 'KeyW', down: 'KeyS', jump: 'Space', dash: 'ShiftLeft', interact: 'KeyE' } });
 export function normalizedSettings(value = {}) { const source = value && typeof value === 'object' ? value : {}; return { ...SETTINGS_DEFAULTS, ...source, bindings: { ...SETTINGS_DEFAULTS.bindings, ...source.bindings } }; }
 export function keyLabel(code = '') { return ({ Space: '空格', ShiftLeft: '左 Shift', ShiftRight: '右 Shift', ArrowLeft: '←', ArrowRight: '→', ArrowUp: '↑', ArrowDown: '↓', Enter: 'Enter', Escape: 'Esc' })[code] || String(code).replace(/^Key/, '').replace(/^Digit/, ''); }
 export function formatControlHints(text, preferences = {}, touch = false) {
@@ -73,7 +86,7 @@ export function commandModel(view = {}, payload = {}) {
   return { ...preview, teammate, precise, constrained: Boolean(preview.constraintId) || cost > 0 || trainingCost > 0 || precise, cost, budget, trainingAvailable, trainingCost, remaining, tokenCost, aiTokens, aiTokenMax, reason, canConfirm: Boolean(preview.targetId) && preview.available !== false && !preview.parseError && remaining <= 0 && cost <= budget && trainingCost <= trainingAvailable && aiTokens >= tokenCost, targets: Array.isArray(preview.targets) ? preview.targets : [], constraints: Array.isArray(preview.constraints) ? preview.constraints : [], conditions: Array.isArray(preview.conditions) ? preview.conditions : [] };
 }
 export function normalizeRecord(value = {}) {
-  return { id: value.id || '', teammate: value.teammate || '小队', text: value.promptText || value.text || value.label || value.type || '行动记录', outcome: receiptText(value.receipt || value.outcome), time: typeof value.time === 'string' ? value.time : formatTime(value.elapsedMs ?? (Number(value.time) || 0) * 1000), published: Boolean(value.public ?? value.broadcastOn), chapter: value.chapter?.name || value.chapter || '', room: value.room?.name || value.room || '' };
+  return { id: value.id || '', teammate: value.teammate || '小队', text: value.promptText || value.text || value.label || RECORD_TYPE_LABELS[value.type] || '行动记录', outcome: receiptText(value.receipt || value.outcome), time: typeof value.time === 'string' ? value.time : formatTime(value.elapsedMs ?? (Number(value.time) || 0) * 1000), published: Boolean(value.public ?? value.broadcastOn), chapter: value.chapter?.name || value.chapter || '', room: value.room?.name || value.room || '' };
 }
 const ico = rasterIconHTML;
 const btn = (action, text, type = '', attrs = '') => `<button type="button" class="game-button ${type}" data-action="${action}" ${attrs}>${text}</button>`;
@@ -114,7 +127,7 @@ export class UIV3Controller {
 
   ensureHUD() {
     const root = this.ui.root;
-    root.insertAdjacentHTML('beforeend', `<button class="hud-map-button" data-action="map-open" type="button" aria-label="房间总览">${artMark('map')}<span class="action-label">航图</span></button><button class="objective-toggle" type="button" data-action="ui-objectives" aria-expanded="false" aria-label="任务清单">${artMark('objective')}<span class="action-label">任务清单</span> <span data-v3="objective-summary"></span></button><section class="tutorial-card" hidden aria-label="当前目标"><div class="tutorial-top"><span data-v3="tutorial-title"></span><small data-v3="tutorial-count"></small></div><p data-v3="tutorial-text"></p><div class="tutorial-actions">${btn('tutorial-hint', '需要提示', 'text-button')}${btn('tutorial-skip', '跳过教程', 'text-button')}</div><div class="tutorial-rail"><i></i></div></section><div class="room-chip" data-v3="room-chip"></div>`);
+    root.insertAdjacentHTML('beforeend', `<button class="hud-map-button" data-action="map-open" type="button" aria-label="房间总览">${artMark('map')}<span class="action-label">航图</span></button><button class="objective-toggle" type="button" data-action="ui-objectives" aria-expanded="false" aria-label="任务清单">${artMark('objective')}<span class="action-label">下一步</span> <span data-v3="objective-summary"></span><small data-v3="objective-progress"></small></button><button class="guidance-route-button" type="button" data-action="route-toggle" aria-pressed="false" aria-label="显示路线提示">路线提示</button><section class="tutorial-card" hidden aria-label="可选操作提示"><div class="tutorial-top"><span data-v3="tutorial-title"></span><small data-v3="tutorial-count"></small></div><p data-v3="tutorial-text"></p><div class="tutorial-actions">${btn('tutorial-hint', '需要提示', 'text-button')}${btn('tutorial-skip', '自由行动', 'text-button')}</div><small class="tutorial-note">路线与顺序自由，教程不影响通关。</small><div class="tutorial-rail"><i></i></div></section><div class="room-chip" data-v3="room-chip"></div>`);
     const strip = root.querySelector('.keyboard-strip'); if (strip) strip.dataset.v3 = 'key-strip';
     root.querySelector('.objective-panel')?.insertAdjacentHTML('beforeend', '<section class="optional-objectives-hud" hidden><h3>可选支线</h3><ul class="map-objectives" data-v3="optional-objectives"></ul><small>不影响主线通关</small></section>');
   }
@@ -123,7 +136,7 @@ export class UIV3Controller {
     if (action.startsWith('ui-')) {
       if (action === 'ui-setting-tab') { this.settingsTab = element.dataset.tab; this.renderSettings(); this.ui.menu.querySelector(`[data-action="ui-setting-tab"][data-tab="${this.settingsTab}"]`)?.focus({ preventScroll: true }); }
       if (action === 'ui-archive-tab') { this.archiveTab = element.dataset.tab; this.renderArchive(); this.ui.menu.querySelector(`[data-action="ui-archive-tab"][data-tab="${this.archiveTab}"]`)?.focus({ preventScroll: true }); }
-      if (action === 'ui-command-more') { this.moreCommand = !this.moreCommand; this.ui.menu.querySelector('.command-advanced').hidden = !this.moreCommand; this.ui.menu.querySelector('.v3-command-panel').classList.toggle('is-expanded', this.moreCommand); element.setAttribute('aria-expanded', String(this.moreCommand)); }
+      if (action === 'ui-command-more') { this.moreCommand = !this.moreCommand; this.ui.menu.querySelector('.command-advanced').hidden = !this.moreCommand; const panel = this.ui.menu.querySelector('.v3-command-panel'); panel.classList.toggle('is-expanded', this.moreCommand); element.setAttribute('aria-expanded', String(this.moreCommand)); if (this.moreCommand) panel.querySelector('.v3-command-body')?.scrollTo({ top: panel.querySelector('.v3-command-body').scrollHeight, behavior: 'smooth' }); }
       if (action === 'ui-command-forecast') { this.forecastOpen = !this.forecastOpen; const panel = this.ui.menu.querySelector('.command-forecast'); if (panel) panel.hidden = !this.forecastOpen; element.setAttribute('aria-expanded', String(this.forecastOpen)); this.ui.menu.querySelector('.v3-command-panel')?.classList.toggle('has-forecast', this.forecastOpen); }
       if (action === 'ui-objectives') {
         const expanded = this.ui.root.classList.toggle('objectives-expanded');
@@ -197,12 +210,23 @@ export class UIV3Controller {
     const chapterKey = core.chapter?.id || core.chapter?.number || '';
     if (chapterKey && chapterKey !== this.objectiveChapterKey) {
       this.objectiveChapterKey = chapterKey;
-      root.classList.remove('objectives-expanded');
-      root.querySelector('.objective-toggle')?.setAttribute('aria-expanded', 'false');
+      // Chapters 4-5 hinge on a short checklist (set the beacon, decide on the
+      // broadcast, gather everyone). Open it once on entry so the final stretch
+      // is readable without hunting for the toggle. Phones keep it collapsed:
+      // there the checklist would cover the evacuation banner and the crew.
+      const finalStretch = Number(core.chapter?.number || 0) >= 4 && Number(globalThis.innerWidth || 0) >= 960;
+      root.classList.toggle('objectives-expanded', finalStretch);
+      root.querySelector('.objective-toggle')?.setAttribute('aria-expanded', String(finalStretch));
     }
     this.syncOptionalObjectives();
     const objective = list(core.objectives).find((item) => !item.complete);
-    const objectiveText = compactObjective(objective?.label || '任务完成，返回鲸艇');
+    const guidance = world.guidance;
+    const objectiveText = guidance?.label || compactObjective(objective?.label || '任务完成，返回鲸艇');
+    shell.dataset.chapter = String(core.chapter?.number || 1);
+    this.text(root, 'objective-progress', guidance?.progress || '');
+    const routeButton = root.querySelector('.guidance-route-button');
+    if (routeButton) { routeButton.hidden = this.ui.screen !== 'none'; routeButton.setAttribute('aria-pressed', String(Boolean(world.routeVisible))); routeButton.textContent = world.routeVisible ? '收起路线' : '路线提示'; }
+    if (guidance) root.querySelector('.objective-toggle')?.setAttribute('title', formatControlHints(guidance.hint, this.settings, this.isTouch));
     this.text(root, 'objective-summary', objectiveText);
     const room = world.room;
     this.text(root, 'room-chip', room ? `${room.name || ''}${room.total ? `  ${Number(room.index ?? 1)}/${room.total}` : ''}` : '');
@@ -214,9 +238,9 @@ export class UIV3Controller {
     card.hidden = this.ui.screen !== 'none' || !core.chapter || !guided;
     const objectiveToggle = root.querySelector('.objective-toggle');
     if (objectiveToggle) {
-      // While the tutorial is active its card is the single source of truth;
-      // after that, the toggle is the only persistent objective summary.
-      objectiveToggle.hidden = this.ui.screen !== 'none' || guided;
+      // Mission requirements remain visible while optional teaching is active.
+      // A teaching step is never the player's only displayed objective.
+      objectiveToggle.hidden = this.ui.screen !== 'none';
       objectiveToggle.setAttribute('aria-label', objective ? `当前目标：${objectiveText}` : '当前目标：任务完成，返回鲸艇');
     }
     const objectivePanel = root.querySelector('.objective-panel');
@@ -228,7 +252,7 @@ export class UIV3Controller {
     const keyStrip = root.querySelector('[data-v3="key-strip"]');
     if (keyStrip) keyStrip.hidden = this.ui.screen !== 'none' || !guided || this.isTouch;
     if (!card.hidden) {
-      this.text(card, 'tutorial-title', '当前目标');
+      this.text(card, 'tutorial-title', '可选操作提示');
       this.text(card, 'tutorial-text', formatControlHints(guided ? tutorial.text : world.message || objective?.label || '回到鲸艇，松开后再次按住互动登艇。', this.settings, this.isTouch));
       this.text(card, 'tutorial-count', guided ? `${Math.min(Number(tutorial.step || 0) + 1, tutorial.total || 1)} / ${tutorial.total || 1}` : '');
       card.querySelector('.tutorial-actions').hidden = !guided;
@@ -314,7 +338,7 @@ export class UIV3Controller {
     let body = '';
     if (this.settingsTab === 'audio') body = this.range('masterVolume', '总音量', 0, 1, .05) + this.range('musicVolume', '背景音乐', 0, 1, .05) + this.range('ambienceVolume', '环境音', 0, 1, .05, '港口水声、机房运转与警戒氛围') + this.range('sfxVolume', '动作与界面音效', 0, 1, .05) + this.range('voiceVolume', '角色语音', 0, 1, .05, '小队指令确认等短句') + '<p class="setting-note">声音会在你首次操作后播放。离开此页时设置已保存。</p>';
     if (this.settingsTab === 'controls') body = `<div class="binding-list">${Object.entries(LABELS).map(([action, label]) => `<div class="binding-row"><span>${label}</span>${btn('bind-key', esc(keyLabel(this.settings.bindings[action])), 'compact key-binding', `data-binding="${action}"`)}</div>`).join('')}</div><div class="binding-notice" data-v3="binding-notice" hidden></div>` + this.range('touchSize', '触控按钮大小', 1, 1.4, .05, '命中区域始终至少 44 × 44') + this.range('touchOpacity', '触控按钮透明度', .35, 1, .05) + this.toggle('leftHanded', '左手操作布局', '移动与动作区域交换') + this.select('interactionMode', '互动方式', [['hold', '按住直到完成'], ['toggle', '点击开始，再点取消']]);
-    if (this.settingsTab === 'accessibility') body = this.range('subtitleScale', '字幕与说明字号', 1, 1.5, .1) + this.range('textSpeed', '剧情文字速度', 12, 72, 4) + this.toggle('autoDialogue', '自动推进剧情') + this.toggle('skipSeenStory', '重玩时跳过已看剧情') + this.toggle('tacticalPause', '编排指令时暂停', '剧情体验生效；挑战遵循当前契约') + this.toggle('tutorialHints', '情境教学与卡住提示') + this.toggle('reduceMotion', '减少动态效果', '降低位移、晃动与粒子运动') + this.toggle('reduceFlashes', '降低闪烁效果', '保留危险形状和文字预警');
+    if (this.settingsTab === 'accessibility') body = this.range('subtitleScale', '字幕与说明字号', 1, 1.5, .1) + this.range('textSpeed', '剧情文字速度', 12, 72, 4) + this.toggle('autoDialogue', '自动推进剧情') + this.toggle('skipSeenStory', '重玩时跳过已看剧情') + this.toggle('tacticalPause', '编排指令时暂停', '剧情体验生效；挑战遵循当前契约') + this.toggle('tutorialHints', '操作提示（不影响通关）') + this.toggle('reduceMotion', '减少动态效果', '降低位移、晃动与粒子运动') + this.toggle('reduceFlashes', '降低闪烁效果', '保留危险形状和文字预警');
     if (this.settingsTab === 'system') body = this.select('storyStyle', '剧情演出风格', [['cinematic', '电影卡片式'], ['stage', '实景小剧场'], ['comic', '分镜动态漫画']], '三种演出风格，剧情和记录不变。') + this.select('quality', '画面效果', [['standard', '标准'], ['low', '轻量']]) + `<div class="setting-row"><span><b>全屏游玩</b><small>保持完整横版场景</small></span>${btn('ui-fullscreen', document.fullscreenElement ? '退出全屏' : '进入全屏', 'compact')}</div><details class="save-tools art-details"><summary>导入 / 导出航程</summary><p>导入前校验版本。</p>${btn('save-export', '导出航程', 'compact')}<label class="import-label">粘贴航程文件内容<textarea data-import-text spellcheck="false" placeholder="在这里粘贴导出的 JSON 内容" aria-label="导入存档内容"></textarea></label>${btn('save-import', '校验并导入', 'compact')}</details><div class="settings-reset">${btn('settings-reset', '恢复默认设置', 'text-button')}<span>仅恢复设置，不清空航程。</span></div>`;
     this.panel('MAKE YOURSELF AT HOME', '设置', `<nav class="v3-tabs" aria-label="设置类别">${tabs.map(([id, label]) => `<button type="button" data-action="ui-setting-tab" data-tab="${id}" aria-pressed="${this.settingsTab === id}">${label}</button>`).join('')}</nav><div class="settings-content">${body}</div>`, 'v3-settings', `<span class="autosave-note">即时生效 · 自动保存</span>${btn('settings-back', '完成', 'primary')}`); this.syncSettings();
   }
@@ -344,7 +368,7 @@ export class UIV3Controller {
     const styleButtons = `<nav class="story-style-switch" aria-label="剧情演出风格"><span>演出</span>${[['cinematic','电影'],['stage','实景'],['comic','分镜']].map(([id,label]) => btn('story-style', label, `story-style-button ${id === style ? 'is-active' : ''}`, `data-style="${id}" aria-pressed="${id === style}"`)).join('')}</nav>`;
     this.ui.menu.dataset.storyStyle = style;
     const stage = comic ? '<main class="comic-board" data-v3="comic-board" aria-label="完整三格分镜：观察、行动、结果"></main>' : `<div class="story-stage"><canvas class="story-stage-canvas" data-v3="story-stage-canvas" aria-hidden="true"></canvas><div class="story-orbit"></div><div class="story-fx-layer" aria-hidden="true"><i class="story-fx-beacon"></i><i class="story-fx-page"></i><i class="story-fx-water"></i><i class="story-fx-impact"></i><i class="story-fx-scan"></i><i class="story-fx-alert"></i><i class="story-fx-record"></i></div><img class="story-speaker" data-v3="story-portrait" src="${portraitPath(story.speaker)}" alt=""><img class="story-paper" src="assets/ui/whale-emblem.webp" alt=""></div>`;
-    this.ui.menu.innerHTML = `<div class="story-backdrop ${comic ? 'comic-backdrop' : ''}" style="background-image:url('${storyArtFor(story, comic ? 'stage' : style)}'),url('${storyBackdrop(story.backdrop)}')"></div><div class="${comic ? 'comic-shade' : 'story-shade'}"></div><header class="story-heading ${comic ? 'comic-heading' : ''}"><span data-v3="story-title">${esc(story.title || '鲸鱼魔盗团')}</span><small data-v3="story-count"></small>${styleButtons}${btn('ui-story-history', '对话历史', 'text-button')}${btn('story-skip', '跳过演出', 'text-button')}</header>${stage}<section class="story-dialogue ${comic ? 'comic-dialogue' : ''}" role="dialog" aria-label="剧情对话"><div class="story-speaker-name" data-v3="story-speaker"></div><p data-v3="story-text"></p><div class="story-choice" data-v3="story-choice"></div><div class="story-dialogue-footer"><span data-v3="story-auto-note">点击或按空格推进</span>${btn('story-next', '继续 →', 'primary')}</div></section><aside class="story-history" ${historyOpen ? '' : 'hidden'}><h3>本段对话</h3><div data-v3="story-history"></div></aside><div class="story-progress"><i></i></div>`;
+    this.ui.menu.innerHTML = `<div class="story-backdrop ${comic ? 'comic-backdrop' : ''}" style="background-image:url('${cssAssetURL(storyArtFor(story, comic ? 'stage' : style))}'),url('${cssAssetURL(storyBackdrop(story.backdrop))}')"></div><div class="${comic ? 'comic-shade' : 'story-shade'}"></div><header class="story-heading ${comic ? 'comic-heading' : ''}"><span data-v3="story-title">${esc(story.title || '鲸鱼魔盗团')}</span><small data-v3="story-count"></small>${styleButtons}${btn('ui-story-history', '对话历史', 'text-button')}${btn('story-skip', '跳过演出', 'text-button')}</header>${stage}<section class="story-dialogue ${comic ? 'comic-dialogue' : ''}" role="dialog" aria-label="剧情对话"><div class="story-speaker-name" data-v3="story-speaker"></div><p data-v3="story-text"></p><div class="story-choice" data-v3="story-choice"></div><div class="story-dialogue-footer"><span data-v3="story-auto-note">点击或按空格推进</span>${btn('story-next', '继续 →', 'primary')}</div></section><aside class="story-history" ${historyOpen ? '' : 'hidden'}><h3>本段对话</h3><div data-v3="story-history"></div></aside><div class="story-progress"><i></i></div>`;
     this.comicPageSignature = ''; this.storyChoiceSignature = ''; this.storyArtSignature = ''; this.storyLayoutKey = ''; this.storyHistorySignature = ''; this.syncStory();
   }
 
@@ -359,7 +383,7 @@ export class UIV3Controller {
     const backdrop = root.querySelector('.story-backdrop');
     if (backdrop && artSignature !== this.storyArtSignature) {
       this.storyArtSignature = artSignature;
-      backdrop.style.backgroundImage = `url('${artPath}'),url('${storyBackdrop(story.backdrop)}')`;
+      backdrop.style.backgroundImage = `url('${cssAssetURL(artPath)}'),url('${cssAssetURL(storyBackdrop(story.backdrop))}')`;
     }
     this.text(root, 'story-title', story.title || '鲸鱼魔盗团'); this.text(root, 'story-count', `${index + 1} / ${total}`); this.text(root, 'story-speaker', story.speaker || 'DeepSeek');
     const image = root.querySelector('[data-v3="story-portrait"]'); if (image && image.getAttribute('src') !== portraitPath(story.speaker)) image.src = portraitPath(story.speaker);
@@ -377,7 +401,7 @@ export class UIV3Controller {
       const signature = JSON.stringify([this.storySessionId, storyBeatFor(story), frame]);
       if (signature !== this.comicPageSignature) {
         this.comicPageSignature = signature; board.style.setProperty('--comic-panel-count', 3);
-        board.innerHTML = [0, 1, 2].map(panel => `<article class="comic-panel ${panel === frame ? 'is-active' : ''}" data-comic-frame="${panel}" style="background-image:url('${storyArtFor(story, 'comic')}');background-size:300% 100%;background-position:${panel * 50}% 50%"><span class="comic-caption">${panel + 1} · ${['观察', '行动', '结果'][panel]}</span></article>`).join('');
+        board.innerHTML = [0, 1, 2].map(panel => `<article class="comic-panel ${panel === frame ? 'is-active' : ''}" data-comic-frame="${panel}" style="background-image:url('${cssAssetURL(storyArtFor(story, 'comic'))}');background-size:300% 100%;background-position:${panel * 50}% 50%"><span class="comic-caption">${panel + 1} · ${['观察', '行动', '结果'][panel]}</span></article>`).join('');
       }
     }
     root.querySelectorAll('.story-style-button').forEach((button) => { const active = button.dataset.style === (this.settings.storyStyle || 'cinematic'); button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); });
@@ -391,7 +415,7 @@ export class UIV3Controller {
     }
     const next = root.querySelector('[data-action="story-next"]'); if (next) {
       const blocked = Boolean(story.choice?.options?.length) && !story.choiceSelected;
-      const ending = story.replay ? '返回调查档案 →' : story.sceneId === 'prologue' ? '开始行动 →' : story.sceneId === 'epilogue' ? '查看航程总结 →' : /^chapter[1-5]-briefing$/.test(story.sceneId || '') ? '查看任务 →' : '继续行动 →';
+      const ending = story.replay ? '返回调查档案 →' : ['prologue', 'departure'].includes(story.sceneId) ? '开始行动 →' : story.sceneId === 'epilogue' ? '查看航程总结 →' : /^chapter[1-5]-briefing$/.test(story.sceneId || '') ? '查看任务 →' : '继续行动 →';
       next.disabled = blocked; next.textContent = blocked ? '先选择行动' : index + 1 >= total ? ending : '继续 →';
     }
     this.text(root, 'story-auto-note', story.choice?.options?.length && !story.choiceSelected ? '请选择一个关键词，再继续' : story.auto || this.settings.autoDialogue ? '自动推进中 · 也可点击继续' : '点击继续；文字未完时点击可立即显示');
@@ -499,7 +523,7 @@ export class UIV3Controller {
       return `<article class="analysis-clue">${ico(clue.kind === 'sensor' ? 'scan' : clue.kind === 'screen' ? 'qualifier' : 'book', 'clue-art')}<div><b>${esc(clue.label)}</b><small>${collected ? analyzed ? '已分析' : '已收集' : '未收集'}</small>${collected ? `<details class="art-details"><summary>查看证据</summary><p>${esc(clue.text)}</p></details>` : ''}</div>${collected && !analyzed ? btn('analysis-analyze', action, 'compact', `data-clue-id="${esc(clue.id)}"`) : `<span class="analysis-state">${action}</span>`}</article>`;
     }).join('');
     const repairRows = list(suggestions.suggestions).map((repair) => btn('analysis-repair', `采用「${esc(repair.label)}」并补充 1 Token`, 'compact', `data-repair-id="${esc(repair.id)}"`)).join('') || '<p class="v3-empty">先完成证据分析，再解锁修复建议。</p>';
-    this.panel('EVIDENCE DESK', '线索分析', `<p class="panel-lead">${esc(file.briefing || '仅分析游戏内日志、配置和证据链。')}</p><div class="analysis-meter"><strong>${ico('token')}分析 Token ${Number(progress.tokens ?? session.tokens ?? 0)} / ${Number(progress.tokenMax ?? 6)}</strong><span>已收集 ${Number(progress.collected || 0)} / ${Number(progress.total || list(file.clues).length)} · 已分析 ${Number(progress.analyzed || 0)}</span></div><div class="analysis-clues">${clueRows || '<p class="v3-empty">当前章节没有可分析证据。</p>'}</div><section class="analysis-repairs"><h3>修复建议</h3>${repairRows}</section><p class="tiny-note">离线虚构沙盒：不连接真实服务器。</p>`, 'v3-analysis', btn('overlay-back', '返回行动', 'primary'));
+    this.panel('EVIDENCE DESK', '鲸港演算舱', `<div class="analysis-station-heading"><div class="analysis-station-art" role="img" aria-label="蓝色演算终端"></div><div><strong>${esc(file.title || '线索分析')}</strong><p>收集线索 → 分析摘要 → 选择修复建议</p></div></div><p class="panel-lead">${esc(file.briefing || '仅分析游戏内日志、配置和证据链。')}</p><div class="analysis-meter"><strong>${ico('token')}分析 Token ${Number(progress.tokens ?? session.tokens ?? 0)} / ${Number(progress.tokenMax ?? 6)}</strong><span>已收集 ${Number(progress.collected || 0)} / ${Number(progress.total || list(file.clues).length)} · 已分析 ${Number(progress.analyzed || 0)}</span></div><div class="analysis-clues">${clueRows || '<p class="v3-empty">当前章节没有可分析证据。</p>'}</div><section class="analysis-repairs"><h3>修复建议</h3>${repairRows}</section><p class="tiny-note">离线虚构沙盒：不连接真实服务器。</p>`, 'v3-analysis', btn('overlay-back', '返回行动', 'primary'));
   }
 
   renderFailure() { const failure = this.ui.payload.failure || this.ui.payload, checkpoint = this.view.checkpoint || {}; const reason = ({ 'health-depleted': '生命耗尽了。小队会在安全处等你。', 'evacuation-timeout': '最后的舱门关闭了。下次出发前，先安排好返程。', fall: '这段落差比想象中更深。试试旁边的梯路。' })[failure.reason] || failure.message || '这次行动暂时告一段落，再调整一下安排。'; const last = list(this.view.records).at(-1); this.panel('REGROUP & TRY AGAIN', '重新集合', `<div class="failure-hero"><img src="${portraitPath('DeepSeek')}" alt=""><div><h3>${esc(failure.title || '还有一次漂亮的机会。')}</h3><p>${esc(reason)}</p>${failure.location ? `<small>危险位置：${esc(failure.location)}</small>` : ''}</div></div>${last ? `<div class="failure-last"><span>最后一条指令</span>${this.recordHTML([last])}</div>` : ''}<p class="tiny-note">${checkpoint.available ? `检查点：${esc(checkpoint.label || '本章安全区')}。重试会恢复当时的完整行动状态。` : '本章尚无检查点，将从章首重新出发。'}</p>`, 'v3-failure', `${btn('tutorial-hint', '查看提示', 'text-button')}${btn('retry', '本章重来')}${btn(checkpoint.available ? 'retry-checkpoint' : 'retry', checkpoint.available ? '从检查点再试' : '重新出发', 'primary')}`); }
@@ -534,28 +558,81 @@ export class UIV3Controller {
   renderChapterResult() {
     const result = this.ui.payload.result || this.view.core?.pendingResult || {}, chapter = CHAPTERS.find((item) => item.id === result.chapterId) || this.view.core?.chapter || {};
     const breakdown = result.breakdown || {}, grade = result.grade || (result.score >= 90 ? 'S' : result.score >= 75 ? 'A' : 'B');
-    this.panel(`CHAPTER ${String(chapter.number || 1).padStart(2, '0')} COMPLETE`, esc(chapter.name || '本章完成'), `<div class="result-visual-hero"><div class="result-visual-backdrop" style="--result-bg:url('${cssAssetURL('assets/backgrounds/results-background.webp')}')"></div><img src="assets/foreground/whale-crew-hero-v2.webp" alt="全员返航" class="result-crew-art"><div class="grade-seal" aria-label="评级 ${esc(grade)}">${esc(grade)}</div><div class="result-visual-copy"><span>行动评分</span><strong>${Number(result.score || 0)}<small> / 100</small></strong><p>小队已登艇，数据安全归档。</p></div></div><div class="result-metrics"><span>${ico('clock', 'metric-art metric-art-time')}<small>用时</small><b>${formatTime(result.elapsedMs)}</b></span><span>${ico('scan', 'metric-art metric-art-alert')}<small title="公开指令 / 公开交付 / 警报 各计 2 点，上限 20">暴露</small><b>${result.exposureDelta || 0}</b></span><span>${ico('retry', 'metric-art metric-art-retry')}<small>重试</small><b>${result.failedAttempts || 0}</b></span></div><p class="tiny-note">暴露 = 公开指令 / 公开交付 / 警报，各 +2，上限 20；广播开着时每次公开动作都会累积。</p><div class="score-lines"><span>${ico('map', 'metric-art metric-art-objective')}<small>任务</small><b>${breakdown.required || 0}</b></span><span>${ico('map', 'metric-art metric-art-explore')}<small>探索</small><b>${breakdown.optional || 0}</b></span><span>${ico('interact', 'metric-art metric-art-crew')}<small>协作</small><b>${breakdown.collaboration || 0}</b></span><span>${ico('scan', 'metric-art metric-art-stealth')}<small>低警戒</small><b>${breakdown.lowAlert || 0}</b></span></div><div class="result-crew-strip">${list(chapter.teammates || ['DeepSeek', 'Grok', 'Claude', 'GLM']).map((name) => `<span><img src="${portraitPath(name)}" alt="${name}"><b>${esc(name)}</b></span>`).join('')}</div>`, 'v3-results', `${actionBtn('retry', '再试一次', 'retry')}${actionBtn('continue', chapter.number === 5 ? '全员返航' : '下一章 →', 'play', 'primary')}`);
+    // The after-action report reuses the settlement screen so the score card is
+    // always one step away; it never changes the score, only explains the run.
+    if (this.ui.payload.report) { this.renderBattleReport(result, chapter, grade, this.ui.payload.cooperation || {}); return; }
+    const alarms = Number(result.events?.alarms || 0), gap = Math.max(0, 90 - Number(result.score || 0));
+    const improve = gap > 0 ? `<p class="tiny-note result-improve">距 S 还差 <b>${gap}</b> 分：探索最多再 +${Math.max(0, 20 - Number(breakdown.optional || 0))}，低警戒最多再 +${Math.max(0, 10 - Number(breakdown.lowAlert || 0))}${alarms ? `（本局警报 ${alarms} 次）` : ''}。</p>` : '';
+    const cooperation = this.ui.payload.cooperation || null;
+    const mvpLines = { Grok: '最硬的墙都交给了他。', Claude: '守卫的注意力都被纸页带走了。', GLM: '每一处红边都被提前标了出来。' };
+    const perCrew = cooperation?.perCrew || {};
+    const crewLine = cooperation ? ['Grok', 'Claude', 'GLM'].map((name) => perCrew[name] && Number(perCrew[name].effects) > 0 ? `${name} ${name === 'Grok' ? '处理' : name === 'Claude' ? '引开' : '扫出'} ${perCrew[name].effects}` : '').filter(Boolean).join(' · ') : '';
+    const recap = cooperation ? `<div class="cooperation-recap"><span>本次配合</span><p>你下达 <b>${cooperation.orders || 0}</b> 条指令，AI 自主协助 <b>${cooperation.autoAssists || 0}</b> 次、主动提示 <b>${cooperation.autoHints || 0}</b> 次。</p>${crewLine ? `<p>${crewLine}</p>` : ''}${cooperation.completed > 0 && cooperation.mvp ? `<p>本局 MVP：<b>${esc(cooperation.mvp)}</b> —— ${mvpLines[cooperation.mvp] || '配合得很稳。'}</p>` : ''}</div>` : '';
+    this.panel(`CHAPTER ${String(chapter.number || 1).padStart(2, '0')} COMPLETE`, esc(chapter.name || '本章完成'), `<div class="result-visual-hero"><div class="result-visual-backdrop" style="--result-bg:url('${cssAssetURL('assets/backgrounds/results-background.webp')}')"></div><img src="assets/foreground/whale-crew-hero-v2.webp" alt="全员返航" class="result-crew-art"><div class="grade-seal" aria-label="评级 ${esc(grade)}">${esc(grade)}</div><div class="result-visual-copy"><span>行动评分</span><strong>${Number(result.score || 0)}<small> / 100</small></strong><p>小队已登艇，数据安全归档。</p></div></div><div class="result-metrics"><span>${ico('clock', 'metric-art metric-art-time')}<small>用时</small><b>${formatTime(result.elapsedMs)}</b></span><span>${ico('scan', 'metric-art metric-art-alert')}<small title="公开指令 / 公开交付 / 公开外泄 / 警报 各计 2 点，上限 20">暴露</small><b>${result.exposureDelta || 0}</b></span><span>${ico('retry', 'metric-art metric-art-retry')}<small title="本章重来的总次数（含血量耗尽自动重来与检查点续玩）">重试</small><b>${result.failedAttempts || 0}</b></span></div>${recap}<p class="tiny-note">暴露 = 公开指令 / 公开交付 / 公开外泄 / 警报，各 +2，上限 20；每次警报还会扣 2 点低警戒分。广播保持公开时公开记录持续累积，结算另扣 10 分广播分。</p>${improve}<div class="score-lines"><span>${ico('map', 'metric-art metric-art-objective')}<small>任务</small><b>${breakdown.required || 0}</b></span><span>${ico('map', 'metric-art metric-art-explore')}<small>探索</small><b>${breakdown.optional || 0}</b></span><span>${ico('interact', 'metric-art metric-art-crew')}<small>协作</small><b>${breakdown.collaboration || 0}</b></span><span>${ico('scan', 'metric-art metric-art-stealth')}<small>低警戒</small><b>${breakdown.lowAlert || 0}</b></span>${breakdown.broadcast !== undefined ? `<span>${ico('scan', 'metric-art metric-art-stealth')}<small>广播</small><b>${breakdown.broadcast}</b></span>` : ''}</div><div class="result-crew-strip">${list(chapter.teammates || ['DeepSeek', 'Grok', 'Claude', 'GLM']).map((name) => `<span><img src="${portraitPath(name)}" alt="${name}"><b>${esc(name)}</b></span>`).join('')}</div>`, 'v3-results', `${cooperation ? actionBtn('battle-report-open', '协作战报', 'book') : ''}${actionBtn('retry', '再试一次', 'retry')}${actionBtn('continue', chapter.number === 5 ? '全员返航' : '下一章 →', 'play', 'primary')}`);
+  }
+
+  renderBattleReport(result = {}, chapter = {}, grade = 'B', cooperation = {}) {
+    const orders = Number(cooperation.orders || 0), autoAssists = Number(cooperation.autoAssists || 0), autoHints = Number(cooperation.autoHints || 0);
+    const receipts = list(cooperation.receipts);
+    const autoLog = list(cooperation.autoLog);
+    const perCrew = cooperation.perCrew || {};
+    const mvpLines = { Grok: '最硬的墙都交给了他。', Claude: '守卫的注意力都被纸页带走了。', GLM: '每一处红边都被提前标了出来。' };
+    const crewTag = { Grok: '破障', Claude: '诱饵', GLM: '扫描' };
+    // Card 1 — what the player actually asked for. Showing the request next to
+    // the result makes the split between player intent and AI execution legible.
+    const commandRows = receipts.length
+      ? receipts.slice(-4).map((row) => `<li class="${row.failed ? 'is-failed' : ''}"><img src="${portraitPath(row.teammate)}" alt=""><div><b>${esc(row.teammate)} · ${esc(row.promptText || row.targetId || '行动')}</b><span>${esc(row.failed ? '未能完成，消耗已退还' : (row.outcome || '已完成'))}</span></div></li>`).join('')
+      : '<li class="battle-card-empty">本局还没有下达指令。靠近目标按 E 就能安排队友。</li>';
+    // Card 2 — autonomous coverage. These are real assists the AI performed
+    // without an order, so the report can credit them explicitly. Idle chatter
+    // is counted as a hint (never an assist) so the badge cannot claim work the
+    // card does not list.
+    const autoRows = autoLog.length
+      ? autoLog.slice(-4).map((row) => `<li><img src="${portraitPath(row.name)}" alt=""><div><b>${esc(row.name)} ${row.kind === 'hint' ? '主动提示' : '自主补位'}</b><span>${esc(row.text)}</span></div></li>`).join('')
+      : '<li class="battle-card-empty">AI 一直在待命，这一局没有需要补位的时刻。</li>';
+    // Card 3 — the handoffs: who did what so the player could move.
+    const keyRows = [];
+    const effects = (name) => Number(perCrew[name]?.effects || 0);
+    if (effects('Grok') > 0) keyRows.push({ name: 'Grok', text: `撞开 ${effects('Grok')} 处障碍与节点，替你省下绕路` });
+    if (effects('Claude') > 0) keyRows.push({ name: 'Claude', text: `引开 ${effects('Claude')} 名守卫，你从空档穿过` });
+    if (effects('GLM') > 0) keyRows.push({ name: 'GLM', text: `扫出 ${effects('GLM')} 处陷阱，你提前避开红边` });
+    if (!keyRows.length && autoAssists > 0) keyRows.push({ name: '小队', text: `主动补位 ${autoAssists} 次，替你标出危险区` });
+    if (!keyRows.length) keyRows.push({ name: '小队', text: '这一局没有额外配合，你和队友各自把路走完了' });
+    const keyHTML = keyRows.map((row) => `<li><img src="${portraitPath(row.name)}" alt=""><div><b>${esc(row.name)} → 你</b><span>${esc(row.text)}</span></div></li>`).join('');
+    const mvp = cooperation.completed > 0 && cooperation.mvp ? `<p class="battle-report-mvp">本局 MVP · <b>${esc(cooperation.mvp)}</b> ${esc(crewTag[cooperation.mvp] || '')} —— ${esc(mvpLines[cooperation.mvp] || '配合得很稳。')}</p>` : '';
+    const body = `<div class="battle-report-lead"><span class="battle-report-grade" aria-label="评级 ${esc(grade)}">${esc(grade)}</span><p><b>${esc(chapter.name || '本章')}</b> · 你下达 <b>${orders}</b> 条指令，AI 自主补位 <b>${autoAssists}</b> 次${autoHints > 0 ? `、主动提示 <b>${autoHints}</b> 次` : ''}。下面一屏说清这一局谁帮了谁。</p></div><div class="battle-report-grid"><article class="battle-card is-commands"><header>${ico('interact', 'battle-card-icon')}<b>你的指令</b><em>${orders} 条</em></header><ul>${commandRows}</ul></article><article class="battle-card is-auto"><header>${ico('heart', 'battle-card-icon')}<b>AI 自主行动</b><em>${autoAssists} 补位${autoHints > 0 ? ` · ${autoHints} 提示` : ''}</em></header><ul>${autoRows}</ul></article><article class="battle-card is-key"><header>${ico('dash', 'battle-card-icon')}<b>关键配合</b><em>谁 → 你</em></header><ul>${keyHTML}</ul></article></div>${mvp}`;
+    this.panel(`CHAPTER ${String(chapter.number || 1).padStart(2, '0')} · AFTER ACTION`, '协作战报', body, 'v3-battle-report', `${actionBtn('battle-report-back', '返回结算', 'book')}${actionBtn('continue', chapter.number === 5 ? '全员返航' : '下一章 →', 'play', 'primary')}`);
   }
 
   renderCampaignResult() {
-    const campaign = this.ui.payload.campaign || this.view.core?.campaign || {}, results = list(campaign.results), total = campaign.totalScore ?? results.reduce((sum, item) => sum + Number(item.score || 0), 0), grade = campaign.grade || (total >= 450 ? 'S' : total >= 375 ? 'A' : 'B');
-    this.ui.menu.innerHTML = `<div class="results-backdrop v3-campaign-backdrop"></div><section class="menu-panel v3-panel v3-campaign" role="dialog" aria-modal="true"><div class="panel-ornament"></div><header class="v3-panel-heading"><div><div class="panel-eyebrow">ALL ABOARD · ALL TOGETHER</div><h2>全员返航</h2></div></header><div class="v3-panel-body"><div class="campaign-visual-hero"><img src="assets/foreground/whale-crew-hero-v2.webp" alt="鲸艇与全员返航"><div class="campaign-grade grade-seal">${esc(grade)}</div><div><span>魔盗团总评分</span><strong>${Number(total)}<small> / 500</small></strong><p>五章航程完成，所有资料和队友都已带回。</p></div></div><div class="result-metrics"><span>${ico('map', 'metric-art metric-art-objective')}<small>完成章节</small><b>${results.length} / 5</b></span><span>${ico('scan', 'metric-art metric-art-alert')}<small>历史暴露</small><b>${campaign.historyExposure || 0}</b></span><span>${ico('book', 'metric-art metric-art-book')}<small>调查记录</small><b>${results.reduce((n, item) => n + Number(item.events?.publicCommands || 0), 0)}</b></span></div><div class="campaign-chapter-rail">${CHAPTERS.map((chapter, index) => `<span class="${index < results.length ? 'is-complete' : ''}"><i>${String(chapter.number).padStart(2, '0')}</i><b>${esc(chapter.name)}</b></span>`).join('')}</div></div><footer class="v3-panel-footer">${actionBtn('title', '返回主菜单', 'home')}${actionBtn('chapter-select', '章节挑战', 'play', 'primary')}</footer></section>`;
+    const campaign = this.ui.payload.campaign || this.view.core?.campaign || {}, results = list(campaign.results), total = campaign.totalScore ?? results.reduce((sum, item) => sum + Number(item.score || 0), 0), grade = campaign.grade || (total >= 450 ? 'S' : total >= 360 ? 'A' : 'B');
+    const publicCommands = results.reduce((n, item) => n + Number(item.events?.publicCommands || 0), 0);
+    const collaboration = results.reduce((n, item) => n + Number(item.breakdown?.collaboration || 0), 0);
+    const detective = publicCommands === 0
+      ? '程探长把公开记录翻了三遍，只找到一张便利店收据。他把它归入「守法公民」档案，有点失落地合上了本子。'
+      : publicCommands <= 2
+        ? `程探长对着 ${publicCommands} 条公开记录看了很久：「你们的广播，比银行的补丁还勤快。」`
+        : `程探长把 ${publicCommands} 条公开记录装订成册，标题写好：《论如何把一次盗窃做成全网直播》。`;
+    this.ui.menu.innerHTML = `<div class="results-backdrop v3-campaign-backdrop"></div><section class="menu-panel v3-panel v3-campaign" role="dialog" aria-modal="true"><div class="panel-ornament"></div><header class="v3-panel-heading"><div><div class="panel-eyebrow">ALL ABOARD · ALL TOGETHER</div><h2>全员返航</h2></div></header><div class="v3-panel-body"><div class="campaign-visual-hero"><img src="assets/foreground/whale-crew-hero-v2.webp" alt="鲸艇与全员返航"><div class="campaign-grade grade-seal">${esc(grade)}</div><div><span>魔盗团总评分</span><strong>${Number(total)}<small> / 500</small></strong><p>五章航程完成，所有资料和队友都已带回。</p></div></div><div class="result-metrics"><span>${ico('map', 'metric-art metric-art-objective')}<small>完成章节</small><b>${results.length} / 5</b></span><span>${ico('scan', 'metric-art metric-art-alert')}<small>历史暴露</small><b>${campaign.historyExposure || 0}</b></span><span>${ico('interact', 'metric-art metric-art-crew')}<small>协作回应</small><b>${collaboration}</b></span><span>${ico('book', 'metric-art metric-art-book')}<small>调查记录</small><b>${publicCommands}</b></span></div><div class="campaign-chapter-rail">${CHAPTERS.map((chapter, index) => `<span class="${index < results.length ? 'is-complete' : ''}"><i>${String(chapter.number).padStart(2, '0')}</i><b>${esc(chapter.name)}</b></span>`).join('')}</div></div><footer class="v3-panel-footer"><p class="detective-line"><b>程探长 · 结案日志</b><span>${esc(detective)}</span></p>${actionBtn('title', '返回主菜单', 'home')}${actionBtn('chapter-select', '章节挑战', 'play', 'primary')}</footer></section>`;
   }
 
   renderCommand() {
     this.moreCommand = false; this.forecastOpen = false; this.targetSignature = ''; this.constraintSignature = ''; this.conditionSignature = '';
-    this.ui.menu.innerHTML = `<div class="command-dimmer"></div><section class="command-panel v3-command-panel" role="dialog" aria-modal="true" aria-label="小队指令"><header class="command-header"><img data-v3="command-portrait" src="${portraitPath('Grok')}" alt=""><div><small data-v3="command-role">选择目标</small><h2 data-v3="command-name">Grok</h2></div><span class="command-budget">${ico('token')}<b data-v3="command-budget">0</b></span><button type="button" class="icon-button" data-action="command-cancel" aria-label="返回">${ico('close')}</button></header><div class="command-step-rail" aria-hidden="true"><span class="is-active"><i>01</i>目标</span><b></b><span><i>02</i>方案</span><b></b><span><i>03</i>执行</span></div><div class="v3-command-body"><div class="command-target-control"><div class="command-target-visual" aria-hidden="true"><span class="command-target-ring"><i data-v3="command-target-image" class="command-target-art"></i><i class="command-target-pulse"></i></span><span><small>行动对象</small><b data-v3="command-target-visual-label">未锁定目标</b></span></div><label><span>目标</span><select data-command-select="prompt-target" data-payload-key="targetId" aria-label="选择行动目标"></select></label><span data-v3="command-target-count"></span></div><div class="command-preview-card" aria-live="polite"><span class="command-step-label">预览影响</span><strong data-v3="command-target-label">先选一个高亮目标</strong><p data-v3="command-status" role="status">选择目标后查看范围。</p></div><div class="command-options" role="group" aria-label="选择行动方案"><button type="button" data-action="prompt-mode" data-precise="false" aria-pressed="true"><span class="command-option-art" data-command-fx="default" aria-hidden="true"><i class="command-fx-atlas"></i>${ico('axe')}</span><span class="command-option-heading"><b>整片开路</b><em>AI Token × 1</em></span><p data-v3="command-default"></p><strong>范围较宽</strong></button><button type="button" class="precise-option" data-action="prompt-mode" data-precise="true" aria-pressed="false"><span class="command-option-art" data-command-fx="precise" aria-hidden="true"><i class="command-fx-atlas"></i>${ico('axe')}</span><span class="command-option-heading"><b>只开此处</b><em>Token × 1 · 限定词 × 1</em></span><p data-v3="command-precise"></p><strong>范围更准</strong></button></div><div class="command-receipt"><span class="command-receipt-avatar"><img data-v3="command-receipt-image" src="${portraitPath('Grok')}" alt=""></span><span>队友复述</span><p data-v3="command-receipt">先选目标，我会复述安排。</p></div><button type="button" class="command-forecast-toggle" data-action="ui-command-forecast" aria-expanded="false">${ico('scan')} 查看影响</button><section class="command-forecast" data-v3="command-forecast" hidden aria-label="行动影响"><div class="forecast-grid"><div><small>会发生什么</small><p data-v3="forecast-impact"></p></div><div><small>可能反应</small><p data-v3="forecast-risk"></p></div><div><small>返程提醒</small><p data-v3="forecast-return"></p></div></section><div class="command-advanced-wrap"><button class="command-more" data-action="ui-command-more" aria-expanded="false">高级编排 <span>⌄</span></button><div class="command-advanced" hidden><div class="command-constraint-row"><label>约束 <select data-command-select="prompt-constraint" data-payload-key="constraintId" aria-label="行动约束"></select></label><label>时机 <select data-command-select="prompt-condition" data-payload-key="condition" aria-label="行动时机"></select></div><div class="command-custom"><label>自定义短句<textarea data-command-text rows="2" placeholder="输入一句清楚的指令。" aria-label="中文指令"></textarea></label><div class="parse-row">${btn('prompt-parse', '识别短句', 'compact')}<span>仅识别已解锁句式。</span></div><div class="command-templates">${[1, 2, 3].map((index) => `<span><small>收藏 ${index}</small>${btn('template-save', '存入', 'compact text-button', `data-template-id="slot-${index}"`)}${btn('template-load', '载入', 'compact text-button', `data-template-id="slot-${index}"`)}</span>`).join('')}</div></div></div></div></div><footer class="command-submit"><span data-v3="command-cost"></span>${btn('command-confirm', '确认执行', 'primary', 'data-command-confirm disabled')}<small>Enter 确认 · Esc 返回</small></footer></section>`; this.syncCommand();
+    this.ui.menu.innerHTML = `<div class="command-dimmer"></div><section class="command-panel v3-command-panel" role="dialog" aria-modal="true" aria-label="小队指令"><header class="command-header"><img data-v3="command-portrait" src="${portraitPath('Grok')}" alt=""><div><small data-v3="command-role">选择目标</small><h2 data-v3="command-name">Grok</h2></div><span class="command-budget">${ico('token')}<b data-v3="command-budget">0</b></span><button type="button" class="icon-button" data-action="command-cancel" aria-label="返回">${ico('close')}</button></header><div class="command-step-rail" aria-hidden="true"><span class="is-active"><i>01</i>目标</span><b></b><span><i>02</i>方案</span><b></b><span><i>03</i>执行</span></div><div class="v3-command-body"><div class="command-target-control"><div class="command-target-visual" aria-hidden="true"><span class="command-target-ring"><i data-v3="command-target-image" class="command-target-art"></i><i class="command-target-pulse"></i></span><span><small>行动对象</small><b data-v3="command-target-visual-label">未锁定目标</b></span></div><label><span>目标</span><select data-command-select="prompt-target" data-payload-key="targetId" aria-label="选择行动目标"></select></label><span data-v3="command-target-count"></span></div><div class="command-preview-card" aria-live="polite"><span class="command-step-label">预览影响</span><strong data-v3="command-target-label">先选一个高亮目标</strong><p data-v3="command-status" role="status">选择目标后查看范围。</p></div><div class="command-options" role="group" aria-label="选择行动方案"><button type="button" data-action="prompt-mode" data-precise="false" aria-pressed="true"><span class="command-option-art" data-command-fx="default" aria-hidden="true"><i class="command-fx-atlas"></i>${ico('axe')}</span><span class="command-option-heading"><b data-v3="command-default-name">连续破障</b><em>AI Token × 1</em></span><p data-v3="command-default"></p><strong>范围较宽</strong></button><button type="button" class="precise-option" data-action="prompt-mode" data-precise="true" aria-pressed="false"><span class="command-option-art" data-command-fx="precise" aria-hidden="true"><i class="command-fx-atlas"></i>${ico('axe')}</span><span class="command-option-heading"><b data-v3="command-precise-name">定点破障</b><em>Token × 1 · 限定词 × 1</em></span><p data-v3="command-precise"></p><strong>范围更准</strong></button></div><div class="command-receipt"><span class="command-receipt-avatar"><img data-v3="command-receipt-image" src="${portraitPath('Grok')}" alt=""></span><span>队友复述</span><p data-v3="command-receipt">先选目标，我会复述安排。</p></div><button type="button" class="command-forecast-toggle" data-action="ui-command-forecast" aria-expanded="false">${ico('scan')} 查看影响</button><p class="command-risk-summary" data-v3="command-risk" role="status"></p><section class="command-forecast" data-v3="command-forecast" hidden aria-label="行动影响"><div class="forecast-grid"><div><small>会发生什么</small><p data-v3="forecast-impact"></p></div><div><small>可能反应</small><p data-v3="forecast-risk"></p></div><div><small>返程提醒</small><p data-v3="forecast-return"></p></div></section><div class="command-advanced-wrap"><button class="command-more" data-action="ui-command-more" aria-expanded="false">高级编排 <span>⌄</span></button><div class="command-advanced" hidden><div class="command-constraint-row"><label>约束 <select data-command-select="prompt-constraint" data-payload-key="constraintId" aria-label="行动约束"></select></label><label>时机 <select data-command-select="prompt-condition" data-payload-key="condition" aria-label="行动时机"></select></div><div class="command-custom"><label>自定义短句<textarea data-command-text rows="2" placeholder="输入一句清楚的指令。" aria-label="中文指令"></textarea></label><div class="parse-row">${btn('prompt-parse', '识别短句', 'compact')}<span>仅识别已解锁句式。</span></div><div class="command-templates">${[1, 2, 3].map((index) => `<span><small>收藏 ${index}</small>${btn('template-save', '存入', 'compact text-button', `data-template-id="slot-${index}"`)}${btn('template-load', '载入', 'compact text-button', `data-template-id="slot-${index}"`)}</span>`).join('')}</div></div></div></div></div><footer class="command-submit"><span data-v3="command-cost"></span>${btn('command-confirm', '确认执行', 'primary', 'data-command-confirm disabled')}<small>1 / 2 / 3 选队友 · Enter 执行 · Esc 返回</small></footer></section>`; this.syncCommand();
   }
   options(select, values, selected, signatureKey) { const signature = JSON.stringify(values.map((value) => [optionId(value), optionLabel(value)])); if (this[signatureKey] !== signature) { this[signatureKey] = signature; select.innerHTML = values.map((value) => `<option value="${esc(optionId(value))}">${esc(optionLabel(value))}</option>`).join(''); } [...select.options].forEach((option, index) => { const source = values[index]; option.disabled = source?.available === false || Boolean(source?.disabled); }); if (select.value !== String(selected || '')) select.value = selected || ''; select.disabled = !values.length; }
   syncCommand() {
     const root = this.ui.menu, model = commandModel(this.view, this.ui.payload), name = model.teammate;
-    if (!root.querySelector('.command-guide')) root.querySelector('.command-header').insertAdjacentHTML('afterend', '<aside class="command-guide" hidden><b>当前目标</b><span data-v3="command-guide-text"></span><button type="button" class="game-button text-button" data-action="tutorial-hint">需要提示</button><button type="button" class="game-button text-button" data-action="tutorial-skip">跳过教程</button></aside>');
+    root.dataset.commandSide = Number(model.x || 0) < 640 ? 'right' : 'left';
+    if (!root.querySelector('.command-guide')) root.querySelector('.command-header').insertAdjacentHTML('afterend', '<aside class="command-guide" hidden><b>可选提示</b><span data-v3="command-guide-text"></span><button type="button" class="game-button text-button" data-action="tutorial-hint">需要提示</button><button type="button" class="game-button text-button" data-action="tutorial-skip">自由行动</button></aside>');
     const commandGuide = root.querySelector('.command-guide');
     commandGuide.hidden = !this.view.tutorial || !this.settings.tutorialHints;
     this.text(root, 'command-guide-text', formatControlHints(this.view.tutorial?.text || '', this.settings, this.isTouch));
     const guide = this.view.tutorial?.guide;
     const guidedCommand = this.settings.tutorialHints && coreChapterOne(this.view) && Number.isInteger(guide?.commandStage);
     const chooseTarget = guidedCommand && guide.commandStage === 1;
+    const names = { Grok: ['连续破障', '定点破障'], Claude: ['引开多人', '只引一人'], GLM: ['广域扫描', '精准扫描'] }[name] || ['默认行动', '精确行动'];
+    this.text(root, 'command-default-name', names[0]); this.text(root, 'command-precise-name', names[1]);
     this.text(root, 'command-name', name); this.text(root, 'command-role', JOBS[name] || '协作'); this.text(root, 'command-budget', `AI ${model.aiTokens}/${model.aiTokenMax} · ${model.trainingAvailable ? `限定词 ${model.budget} / 训练 ${model.trainingAvailable}` : `限定词 ${model.budget}`}`);
     const portrait = portraitPath(name); const image = root.querySelector('[data-v3="command-portrait"]'); if (image && image.getAttribute('src') !== portrait) image.src = portrait;
     const receiptImage = root.querySelector('[data-v3="command-receipt-image"]'); if (receiptImage && receiptImage.getAttribute('src') !== portrait) receiptImage.src = portrait;
@@ -569,8 +646,8 @@ export class UIV3Controller {
     const defaults = { Grok: ['沿通道持续冲锋，打开沿途合法障碍。', '只处理指定对象，在标记处停下。'], Claude: ['引向远端纸页，抵达后分心 6 秒。', '只引一名，抵达后分心 6 秒。'], GLM: ['扫描大片区域，可能惊动警戒器。', '只扫描前方窄区，控制影响范围。'] }[name] || ['', ''];
     this.text(root, 'command-default', model.defaultDescription || defaults[0]); this.text(root, 'command-precise', model.preciseDescription || defaults[1]); this.text(root, 'command-target-label', model.label || (model.targetId ? '已选目标' : '先选一个高亮目标'));
     root.querySelectorAll('[data-action="prompt-mode"]').forEach((button) => { button.setAttribute('aria-pressed', String((button.dataset.precise === 'true') === model.constrained)); button.disabled = button.dataset.precise === 'true' && model.budget + model.trainingAvailable < 1; });
-    const preciseCost = root.querySelector('[data-action="prompt-mode"][data-precise="true"] em'); if (preciseCost) preciseCost.textContent = model.trainingAvailable ? '训练限定词 × 1' : '限定词 × 1';
-    const defaultCost = root.querySelector('[data-action="prompt-mode"][data-precise="false"] em'); if (defaultCost) defaultCost.textContent = 'AI Token × 1 · 限定词 0';
+    const preciseCost = root.querySelector('[data-action="prompt-mode"][data-precise="true"] em'); if (preciseCost) preciseCost.textContent = `Token × 2 · ${model.trainingAvailable ? '训练限定词' : '限定词'} × 1`;
+    const defaultCost = root.querySelector('[data-action="prompt-mode"][data-precise="false"] em'); if (defaultCost) defaultCost.textContent = 'Token × 1 · 限定词 0';
     const targets = model.targets.length ? model.targets : model.targetId ? [{ id: model.targetId, label: model.label || model.targetId }] : [];
     this.options(root.querySelector('[data-command-select="prompt-target"]'), targets, model.targetId, 'targetSignature'); this.text(root, 'command-target-count', targets.length ? `${targets.length} 个合法对象` : '靠近场景中的目标');
     root.querySelector('.command-step-rail span:nth-of-type(1)')?.classList.toggle('is-complete', Boolean(model.targetId));
@@ -591,8 +668,11 @@ export class UIV3Controller {
       this.text(root, 'forecast-impact', impact); this.text(root, 'forecast-risk', risk); this.text(root, 'forecast-return', ret);
       forecast.hidden = !this.forecastOpen;
     }
+    const alarms = model.geometry?.alarmIds?.length || 0;
+    this.text(root, 'command-risk', model.reason || (alarms ? `注意：本次扫描将触及 ${alarms} 个警戒器，可能触发警报。` : model.teammate === 'Claude' && model.precise ? '只引开一人，其余守卫仍会巡逻。' : '确认前可查看场景中的实际作用范围。'));
+    root.querySelector('.command-risk-summary')?.classList.toggle('is-warning', Boolean(alarms || model.reason));
     const status = root.querySelector('[data-v3="command-status"]'); status.classList.toggle('is-warning', Boolean(model.reason)); status.setAttribute('role', model.parseError ? 'alert' : 'status');
-    this.text(root, 'command-cost', model.trainingCost || model.budgetSource === 'training' ? `本次使用训练限定词 × ${model.trainingCost || 1} · AI Token × ${model.tokenCost}` : `${model.cost ? `限定词 × ${model.cost} · ` : ''}开始执行时消耗 AI Token × ${model.tokenCost}`); const confirm = root.querySelector('[data-command-confirm]'); if (confirm) confirm.disabled = !model.canConfirm;
+    this.text(root, 'command-cost', model.trainingCost || model.budgetSource === 'training' ? `本次使用训练限定词 × ${model.trainingCost || 1} · AI Token × ${model.tokenCost}` : `${model.cost ? `限定词 × ${model.cost} · ` : ''}消耗 Token × ${model.tokenCost}`); const confirm = root.querySelector('[data-command-confirm]'); if (confirm) confirm.disabled = !model.canConfirm;
     root.querySelectorAll('[data-action="prompt-mode"]').forEach(button => {
       button.classList.toggle('is-guide-target', guidedCommand && guide.commandStage === 2 && button.dataset.precise === 'false');
     });

@@ -80,6 +80,7 @@ async function test(name, run) {
 }
 
 function finishOpening(api) {
+  if(api.state.storyPlayer?.scene.id==='departure'){api.finishStory();return;}
   api.finishStory();
   for (const id of ['observe', 'issue', 'evacuate']) { api.storyChoice(id); api.finishStory(); }
   api.nextStory();
@@ -112,36 +113,35 @@ function commandWorld() {
   };
 }
 
-await test('opening requires three actual keyword choices, even when skipping animation', async () => {
+await test('short departure starts in two beats, can be skipped, and never invents tutorial progress', async () => {
   const { api } = await harness();
   await api.startWorld();
-  assert.equal(api.state.storyPlayer.scene.id, 'prologue');
-  assert.equal(api.state.storyPlayer.scene.duration, 30);
-  api.finishStory();
-  const index = api.state.storyPlayer.index;
-  assert.equal(api.state.storyPlayer.scene.steps[index].choice.options[0].id, 'observe');
-  api.nextStory(); assert.equal(api.state.storyPlayer.index, index);
-  api.storyChoice('issue'); assert.equal(api.state.storyPlayer.choiceSelected, null);
-  for (const id of ['observe', 'issue', 'evacuate']) { api.storyChoice(id); api.finishStory(); }
-  assert.deepEqual(Array.from(api.state.storyPlayer.choices, entry => entry.id), ['observe', 'issue', 'evacuate']);
-  assert.equal(api.state.storyPlayer.index, api.state.storyPlayer.scene.steps.length - 1);
+  assert.equal(api.state.storyPlayer.scene.id, 'departure');
+  assert.equal(api.state.storyPlayer.scene.steps.length, 2);
+  assert.equal(api.state.storyPlayer.scene.duration, 8);
+  assert(api.state.storyPlayer.scene.steps.every(step => !step.choice));
+  api.nextStory();
   api.setAuto(true);
   const now = performance.now();
   for (let frame = 1; frame <= 100; frame++) api.frame(now + frame * 80);
-  assert(api.state.storyPlayer, 'auto dialogue must still wait for Start after eight seconds');
+  assert(api.state.storyPlayer, 'auto dialogue must wait for the explicit Start');
   api.nextStory();
   assert.equal(api.state.storyPlayer, null);
   assert.equal(api.state.ui.screen, 'none');
   assert.equal(api.state.core.view().phase, 'playing');
   assert.equal(api.state.tutorial.current().id, 'move');
+  const skipped = (await harness()).api;
+  await skipped.startWorld(); skipped.finishStory();
+  assert.equal(skipped.state.ui.screen, 'none');
+  assert.equal(skipped.state.tutorial.current().id, 'move');
 });
 
-await test('real playChapterIntro sends chapter one directly from prologue to the playable lesson', async () => {
+await test('real playChapterIntro sends chapter one directly from departure to the playable lesson', async () => {
   const { api } = await harness();
   await api.startWorld({ showIntro: false });
   assert.equal(api.state.storyPlayer, null);
   api.playChapterIntro();
-  assert.equal(api.state.storyPlayer.scene.id, 'prologue');
+  assert.equal(api.state.storyPlayer.scene.id, 'departure');
   finishOpening(api);
   assert.equal(api.state.storyPlayer, null, 'chapter1-briefing must not remain in the scene queue');
   assert.equal(api.state.ui.screen, 'none', 'the separate briefing screen must not block the first action');
@@ -159,7 +159,7 @@ await test('an unfocused start keeps its pending intro and resumes through the r
   context.document.hidden = false;
   await api.act('resume-play');
   assert.equal(api.state.pendingChapterIntro, false);
-  assert.equal(api.state.storyPlayer.scene.id, 'prologue');
+  assert.equal(api.state.storyPlayer.scene.id, 'departure');
   finishOpening(api);
   assert.equal(api.state.storyPlayer, null);
   assert.equal(api.state.ui.screen, 'none');

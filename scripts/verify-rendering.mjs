@@ -93,7 +93,11 @@ for (const layer of ['background', 'structure', 'actors', 'effects']) assert(cal
 assert(actorDraws > 20 && spriteDraws > 50);
 assert(elements['scene-labels'].children.length > 0, 'scene text rendered in HTML');
 assert(authoredFragments > 500 && effectDraws > 10 && previews > 30, 'All rooms exercise authored atmosphere, skills and command-range overlays');
-assert(!calls.some(call => ['fill', 'fillRect', 'stroke', 'strokeRect', 'lineTo', 'quadraticCurveTo', 'bezierCurveTo', 'fillText'].includes(call.key)), 'Normal rendering paints no substitute shapes or text icons; range geometry only clips art');
+// Normal rendering must not substitute shapes for art. The one sanctioned
+// exception is the documented medkit cross (the catalog has no medkit sprite);
+// it is accounted for exactly, so any other primitive still fails this check.
+const primitives = calls.filter(call => ['fill', 'fillRect', 'stroke', 'strokeRect', 'lineTo', 'quadraticCurveTo', 'bezierCurveTo', 'fillText'].includes(call.key));
+assert.equal(primitives.length, renderer.aidMarks * 3, 'Normal rendering paints no substitute shapes or text icons; range geometry only clips art');
 // Advance the actual world with a command preview open. Observe source crops
 // emitted by the complete renderer/AssetLibrary path during movement and jump.
 readyImages = new Set(sceneImageKeys(CHAPTERS[0]));

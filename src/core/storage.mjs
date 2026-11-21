@@ -90,23 +90,33 @@ export function normalizeCheckpoint(raw) {
         || typeof value.broadcastOn !== 'boolean' || !flagsValid(value.storyFlags)) return null;
     const score = value.breakdown;
     const counts = value.events;
+    const chapterFour = value.chapterId === 'public-report';
+    // Legacy chapter-four results predate the explicit broadcast price. They
+    // were all closed-broadcast runs, so a missing entry reads as 0.
+    const broadcast = score.broadcast === undefined ? 0 : score.broadcast;
+    const publicLeaks = counts.publicLeaks === undefined ? 0 : counts.publicLeaks;
     if (score.required !== 60 || ![0, 10, 20].includes(score.optional)
         || ![0, 5, 10].includes(score.collaboration)
         || !integer(score.lowAlert, 0, 10) || score.lowAlert % 2 !== 0
-        || !integer(value.score, 60, 100)
-        || value.score !== score.required + score.optional + score.collaboration + score.lowAlert
+        || !integer(broadcast, -10, 0)
+        || (chapterFour ? broadcast !== (value.broadcastOn ? -10 : 0) : broadcast !== 0)
+        || !integer(value.score, chapterFour ? 50 : 60, 100)
+        || value.score !== score.required + score.optional + score.collaboration + score.lowAlert + broadcast
         || !Number.isFinite(value.elapsedMs) || value.elapsedMs < 0
         || !integer(value.failedAttempts, 0, 1_000_000)
         || !integer(counts.publicCommands, 0, 1000)
         || !integer(counts.publicDeliveries, 0, 1000)
+        || !integer(publicLeaks, 0, 1000)
         || !integer(counts.alarms, 0, 1000)
         || score.lowAlert !== Math.max(0, 10 - counts.alarms * 2)
-        || value.exposureDelta !== Math.min(20, 2 * (counts.publicCommands + counts.publicDeliveries + counts.alarms))) return null;
-    if (i === 3 && (!value.storyFlags.includes('return-beacon-ready') || value.broadcastOn)) return null;
+        || value.exposureDelta !== Math.min(20, 2 * (counts.publicCommands + counts.publicDeliveries + publicLeaks + counts.alarms))) return null;
+    if (i === 3 && !value.storyFlags.includes('return-beacon-ready')) return null;
     results.push({
       chapterId: value.chapterId, score: value.score,
-      breakdown: { required: 60, optional: score.optional, collaboration: score.collaboration, lowAlert: score.lowAlert },
-      events: { publicCommands: counts.publicCommands, publicDeliveries: counts.publicDeliveries, alarms: counts.alarms },
+      breakdown: { required: 60, optional: score.optional, collaboration: score.collaboration, lowAlert: score.lowAlert,
+        ...(chapterFour ? { broadcast } : {}) },
+      events: { publicCommands: counts.publicCommands, publicDeliveries: counts.publicDeliveries,
+        publicLeaks, alarms: counts.alarms },
       exposureDelta: value.exposureDelta, elapsedMs: value.elapsedMs,
       failedAttempts: value.failedAttempts, broadcastOn: value.broadcastOn,
       storyFlags: [...value.storyFlags],

@@ -1,0 +1,153 @@
+/* Player-facing hierarchy. One next action; explicit costs; visible scene previews. */
+#background-canvas { filter:brightness(.72) saturate(.82); }
+#game-shell[data-chapter="2"] #background-canvas { filter:brightness(.7) saturate(.76) hue-rotate(14deg); }
+#game-shell[data-chapter="3"] #background-canvas { filter:brightness(.65) saturate(.72) hue-rotate(32deg); }
+#game-shell[data-chapter="4"] #background-canvas { filter:brightness(.62) saturate(.72) hue-rotate(49deg); }
+#game-shell[data-chapter="5"] #background-canvas { filter:brightness(.7) saturate(.7) hue-rotate(-12deg); }
+.ui-root .objective-toggle {
+  top:9.7%; right:1.5%; width:auto; min-width:22cqw; max-width:43%; min-height:46px; height:auto;
+  display:grid; grid-template-columns:auto 1fr; column-gap:8px; row-gap:3px;
+  padding:8px 14px; text-align:left; white-space:normal;
+  background-color:#062337ed; border:1px solid #70c8dd; border-radius:9px;
+}
+.objective-toggle .art-mark { grid-row:1 / 3; }
+.objective-toggle [data-v3="objective-summary"] { font-size:clamp(12px,1.04cqw,17px); color:#ecfbff; line-height:1.45; }
+.objective-toggle [data-v3="objective-progress"] { grid-column:2; color:#afd5df; font-size:clamp(10px,.86cqw,14px); }
+.guidance-route-button { position:absolute; top:18.5%; right:1.5%; min-height:36px; padding:6px 12px; border:1px solid #568ba3; border-radius:7px; background:#052337ee; color:#c5eff5; font-size:clamp(11px,.9cqw,14px); pointer-events:auto; }
+.guidance-route-button[aria-pressed="true"] { border-color:#e9cf8d; color:#ffe7ac; }
+.ui-root .objective-panel { top:25%; max-height:52%; overflow:auto; }
+.scene-label.player-marker { padding:0 6px; min-width:22px; border-radius:12px; color:#e3fbff; background:#05273a; border:1px solid #8be8ff; font-weight:700; }
+.screen-command .command-dimmer { background:#03142122; backdrop-filter:none; }
+.screen-command .v3-command-panel {
+  width:48%; max-width:800px; max-height:72%; left:50%; top:auto; bottom:2%;
+  transform:translateX(-50%); padding:12px 18px; overflow:auto;
+}
+.screen-command[data-command-side="left"] .v3-command-panel { left:1%; right:auto; transform:none; }
+.screen-command[data-command-side="right"] .v3-command-panel { right:1%; left:auto; transform:none; }
+.screen-command .v3-command-panel.is-expanded { width:76%; left:50%; right:auto; transform:translateX(-50%); }
+.screen-command .command-step-rail,
+.screen-command .command-target-visual,
+.screen-command .command-target-control>span,
+.screen-command .command-preview-card,
+.screen-command .command-receipt { display:none; }
+.screen-command .command-header { min-height:40px; padding:0 0 6px; }
+.screen-command .command-header>img { width:42px; height:42px; }
+.screen-command .command-header h2 { font-size:20px; }
+.screen-command .command-budget { font-size:12px; }
+.screen-command .command-target-control { display:block; padding:0; }
+.screen-command .command-target-control>label { display:flex; align-items:center; gap:10px; }
+.screen-command .command-target-control select { width:100%; min-height:42px; font-size:14px; }
+.screen-command .v3-command-panel .v3-command-body { display:grid; grid-template-columns:1fr auto; gap:6px 12px; }
+.screen-command .v3-command-panel .command-target-control,
+.screen-command .v3-command-panel .command-options,
+.screen-command .v3-command-panel .command-risk-summary,
+.screen-command .v3-command-panel .command-forecast,
+.screen-command .v3-command-panel .command-preview-card,
+.screen-command .v3-command-panel .command-receipt { grid-column:1 / -1!important; }
+.screen-command .v3-command-panel .command-risk-summary { grid-row:3!important; }
+.screen-command .v3-command-panel .command-forecast-toggle { grid-column:1!important; grid-row:4!important; }
+.screen-command .v3-command-panel .command-advanced-wrap { grid-column:2!important; grid-row:4!important; }
+.screen-command .v3-command-panel .command-forecast { grid-row:5!important; }
+.screen-command .v3-command-panel.is-expanded .v3-command-body { display:flex; }
+.screen-command .command-options { gap:10px; }
+.screen-command .command-options>button { min-height:65px; padding:8px; }
+.screen-command .command-option-heading b { font-size:15px; }
+.screen-command .command-option-heading em { font-size:11px; white-space:normal; }
+.screen-command .command-option-art { width:36px; height:36px; min-width:36px; min-height:36px; }
+.screen-command .command-options>button>strong { display:none; }
+.screen-command .command-risk-summary { margin:2px 0; font-size:12px; line-height:1.5; color:#afd4df; }
+.screen-command .command-risk-summary.is-warning { color:#ffd08a; }
+.screen-command .v3-command-panel .command-submit { margin:6px 0 0; padding:6px 0 0; }
+.screen-command .v3-command-panel .command-submit>.game-button { min-height:46px; min-width:170px; font-size:15px; animation:none; }
+.screen-command .v3-command-panel .command-submit>span { font-size:12px; }
+.screen-command .v3-command-panel .command-submit>small { display:block; font-size:11px; color:#afd5df; }
+.screen-command .v3-command-panel .command-submit { flex-wrap:wrap; }
+.screen-command .v3-command-panel .command-submit>small { flex-basis:100%; text-align:center; }
+.screen-command .command-more,.screen-command .command-forecast-toggle { min-height:32px; font-size:12px; }
+.screen-command .command-guide { padding:5px 8px; font-size:12px; }
+.screen-command .v3-command-panel.is-expanded .command-preview-card,
+.screen-command .v3-command-panel.is-expanded .command-receipt { display:flex; }
+.screen-command .v3-command-panel .command-forecast p { font-size:12px; }
+/* Award pass: one instruction surface at a time. While the tutorial is the
+ * active coach, the mission toggle is redundant and competes for the same eye
+ * movement. It returns as soon as free play starts. */
+.ui-root:has(.tutorial-card:not([hidden])) .objective-toggle { display:none; }
+.guidance-route-button { min-height:44px; }
+@media(max-width:900px),(max-height:480px) {
+  .ui-root .objective-toggle { top:11%; right:1%; max-width:48%; min-height:40px; padding:5px 9px; }
+  .guidance-route-button { top:calc(44px + 7px); min-height:44px; right:1.2%; font-size:11px; }
+  .ui-root:has(.objective-toggle:not([hidden])) .guidance-route-button { top:calc(44px + 62px); }
+  /* The tutorial used to consume a third of the playfield. Keep the sentence,
+   * drop the secondary copy, and let the player see the room while reading. */
+  .ui-root .tutorial-card { top:calc(44px + 42px); left:1.4%; width:45%; max-width:360px; max-height:34%; padding:6px 9px; border-radius:7px; }
+  .ui-root .tutorial-card .tutorial-top { font-size:10px; }
+  .ui-root .tutorial-card>p { font-size:11px; line-height:1.45; margin:4px 0 2px; }
+  .ui-root .tutorial-card .tutorial-note,
+  .ui-root .tutorial-card .tutorial-rail { display:none; }
+  .ui-root .tutorial-card .tutorial-actions { display:flex; gap:6px; margin-top:3px; }
+  .ui-root .tutorial-card .tutorial-actions .text-button { min-height:44px; padding:2px 8px; font-size:10px; }
+  .ui-root .tutorial-card .tutorial-actions .text-button[data-action="tutorial-hint"] { display:none; }
+  /* Controls sit on top of the boat and the walkable floor. Lower the visual
+   * weight so the world stays legible; pressed state restores full contrast. */
+  .game-shell { --touch-opacity:.5; }
+  .touch-controls button { background-color:#12334b66; }
+  .touch-controls button.held,
+  .touch-controls button:active { background-color:#3783a9e0; }
+  .touch-controls small { font-size:9px; }
+  /* Compact crew dock: 34px portraits keep the 44px hit target but stop the
+   * panel from covering the character's feet. */
+  .bottom-hud { bottom:0; padding:3px 6px; gap:6px; border-radius:8px 8px 0 0; }
+  .crew-panel { gap:4px; }
+  .crew-button { min-width:38px; }
+  .crew-portrait { width:34px; height:34px; }
+  .crew-name { font-size:9px; margin-top:2px; }
+  .crew-job { display:none; }
+  .cargo-slot { width:22px; height:22px; }
+  .qualifiers { font-size:8px; padding:2px 4px; gap:3px; }
+  .qualifiers b { font-size:10px; }
+  .interaction-hint { bottom:20%; padding:4px 8px; gap:4px; font-size:10px; }
+  .interaction-hint .keycap { display:none; }
+  .interaction-hint strong { font-size:11px; }
+  .chapter-heading small { font-size:9px; }
+  .chapter-heading strong { font-size:12px; }
+  .hud-clock b { font-size:14px; }
+  .ai-token-meter b { font-size:12px; }
+  .ai-token-label { font-size:8px; }
+  .hud-vitals b { font-size:12px; }
+  .hud-vitals small { font-size:10px; }
+  .game-shell .title-crew-rail { display:none !important; }
+  .ui-root .objective-panel { top:36%; max-height:44%; }
+  .screen-command .v3-command-panel { width:48%; max-height:84%; bottom:1%; padding:6px 10px; }
+  .screen-command .v3-command-panel.is-expanded { width:86%; }
+  .screen-command .command-header { min-height:32px; }
+  .screen-command .command-header>img { width:30px; height:30px; }
+  .screen-command .command-header h2 { font-size:16px; }
+  .screen-command .command-header { min-height:44px; }
+  .screen-command .command-budget { display:none; }
+  .screen-command .v3-command-panel:not(.is-expanded) .command-target-control { position:static; }
+  .screen-command .command-options>button { min-height:52px; padding:4px; }
+  .screen-command .v3-command-panel .command-option-heading b { font-size:13px; }
+  .screen-command .v3-command-panel .command-option-heading em { font-size:11px; }
+  .screen-command .command-option-art { display:none; }
+  .screen-command .command-options>button { grid-template-columns:1fr; }
+  .screen-command .v3-command-panel .command-options>button .command-option-heading { grid-column:1; }
+  .screen-command .command-risk-summary { font-size:11px; }
+  .screen-command .v3-command-panel .command-advanced-wrap .command-more,
+  .screen-command .v3-command-panel .command-forecast-toggle { min-height:44px; padding-top:6px; padding-bottom:6px; }
+  .screen-command .v3-command-panel .command-submit>span { font-size:10px; }
+  .screen-command .v3-command-panel .command-submit>small { display:none; }
+}
+/* Results readability: say what the next grade needs, and close the campaign
+ * with the detective's log so exposure reads as a consequence, not a number.
+ * The log lives in the footer: it stays visible without stealing height from
+ * the scrollable chapter summary. */
+.result-improve b { color:#ffe6a6; }
+.v3-campaign .v3-panel-footer { align-items:flex-start; }
+.detective-line { display:grid; gap:1px; margin:0 auto 0 0; max-width:58%; text-align:left; }
+.detective-line b { font-size:9px; letter-spacing:.16em; color:#e0c06f; }
+.detective-line span { font-size:10.5px; line-height:1.5; color:#cfe6ee; }
+@media(max-width:900px),(max-height:480px) {
+  .detective-line { max-width:50%; }
+  .detective-line b { font-size:8px; }
+  .detective-line span { font-size:9px; line-height:1.4; }
+}

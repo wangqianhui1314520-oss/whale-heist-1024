@@ -116,6 +116,11 @@ export class LessonBridge {
     if (view?.phase === 'chapter-result') { this.tutorial.skip(); return; }
     const firstChapter = this.tutorial.chapter === 'paper-window';
     if (firstChapter && ['delivery', 'board'].includes(current.id)) return;
+    // A valid chapter route takes precedence over the teaching example. In
+    // particular, Grok's divider route must not leave a Claude/GLM exercise
+    // looking compulsory after the player has already fulfilled the mission.
+    const mainRouteComplete = view?.objectives?.some(goal => goal.complete
+      && ['effective-command', 'changed-patrol', 'completed-review'].includes(goal.id));
     const leftTrainingRoom = world.currentRoom && world.currentRoom.index !== 1;
     const earlyAction = firstChapter && (
       world.barriers?.some(barrier => barrier.id === 'paper-window' && barrier.broken)
@@ -123,7 +128,7 @@ export class LessonBridge {
     const unavailableNode = firstChapter && Array.isArray(world.nodes) && world.nodes.length > 0 && (
       current.id === 'node-first' && !world.nodes.some(node => node.hp >= 2)
       || current.id === 'node-open' && !world.nodes.some(node => node.id === this.tutorial.memory.nodeId && node.hp > 0));
-    if (leftTrainingRoom || earlyAction || unavailableNode) this.tutorial.skip();
+    if (mainRouteComplete || leftTrainingRoom || earlyAction || unavailableNode) this.tutorial.skip();
   }
 
   /** A route is a demonstration, shown only after two actual failures or an explicit request. */

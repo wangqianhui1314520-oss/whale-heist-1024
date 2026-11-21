@@ -228,10 +228,8 @@ async function finishPrologue(page) {
         await page.waitForTimeout(120); await shot(page,`desktop-story-${style}`);
       }
       await page.locator('[data-action="story-style"][data-style="cinematic"]').click(); await act(page,'story-skip').click();
-      assert.equal(await act(page,'story-next').isDisabled(),true,'Required prologue choice was skipped');
-      await act(page,'story-choice').focus(); await page.keyboard.press('Space');
-      assert.equal(await act(page,'story-next').isEnabled(),true);
-      await finishPrologue(page); await screen(page,'none');
+      await screen(page,'none');
+      assert.equal(await page.locator('[data-action="story-choice"]:visible').count(),0,'short departure must not leave a mandatory choice');
       assert.equal((await page.locator('[data-v3="tutorial-count"]').innerText()).trim(),'1 / 10');
       await page.keyboard.down('d'); await page.waitForTimeout(620); await page.keyboard.up('d'); await page.waitForTimeout(100);
       assert.equal((await page.locator('[data-v3="tutorial-count"]').innerText()).trim(),'2 / 10');
@@ -265,9 +263,9 @@ async function finishPrologue(page) {
         await page.keyboard.press('Escape'); await screen(page,'none');
         if(viewport.width===844) await performanceSample(page,'touch-emulation-844x390-standard');
         await title(page); await act(page,'new-game').click(); await screen(page,'story');
-        await act(page,'story-skip').click(); await page.waitForTimeout(1200);
+        await page.waitForTimeout(1200);
         const choices=await dimensions(page,'[data-action="story-choice"]');
-        assert.equal(choices.length,1); assert(choices[0].h>=44&&choices[0].font>=12,JSON.stringify(choices));
+        assert.equal(choices.length,0,'short departure has no mandatory single-option choices');
         const headings=await dimensions(page,'.story-heading button');
         for(const c of headings) assert(c.y>=0&&c.y+c.h<=viewport.height,JSON.stringify(c));
         await act(page,'story-next').scrollIntoViewIfNeeded();
@@ -332,6 +330,38 @@ async function finishPrologue(page) {
         await page.waitForTimeout(100);await shot(page,`fixture-c${room.chapter}-room${room.index+1}`);
       }
       await ctx.close();return{rooms};
+    });
+    await test('Player upgrade: real next action, optional route, 1-Enter confirmation, distinct role labels and visible scan risk', async()=>{
+      const {ctx,page}=await context();
+      await act(page,'new-game').click();await screen(page,'story');
+      assert.match(await page.locator('[data-v3="story-count"]').innerText(),/2/);
+      assert.equal(await act(page,'story-choice').count(),0);
+      await act(page,'story-skip').click();await screen(page,'none');
+      assert.match(await page.locator('[data-v3="objective-summary"]').innerText(),/收集资料 0\/4/);
+      assert.match(await page.locator('[data-v3="objective-progress"]').innerText(),/背包 0\/3/);
+      await act(page,'route-toggle').click();assert.equal(await act(page,'route-toggle').getAttribute('aria-pressed'),'true');
+      await shot(page,'upgraded-guidance');
+      await title(page);await demo(page,'paper-window');
+      const before=Number(await page.locator('[data-field="ai-tokens"]').innerText());
+      await page.keyboard.press('1');await screen(page,'command');
+      assert.equal(await page.evaluate(()=>document.activeElement?.dataset.action),'command-confirm','keyboard shortcut should focus confirmation rather than the select');
+      assert.equal(await page.locator('[data-v3="command-default-name"]').innerText(),'连续破障');
+      await page.keyboard.press('Enter');await screen(page,'none');
+      assert.equal(Number(await page.locator('[data-field="ai-tokens"]').innerText()),before-1);
+      await title(page);await demo(page,'review-quietly');await page.keyboard.press('3');await screen(page,'command');
+      assert.equal(await page.locator('[data-v3="command-default-name"]').innerText(),'广域扫描');
+      assert.equal(await page.locator('[data-v3="command-precise-name"]').innerText(),'精准扫描');
+      assert.match(await page.locator('[data-v3="command-risk"]').innerText(),/警戒器/);
+      assert(await page.locator('[data-v3="command-risk"]').isVisible());
+      await shot(page,'upgraded-scan-command');
+      await page.locator('[data-action="prompt-mode"][data-precise="true"]').click();
+      assert.match(await page.locator('[data-v3="command-cost"]').innerText(),/Token × 2/);
+      await page.keyboard.press('Escape');await screen(page,'none');await title(page);
+      await demo(page,'resume-storm');await page.keyboard.press('2');await screen(page,'command');
+      assert.equal(await page.locator('[data-v3="command-default-name"]').innerText(),'引开多人');
+      assert.equal(await page.locator('[data-v3="command-precise-name"]').innerText(),'只引一人');
+      await ctx.close();
+      return{keyboard:'1 → Enter spends exactly one token',departureBeats:2,rolePlans:6,scanRiskVisible:true};
     });
     await test('No browser exceptions, failed resources or source/build drift during acceptance', async()=>{assert.deepEqual(report.diagnostics,[]);assert.deepEqual(buildConsistency(),report.build);});
   } catch(error) { report.fatal=error.stack; console.error(error.stack); }

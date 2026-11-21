@@ -70,6 +70,7 @@ export const CHAPTERS = freeze([
     supplies: [
       { id: 'review-qualifier-a', qualifiers: 1, aiTokens: 2 },
       { id: 'review-qualifier-b', qualifiers: 1, aiTokens: 2 },
+      { id: 'review-first-aid', qualifiers: 0, aiTokens: 0, heal: 50 },
     ],
     commandTargets: [
       { id: 'trap-bridge', teammate: 'GLM', effect: 'review-traps', collaboration: true },
@@ -95,7 +96,7 @@ export const CHAPTERS = freeze([
       { id: 'return-inspection', teammate: 'GLM', effect: 'review-traps', collaboration: true },
       { id: 'archive-guard', teammate: 'Claude', effect: 'change-patrol', collaboration: false },
     ],
-    requiredMechanic: 'broadcast-off-and-beacon',
+    requiredMechanic: 'broadcast-choice-and-beacon',
   },
   {
     id: 'close-hatch', number: 5, name: '闭舱返航', targetMinutes: 4,

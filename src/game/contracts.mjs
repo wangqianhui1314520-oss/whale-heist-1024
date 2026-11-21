@@ -36,7 +36,7 @@ export function applyContract(base, selected = 'standard') {
       ...(Number.isFinite(guard.minX) && Number.isFinite(guard.maxX) ? { x: guard.minX + (guard.maxX - guard.minX) * phase } : {}) };
   });
   if (!rules.shortcutsEnabled) {
-    for (const key of ['gates', 'bridges', 'portals', 'shortcuts']) if (Array.isArray(result[key])) result[key] = result[key].map(entry =>
+    for (const key of ['gates', 'bridges', 'portals', 'shortcuts', 'exits']) if (Array.isArray(result[key])) result[key] = result[key].map(entry =>
       entry.shortcut === true || entry.optionalShortcut === true ? { ...entry, disabled: true, open: false, contractClosed: true } : entry);
   }
   result.contract = { ...createContract(contract.id, { seed: contract.seed, chapter: contract.chapter }), rules: clone(rules) };

@@ -18,13 +18,13 @@ function webpSize(bytes) {
   assert.fail('unsupported WebP chunk: ' + chunk);
 }
 const expectedBeats = {
-  prologue: 'opening', 'chapter1-briefing': 'grok', 'grok-join': 'grok',
+  departure: 'opening', prologue: 'opening', 'chapter1-briefing': 'grok', 'grok-join': 'grok',
   'claude-join': 'claude', 'chapter2-briefing': 'claude',
   'glm-join': 'glm', 'chapter3-briefing': 'glm',
   'chapter4-briefing': 'broadcast', 'chapter4-reveal': 'broadcast',
   'chapter5-briefing': 'evacuation', 'chapter5-preparation': 'evacuation', epilogue: 'epilogue',
 };
-assert.equal(STORY_REPLAY_INDEX.length, 12, 'all 12 narrative scenes are covered');
+assert.equal(STORY_REPLAY_INDEX.length, 13, 'all 13 narrative scenes are covered');
 assert.equal(STORY_ART_BEATS.length, 7, 'seven separately illustrated beats');
 assert.equal(new Set(STORY_ART_BEATS).size, 7, 'beat identities are unique');
 assert.equal(STORY_ART_IMAGES.length, 21, 'one image per beat and treatment');
@@ -50,7 +50,7 @@ for (const { id } of STORY_REPLAY_INDEX) {
 }
 for (const [backdrop, beat] of [['story-prologue', 'opening'], ['story-grok', 'grok'], ['recruitment-hall', 'claude'], ['inspection-bridge', 'glm'], ['broadcast-room', 'broadcast'], ['remote-beacon', 'evacuation'], ['investigation-desk', 'epilogue']]) assert.equal(storyBeatFor(backdrop), beat);
 for (const speaker of ['Grok', 'Claude', 'GLM']) assert.equal(storyBeatFor({ speaker }), speaker.toLowerCase(), 'speaker fallback remains usable without scene identity');
-console.log('PASS all 12 scenes and dynamic branches resolve to seven valid beats and 21 unique treatment images');
+console.log('PASS all 13 scenes and dynamic branches resolve to seven valid beats and 21 unique treatment images');
 
 for (const total of [1, 2, 3, 4, 6, 9, 12, 30]) {
   const frames = Array.from({ length: total }, (_, index) => comicFrameFor({ index, total }));

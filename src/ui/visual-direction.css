@@ -287,6 +287,21 @@
   .campaign-chapter-rail i { font-size:15px; }
   .campaign-chapter-rail b { font-size:7px; }
 }
+@media (max-height:520px) {
+  .v3-results .result-visual-hero { min-height:84px; padding:4px 7px; gap:6px; }
+  .v3-results .result-crew-art { width:24%; max-height:72px; }
+  .v3-results .grade-seal { width:44px; height:44px; min-width:44px; min-height:44px; font-size:22px; }
+  .v3-results .result-visual-copy { gap:1px; }
+  .v3-results .result-visual-copy strong { font-size:22px; }
+  .v3-results .result-visual-copy p { display:none; }
+  .v3-results .result-metrics { margin-top:3px; }
+  .v3-results .tiny-note { display:none; }
+  .v3-results .cooperation-recap { margin-top:4px; padding-top:3px; gap:1px; }
+  .v3-results .cooperation-recap>span { font-size:8px; }
+  .v3-results .cooperation-recap p { font-size:10px; line-height:1.35; }
+  .v3-results .cooperation-recap p:nth-of-type(3) { display:none; }
+  .v3-results .result-crew-strip { display:none; }
+}
 @media (prefers-reduced-motion: reduce) { .v3-campaign-backdrop,.campaign-visual-hero>img { animation:none; } }
 
 /* Raster quality pass. Chrome is sliced only at the container boundary;
@@ -522,4 +537,33 @@
 }
 @media (prefers-reduced-motion:reduce) {
   .story-stage .story-fx-layer { display:none; }
+}
+/* Result fit: the four score axes and the grade hint must be readable without
+   inner scrolling at 1280x720 and on short landscape phones (844x390). */
+.v3-results .result-visual-hero { min-height:8.2cqw; padding:.6cqw .9cqw; gap:.9cqw; }
+.v3-results .result-crew-art { width:26%; max-height:8.4cqw; }
+.v3-results .grade-seal { width:5.2cqw; height:5.2cqw; min-width:54px; min-height:54px; font-size:2.8cqw; }
+.v3-results .result-metrics { margin:.5cqw 0 .45cqw; padding:.5cqw 0; }
+.v3-results .result-metrics b { font-size:1.25cqw; }
+.v3-results .cooperation-recap { margin-top:.4cqw; padding-top:.35cqw; gap:.15cqw; }
+.v3-results .cooperation-recap p { line-height:1.4; }
+.v3-results .tiny-note { margin:.3cqw 0; line-height:1.5; }
+.v3-results .result-improve { margin:.2cqw 0 0; }
+.v3-results .score-lines { margin:.5cqw 0 .6cqw; }
+.v3-results .result-crew-strip { margin-top:.5cqw; }
+.v3-results .result-crew-strip span { font-size:.58cqw; padding:.18cqw .38cqw; }
+.v3-results .result-crew-strip img { width:1.25cqw; height:1.25cqw; min-width:18px; min-height:18px; }
+@media (max-width:800px), (max-height:520px) {
+  .v3-results .result-visual-hero { min-height:50px; padding:3px 6px; gap:5px; }
+  .v3-results .result-crew-art { width:20%; max-height:46px; }
+  .v3-results .grade-seal { width:34px; height:34px; min-width:34px; min-height:34px; font-size:17px; }
+  .v3-results .result-visual-copy strong { font-size:19px; }
+  .v3-results .result-metrics { margin:1px 0; padding:2px 0; }
+  .v3-results .result-metrics b { font-size:13px; }
+  .v3-results .cooperation-recap { margin-top:2px; padding-top:2px; gap:1px; }
+  .v3-results .cooperation-recap p { font-size:10px; line-height:1.22; }
+  .v3-results .tiny-note:not(.result-improve) { display:none; }
+  .v3-results .result-improve { display:block; font-size:9px; line-height:1.35; margin:1px 0; }
+  .v3-results .score-lines { margin:2px 0 3px; font-size:9px; }
+  .v3-results .result-crew-strip { display:none; }
 }

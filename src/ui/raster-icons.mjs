@@ -11,15 +11,18 @@ const aliases = { archive:'book', home:'map', guide:'book', objective:'map', che
 // Crop the painted badge itself; the original sheet has tall transparent cells.
 const badgeRects = { token:[0,130,362,440], scan:[362,140,362,440], qualifier:[724,180,362,380], cube:[1086,170,362,400], broadcast:[1448,155,362,410] };
 const esc = text => String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// The self-contained build embeds every asset; resolve through the embedded map
+// so an HTML copied away from its assets folder still paints the icons.
+const assetURL = p => globalThis.__ASSET_DATA__?.[String(p)] ?? p;
 export function rasterIconStyle(name) {
   const id = aliases[name] || name, rect = OPERATION_ICON_RECTS[id];
   if (rect) {
     const [x,y,w,h] = rect, {width:iw,height:ih,file} = OPERATION_ICON_SHEET;
-    return `background-image:url('${file}');background-size:${iw/w*100}% ${ih/h*100}%;background-position:${x/(iw-w)*100}% ${y/(ih-h)*100}%;border-radius:0;`;
+    return `background-image:url('${assetURL(file)}');background-size:${iw/w*100}% ${ih/h*100}%;background-position:${x/(iw-w)*100}% ${y/(ih-h)*100}%;border-radius:0;`;
   }
-  if(id==='axe') return "background-image:url('assets/portraits/grok-portrait.webp');background-size:contain;background-position:center;border-radius:0;";
+  if(id==='axe') return `background-image:url('${assetURL('assets/portraits/grok-portrait.webp')}');background-size:contain;background-position:center;border-radius:0;`;
   const [x,y,w,h] = badgeRects[id] || badgeRects.token;
-  return `background-image:url('assets/ui/hud-icon-badges.webp');background-size:${2172/w*100}% ${724/h*100}%;background-position:${x/(2172-w)*100}% ${y/(724-h)*100}%;border-radius:0;`;
+  return `background-image:url('${assetURL('assets/ui/hud-icon-badges.webp')}');background-size:${2172/w*100}% ${724/h*100}%;background-position:${x/(2172-w)*100}% ${y/(724-h)*100}%;border-radius:0;`;
 }
 export function rasterIconHTML(name, className='', label='') {
   const id = String(name || 'map').replace(/[^a-z0-9_-]/gi,'');

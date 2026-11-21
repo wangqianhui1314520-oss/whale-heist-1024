@@ -8,9 +8,12 @@ import { GameCore } from '../src/core/state.mjs';
 import { getMap } from '../src/game/maps.mjs';
 import { GameWorld, routeFor } from '../src/game/world.mjs';
 import { compilePrompt } from '../src/game/prompts.mjs';
+import { TutorialDirector } from '../src/game/tutorial.mjs';
+import { LessonBridge } from '../src/game/lesson-bridge.mjs';
 
 const DT = 1 / 60;
 const failures = [], reports = [];
+const freePlay = process.argv.includes('--free-play'), lessons = new WeakMap();
 let activeWorld = null;
 const ok = result => assert.equal(result.ok, true, JSON.stringify(result));
 function diagnostics(world) {
@@ -26,6 +29,7 @@ function diagnostics(world) {
 function step(world, input = {}) {
   const result = world.update(DT, input);
   assert(!result?.rebuild, 'Unexpected physical death/retry: ' + JSON.stringify(diagnostics(world)));
+  lessons.get(world)?.observe(world, DT);
 }
 function advance(world, seconds, input = {}) { for (let n = 0; n < Math.ceil(seconds / DT); n++) step(world, input); }
 function until(world, condition, seconds, label, input = {}) {
@@ -284,6 +288,9 @@ function setupRoom(world, zeroBudget) {
   }
   assert(world.nodes.every(entry => entry.hp === 0), 'All required nodes need an actual opening action');
   for (const target of main.filter(entry => entry.teammate === 'GLM')) {
+    // Exercise the legitimate Grok return-divider route instead of the scan
+    // shown by chapter three's optional teaching example.
+    if (freePlay && world.core.view().chapter.number === 3) continue;
     stageBelow(world, target); command(world, target.id, !zeroBudget);
   }
   // Claude is timed close to the actual collection attempt, after node opening and scan travel.
@@ -347,9 +354,13 @@ function campaign(zeroBudget = false) {
   for (const chapter of CHAPTERS) {
     assert.equal(core.view().chapter.id, chapter.id);
     if (zeroBudget) ok(core.configureAttempt({ qualifiers: 0 }));
-    const events = [];
+    const events = []; let lesson = null, tutorial = null;
     const world = new GameWorld(core, getMap(chapter.id), { expanded: true, compilePrompt,
-      trainingCredits: { Claude: !zeroBudget && chapter.number === 2 ? 1 : 0 }, onEvent: (type, payload) => events.push({ type, payload }) });
+      trainingCredits: { Claude: !zeroBudget && chapter.number === 2 ? 1 : 0 }, onEvent: (type, payload) => { events.push({ type, payload }); lesson?.handleEvent(type, payload); } });
+    if (freePlay) {
+      tutorial = new TutorialDirector({ chapter: chapter.id });
+      lesson = new LessonBridge({ tutorial, world }); lessons.set(world, lesson);
+    }
     activeWorld = world;
     if (core.view().attempt.broadcastOn) { navigate(world, world.map.broadcast); hold(world, .9); assert.equal(core.view().attempt.broadcastOn, false); }
     setupRoom(world, zeroBudget);
@@ -367,9 +378,13 @@ function campaign(zeroBudget = false) {
     assert(chapter.requiredItems.every(item => core.view().attempt.deliveredIds.includes(item.id)));
     assert(events.filter(event => event.type === 'room-change').some(event => event.payload.to.endsWith(':room-2')));
     const state = core.view().attempt;
+    if (freePlay && chapter.number === 1) assert(!tutorial.completed.includes('node-first'), 'Grok may open the nodes without the player performing the manual dash exercise');
+    if (freePlay && chapter.number === 2) assert(!tutorial.completed.includes('claude-constraint'), 'The training-only precise decoy is not required to clear chapter two');
+    if (freePlay && chapter.number === 3) assert(!state.completedTargetIds.includes('trap-bridge') && state.completedTargetIds.includes('return-divider'), 'The alternate divider route must clear chapter three without the tutorial scan');
     if (zeroBudget) assert(world.records.filter(record => record.type === 'command').every(record => record.chargedCost === 0));
     const entry = { chapter: chapter.id, simulatedSeconds: Math.round(state.elapsedMs / 10) / 100, health: state.health, deliveries: state.deliveryIds.length,
-      actualReceipts: world.receipts.length, qualifiersRemaining: state.qualifiers, finalTimerRemainingMs: chapter.number === 5 ? state.evacuationRemainingMs : null };
+      actualReceipts: world.receipts.length, qualifiersRemaining: state.qualifiers, finalTimerRemainingMs: chapter.number === 5 ? state.evacuationRemainingMs : null,
+      ...(freePlay ? { optionalTeaching: { completed: [...tutorial.completed], skipped: tutorial.skipped } } : {}) };
     report.chapters.push(entry); report.simulatedSeconds += entry.simulatedSeconds;
     console.log('PLAYTHROUGH ' + report.mode + ' ' + JSON.stringify(entry)); ok(core.continueCampaign());
   }

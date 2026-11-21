@@ -16,8 +16,17 @@ const copy = (value) => JSON.parse(JSON.stringify(value));
 const success = (extra = {}) => ({ ok: true, ...extra });
 const failure = (reason) => ({ ok: false, reason });
 const validId = (id) => typeof id === 'string' && id.length > 0 && id.length <= 160;
+// While chapter four's broadcast stays on, public records keep accruing on a
+// fixed in-game cadence. Turning it off freezes both the count and the earlier
+// records; the exposure they represent is never rolled back.
+const BROADCAST_LEAK_INTERVAL_MS = 12_000;
+const BROADCAST_LEAK_ALERT = 2;
+const BROADCAST_LEAK_LIMIT = 40;
+const broadcastLeaksOf = (attempt) => Math.max(0, Math.min(BROADCAST_LEAK_LIMIT,
+  Number.isInteger(attempt.broadcastLeaks) ? attempt.broadcastLeaks : 0));
 const exposureOf = (attempt) => Math.min(20,
-  2 * (attempt.publicCommandIds.length + attempt.publicDeliveryIds.length + attempt.alarmIds.length));
+  2 * (attempt.publicCommandIds.length + attempt.publicDeliveryIds.length
+    + attempt.alarmIds.length + broadcastLeaksOf(attempt)));
 const committedExposure = (checkpoint) => Math.min(100,
   checkpoint.campaign.results.reduce((sum, result) => sum + result.exposureDelta, 0));
 
@@ -48,6 +57,9 @@ function makeAttempt(checkpoint, chapter, generation) {
     elapsedMs: 0, lastDamageAtMs: -Infinity,
     alert: Math.min(100, chapter.baseAlert + Math.min(10, Math.floor(committedExposure(checkpoint) / 10))),
     broadcastOn: checkpoint.campaign.broadcastOn,
+    // Time spent with chapter four's broadcast still on, plus the public
+    // records it has already leaked. Both freeze the moment it is closed.
+    broadcastLeakMs: 0, broadcastLeaks: 0,
     storyFlags: [...checkpoint.campaign.storyFlags],
     inventory: [], deliveredIds: [], collectedSupplyIds: [], collectedTokenCacheIds: [],
     completedTargetIds: [], collaborationIds: [],
@@ -74,6 +86,7 @@ export class GameCore {
   #storageStatus;
   #loadNotice = null;
   #failures = [];
+  #chapterRestarts = 0;
   #generation = 1;
   #worldTargets = [];
 
@@ -127,10 +140,11 @@ export class GameCore {
 
   exportRuntime() {
     return copy({ version: 2, checkpoint: this.#checkpoint, attempt: this.#attempt,
-      phase: this.#phase, pending: this.#pending, failures: this.#failures, worldTargets: this.#worldTargets });
+      phase: this.#phase, pending: this.#pending, failures: this.#failures,
+      chapterRestarts: this.#chapterRestarts, worldTargets: this.#worldTargets });
   }
 
-  restoreRuntime(snapshot, { reason = null } = {}) {
+  restoreRuntime(snapshot) {
     if (!snapshot || snapshot.version !== 2 || !normalizeCheckpoint(snapshot.checkpoint)
       || !['playing', 'paused'].includes(snapshot.phase)) return failure('invalid-runtime');
     const checkpoint = normalizeCheckpoint(snapshot.checkpoint), chapter = CHAPTERS[checkpoint.campaign.results.length];
@@ -139,7 +153,9 @@ export class GameCore {
       || a.elapsedMs > 86400000 || !Number.isFinite(a.health) || a.health <= 0 || a.health > RULES.maxHealth
       || !Number.isInteger(a.qualifiers) || a.qualifiers < 0 || a.qualifiers > RULES.qualifierCapacity
       || !Number.isInteger(a.aiTokens) || a.aiTokens < 0 || a.aiTokens > RULES.aiTokenCapacity
-      || typeof a.broadcastOn !== 'boolean' || !Number.isFinite(a.alert) || a.alert < 0 || a.alert > 100) return failure('invalid-runtime-attempt');
+      || typeof a.broadcastOn !== 'boolean' || !Number.isFinite(a.alert) || a.alert < 0 || a.alert > 100
+      || a.broadcastLeaks !== undefined && (!Number.isInteger(a.broadcastLeaks) || a.broadcastLeaks < 0 || a.broadcastLeaks > BROADCAST_LEAK_LIMIT)
+      || a.broadcastLeakMs !== undefined && (!Number.isFinite(a.broadcastLeakMs) || a.broadcastLeakMs < 0 || a.broadcastLeakMs >= BROADCAST_LEAK_INTERVAL_MS)) return failure('invalid-runtime-attempt');
     let analysisSession = null;
     if (a.vulnerabilitySession !== undefined) {
       const restoredAnalysis = restoreAnalysisSession(a.vulnerabilitySession);
@@ -184,8 +200,13 @@ export class GameCore {
       || evacuationStage === 'remote-ready' && (!a.remoteReady || a.evacuationStarted)
       || (evacuationStage === 'evacuating' && !a.evacuationStarted)
       || (a.evacuationStarted && evacuationStage !== 'evacuating')) return failure('invalid-runtime-evacuation');
-    const failures = [...(Array.isArray(snapshot.failures)?snapshot.failures:[])];
-    if (reason) failures.push({reason:String(reason).slice(0,80),elapsedMs:this.#attempt?.elapsedMs||0});
+    const snapshotFailures = Array.isArray(snapshot.failures) ? snapshot.failures : [];
+    // A room checkpoint predates any later deaths, so the live attempt is the
+    // authoritative record. Resuming must not erase how often this chapter has
+    // already ended, and the resume click itself is not another failure.
+    const failures = (this.#failures.length >= snapshotFailures.length ? this.#failures : snapshotFailures).slice(-1000);
+    const carriedRestarts = Number.isInteger(snapshot.chapterRestarts) && snapshot.chapterRestarts >= 0
+      ? Math.min(snapshot.chapterRestarts, 1_000_000) : snapshotFailures.length;
     this.#checkpoint=checkpoint;this.#generation+=1;
     // A new instance may resume a snapshot that already used attempt-2. Keep
     // its old world callbacks stale even when the local counter starts at 1.
@@ -202,7 +223,8 @@ export class GameCore {
     fresh.attemptId=`attempt-${this.#generation}`;
     fresh.lastDamageAtMs=Number.isFinite(a.lastDamageAtMs)?a.lastDamageAtMs:-Infinity;
     fresh.lastAlarmAtBySource=Object.fromEntries(Object.entries(a.lastAlarmAtBySource||{}).filter(([id,t])=>validId(id)&&Number.isFinite(t)&&t>=0));
-    this.#attempt=fresh;this.#phase='playing';this.#pending=null;this.#failures=failures.slice(-1000);
+    this.#attempt=fresh;this.#phase='playing';this.#pending=null;this.#failures=failures;
+    this.#chapterRestarts=Math.max(this.#chapterRestarts,carriedRestarts);
     this.#worldTargets=[];this.registerWorldTargets(extra);return success();
   }
 
@@ -217,6 +239,7 @@ export class GameCore {
       case 'emergency-ai-token': return this.claimEmergencyToken(event.interactionTarget);
       case 'delivery': return this.deliver(event.eventId);
       case 'command-complete': return this.completeCommand(event.teammate, event.commandId);
+      case 'command-effects': return this.recordCommandEffects(event);
       case 'alarm': return this.alarm(event);
       case 'damage': return this.damage(event.amount);
       case 'broadcast': return this.setBroadcast(event.on);
@@ -318,8 +341,7 @@ export class GameCore {
     if (chapter.number === 2) goals.push({ id: 'changed-patrol', label: '完成诱饵或破障路线', complete: targetGroupComplete(chapter, attempt, groups[0] || ['patrol-east']) });
     if (chapter.number === 3) goals.push({ id: 'completed-review', label: '完成扫描或打开回程', complete: targetGroupComplete(chapter, attempt, groups[0] || ['trap-bridge']) });
     if (chapter.number === 4) goals.push(
-      { id: 'broadcast-off', label: '关闭或验证广播已关闭', complete: !attempt.broadcastOn },
-      { id: 'return-beacon-ready', label: '设置返航信标', complete: attempt.returnBeaconReady },
+      { id: 'return-beacon-ready', label: '到控制台设置返航信标', complete: attempt.returnBeaconReady },
     );
     if (chapter.number === 5) goals.push(
       { id: 'crew-rendezvous', label: '三名队友在远端信标到齐', current: attempt.rendezvousCrew.length, required: 3, complete: attempt.rendezvousCrew.length === 3 },
@@ -339,6 +361,12 @@ export class GameCore {
       current, required, complete: current >= required, optional: true });
     if (chapter.optionalItems.length) goals.push(goal('optional-delivery', '交付可选档案', 'archive',
       chapter.optionalItems.filter(item => attempt.deliveredIds.includes(item.id)).length, chapter.optionalItems.length));
+    // Chapter four's broadcast is a genuine trade-off, not a gate: staying
+    // public is faster but leaks records, raises exposure and costs score.
+    if (chapter.number === 4) goals.push({
+      ...goal('broadcast-off', '关闭公开广播：交付变慢，但停止新增公开记录', 'choice',
+        attempt.broadcastOn ? 0 : 1, 1),
+    });
     const optionalSupplies = chapter.supplies.filter(supply => supply.optionalObjective);
     if (optionalSupplies.length) goals.push({ ...goal('optional-supplies', '收集可选撤离补给', 'supply',
       optionalSupplies.filter(supply => attempt.collectedSupplyIds.includes(supply.id)).length, optionalSupplies.length),
@@ -364,6 +392,18 @@ export class GameCore {
     if (!Number.isFinite(deltaMs) || deltaMs < 0 || !Number.isFinite(timeScale) || timeScale < 0 || timeScale > 1) return failure('invalid-delta');
     const scaled = deltaMs * timeScale;
     this.#attempt.elapsedMs += scaled;
+    // Public records accrue only while chapter four's broadcast is on. Closing
+    // it freezes the ledger (old records stay), so the cost is time public.
+    if (this.#chapter()?.number === 4 && this.#attempt.broadcastOn) {
+      const attempt = this.#attempt;
+      attempt.broadcastLeakMs += scaled;
+      while (attempt.broadcastLeakMs >= BROADCAST_LEAK_INTERVAL_MS && attempt.broadcastLeaks < BROADCAST_LEAK_LIMIT) {
+        attempt.broadcastLeakMs -= BROADCAST_LEAK_INTERVAL_MS;
+        attempt.broadcastLeaks += 1;
+        this.#addAlert(BROADCAST_LEAK_ALERT);
+      }
+      if (attempt.broadcastLeaks >= BROADCAST_LEAK_LIMIT) attempt.broadcastLeakMs = 0;
+    }
     if (this.#attempt.evacuationStarted) {
       this.#attempt.evacuationRemainingMs -= scaled;
       if (this.#attempt.evacuationRemainingMs <= 0) return this.retryChapter('evacuation-timeout');
@@ -392,10 +432,14 @@ export class GameCore {
     this.#attempt.collectedSupplyIds.push(supplyId);
     this.#attempt.qualifiers = Math.min(RULES.qualifierCapacity, this.#attempt.qualifiers + (supply.qualifiers || 0));
     // Every finite supply also carries one local AI-token cache. Tokens are
-    // refilled only when the player physically reaches that pickup.
-    const tokenGain = Math.max(0, Math.min(RULES.aiTokenCapacity - this.#attempt.aiTokens, Number(supply.aiTokens) || RULES.aiTokenSupply));
+    // refilled only when the player physically reaches that pickup. A heal-only
+    // pocket (aiTokens: 0) restores health instead of granting a token.
+    const tokenGain = Math.max(0, Math.min(RULES.aiTokenCapacity - this.#attempt.aiTokens,
+      supply.aiTokens === undefined ? RULES.aiTokenSupply : Number(supply.aiTokens) || 0));
     this.#attempt.aiTokens += tokenGain;
-    return success({ tokenGain, qualifierGain: supply.qualifiers || 0 });
+    const healthGain = Math.max(0, Math.min(RULES.maxHealth - this.#attempt.health, Number(supply.heal) || 0));
+    this.#attempt.health += healthGain;
+    return success({ tokenGain, qualifierGain: supply.qualifiers || 0, healthGain, health: this.#attempt.health });
   }
 
   collectTokenSupply(cacheId) {
@@ -497,6 +541,23 @@ export class GameCore {
   }
 
   /** The action engine reports success only after the target's world effect actually happened. */
+  recordCommandEffects({ commandId, teammate, targetId, affectedTargetIds = [] } = {}) {
+    if (!this.#attempt || !['playing', 'paused'].includes(this.#phase)) return failure('not-in-chapter');
+    const attempt = this.#attempt, targets = this.#targets();
+    if (teammate !== 'Grok' || !attempt.commandIds.includes(commandId)
+      || !attempt.completedTargetIds.includes(targetId)
+      || !targets.some(target => target.id === targetId && target.teammate === teammate)) return failure('unverified-command-effects');
+    if (!Array.isArray(affectedTargetIds) || affectedTargetIds.length > 100
+      || affectedTargetIds.some(id => !targets.some(target => target.id === id && target.teammate === teammate && target.effect === 'break-obstacle'))) return failure('invalid-command-effects');
+    const credited = [];
+    for (const id of new Set(affectedTargetIds)) {
+      if (!attempt.completedTargetIds.includes(id)) { attempt.completedTargetIds.push(id); credited.push(id); }
+      if (targets.find(target => target.id === id).collaboration && !attempt.collaborationIds.includes(id)) attempt.collaborationIds.push(id);
+    }
+    return success({ credited });
+  }
+
+  /** The selected target and every verified world effect belong to one paid command. */
   completeCommand(teammate, commandId) {
     if (!this.#playing()) return failure('not-playing');
     const attempt = this.#attempt;
@@ -595,6 +656,8 @@ export class GameCore {
   /** Stage only. It does not commit score, exposure, broadcast or story flags. */
   board() {
     if (!this.#playing()) return failure('not-playing');
+    // Only chapter objectives gate boarding. Tutorial progress, input order,
+    // teaching examples and optional investigations do not participate here.
     const unmet = this.objectives().filter((objective) => !objective.complete);
     if (unmet.length) return failure(`objectives-incomplete:${unmet.map((goal) => goal.id).join(',')}`);
     const chapter = this.#chapter();
@@ -604,19 +667,32 @@ export class GameCore {
     const breakdown = { required: 60, optional: Math.min(20, optionalCount * 10),
       collaboration: Math.min(10, attempt.collaborationIds.length * 5),
       lowAlert: Math.max(0, 10 - attempt.alarmIds.length * 2) };
+    // Chapter four prices the broadcast decision: staying public keeps the
+    // faster 0.4 s delivery but forfeits 10 points. Closing it costs time.
+    if (chapter.number === 4) breakdown.broadcast = attempt.broadcastOn ? -10 : 0;
     this.#pending = {
       chapterId: chapter.id, score: Object.values(breakdown).reduce((sum, value) => sum + value, 0), breakdown,
       elapsedMs: attempt.elapsedMs, exposureDelta: exposureOf(attempt),
-      events: { publicCommands: attempt.publicCommandIds.length, publicDeliveries: attempt.publicDeliveryIds.length, alarms: attempt.alarmIds.length },
-      broadcastOn: attempt.broadcastOn, storyFlags: [...attempt.storyFlags], failedAttempts: this.#failures.length,
+      events: { publicCommands: attempt.publicCommandIds.length, publicDeliveries: attempt.publicDeliveryIds.length,
+        publicLeaks: broadcastLeaksOf(attempt), alarms: attempt.alarmIds.length },
+      broadcastOn: attempt.broadcastOn, storyFlags: [...attempt.storyFlags], failedAttempts: this.#chapterRestarts,
     };
     this.#phase = 'chapter-result';
     return success({ result: copy(this.#pending) });
   }
 
-  retryChapter(reason = 'manual') {
+  /**
+   * `count` records one real chapter termination (death, evacuation timeout).
+   * Manual restarts from the failure or result screen pass `count: false`:
+   * the termination is already counted, so the settlement total stays equal
+   * to the number of deaths instead of inflating with every button press.
+   */
+  retryChapter(reason = 'manual', { count = true } = {}) {
     if (!this.#attempt || !['playing', 'paused', 'chapter-result'].includes(this.#phase)) return failure('not-in-chapter');
-    this.#failures.push({ reason: String(reason).slice(0, 80), elapsedMs: this.#attempt.elapsedMs });
+    if (count) {
+      this.#failures.push({ reason: String(reason).slice(0, 80), elapsedMs: this.#attempt.elapsedMs });
+      this.#chapterRestarts += 1;
+    }
     this.#generation += 1;
     this.#attempt = makeAttempt(this.#checkpoint, this.#chapter(), this.#generation);
     this.#pending = null;
@@ -634,6 +710,7 @@ export class GameCore {
     campaign.completed = campaign.results.length === CHAPTERS.length;
     this.#pending = null;
     this.#failures = [];
+    this.#chapterRestarts = 0;
     this.#phase = campaign.completed ? 'campaign-complete' : 'playing';
     this.#generation += 1;
     this.#attempt = campaign.completed ? null : makeAttempt(this.#checkpoint, CHAPTERS[campaign.results.length], this.#generation);

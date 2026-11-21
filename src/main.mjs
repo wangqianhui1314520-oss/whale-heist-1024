@@ -28,6 +28,9 @@ let loadSequence=0,pauseAfterLoad=false,lastFrame=0,lastUI=0,accumulator=0,lastA
 let storyPlayer=null,storyAfter=null,storyRunId=0,pendingChapterIntro=false,overlayStack=[],promptError=null,bindingAction=null,failure=null;
 let noticeQueue=[],lastNoticeAt=0,trainingUsed=false,recordCounter=0,preparationSeen=false,grokJoinPlayed=false;
 let chapterOrderPlayed=false,evacuationVoiceTick=0;
+// A checkpoint is written on room entry / pickup, so a death deep in a room
+// used to restore the exact low health that caused it. Keep a floor on retry.
+const CHECKPOINT_HEALTH_FLOOR=60;
 // Watchdog: the world must never stall while the player is in free play. If the
 // simulation clock stops advancing behind an opaque "no overlay" state, recover
 // instead of leaving the character frozen.
@@ -48,7 +51,7 @@ function preloadStoryImage(story, style=settings.storyStyle){
       resolve(ok?image:null);
     };
     image.onload=()=>done(true);image.onerror=()=>done(false);
-    image.src=path;
+    image.src=globalThis.__ASSET_DATA__?.[path]??path;
     if(typeof image.decode==='function')image.decode().then(()=>done(true),()=>{if(image.complete)done(Boolean(image.naturalWidth));});
     else if(image.complete)done(Boolean(image.naturalWidth));
   });
@@ -104,13 +107,15 @@ function getView(){
  const scene=storyPlayer?{sceneId:storyPlayer.scene.id,title:storyPlayer.scene.title,...storyPlayer.scene.steps[storyPlayer.index],runId:storyPlayer.runId,replay:storyPlayer.replay,index:storyPlayer.index,total:storyPlayer.scene.steps.length,auto:settings.autoDialogue,presentation:settings.storyStyle,comicPanels:storyPlayer.scene.steps.map((entry)=>({caption:entry.speaker,text:entry.text,speaker:entry.speaker,backdrop:entry.backdrop})),progress:(storyPlayer.index+1)/storyPlayer.scene.steps.length,choiceSelected:storyPlayer.choiceSelected||null}:null;
  return {core:view,world:snapshot,mode,muted:audio.muted,reduceMotion:settings.reduceMotion,unlocked:unlocked(),settings,saveSummary:saveSummary(),
   tutorial:tutorialView,story:scene,records:records(),recordTriage:recordTriageState(records()),checkpoint:{available:Boolean(checkpoint),label:checkpoint?.label||'本章入口'},bindingAction,
-  selectedChapterId,contractId,contracts:CONTRACTS,archive:{stories:getStoryReplayIndex({...view,records:records(),seenScenes:archive.seenStories}).map(entry=>({...entry,available:/^chapter[1-5]-briefing$/.test(entry.id)&&entry.chapter<=(view.chapter?.number||5)})),
+  selectedChapterId,contractId,contracts:CONTRACTS,archive:{stories:getStoryReplayIndex({...view,records:records(),seenScenes:archive.seenStories}).map(entry=>({...entry,available:entry.id==='prologue'&&archive.seenStories.includes('departure')||/^chapter[1-5]-briefing$/.test(entry.id)&&entry.chapter<=(view.chapter?.number||5)})),
   templates:[...archive.templates.map(t=>({...t,unlocked:true})),...getTemplates(null,view.chapter?.number||5).map(t=>({...t,name:t.label,unlocked:true}))],
   characters:[{name:'DeepSeek',job:'行动队长',description:'鲸尾冲刺、搬运资料，安排大家一起返航。'},{name:'Grok',job:'破障',description:'默认连续冲锋，限定后到指定位置停下。'},{name:'Claude',job:'诱饵',description:'纸页引开同层巡逻，限定后只影响一名。'},{name:'GLM',job:'扫描',description:'复查隐藏机关，范围越广越需要留意警戒器。'}]}};
 }
 const updateUI=()=>ui.update(getView());
 function setLoading(progress,label){document.getElementById('game-shell').dataset.loading=progress<1?'true':'false';ui.setLoading(progress,label);}
-function announce(text,priority=0){if(!text)return;if(noticeQueue.some(n=>n.text===text))return;noticeQueue.push({text,priority});noticeQueue.sort((a,b)=>b.priority-a.priority);noticeQueue=noticeQueue.slice(0,5);}
+function announce(text,priority=0){if(!text)return;
+ if(priority>=2&&ui.screen==='none'){ui.toast(text);lastNoticeAt=performance.now();noticeQueue=noticeQueue.filter(n=>n.priority>=priority);return;}
+ if(noticeQueue.some(n=>n.text===text))return;noticeQueue.push({text,priority});noticeQueue.sort((a,b)=>b.priority-a.priority);noticeQueue=noticeQueue.slice(0,5);}
 function flushNotices(now){if(noticeQueue.length&&['none','command'].includes(ui.screen)&&now-lastNoticeAt>2700){ui.toast(noticeQueue.shift().text);lastNoticeAt=now;}}
 function snapshot(){if(!active()||!world.exportState)return null;return {core:core.exportRuntime(),world:world.exportState(),tutorial:tutorial?.serialize(),trainingUsed};}
 function persist(){const view=core.view();if(mode!=='campaign'||(!world&&!view.campaign.completed))return;archive.records=records();saveArchive(storage,archive);
@@ -178,7 +183,7 @@ function showBriefing(){input.clear();core.setPaused(true);updateUI();ui.show('b
 function playChapterIntro(){
  pendingChapterIntro=false;
  const chapter=core.view().chapter;if(!chapter){resumePlay();return;}
- if(chapter.number===1){beginStory('prologue',resumePlay,{skipSeen:false});return;}
+ if(chapter.number===1){beginStory('departure',resumePlay,{skipSeen:false});return;}
  const scenes=chapter.number===2?['claude-join']:chapter.number===3?['glm-join']:[];
  scenes.push(`chapter${chapter.number}-briefing`);sequenceStories(scenes,showBriefing,'briefing',{skipSeen:false});
 }
@@ -187,7 +192,7 @@ function resumePlay(){if(!world){showTitle();return;}if(mustStayPaused()){core.s
  core.setPaused(false);input.clear();accumulator=0;lastFrame=performance.now();updateUI();ui.show('none');audio.setPaused(false);}
 function worldEvent(type,payload={}){
  lesson?.handleEvent(type,payload);
- if(type==='toast')announce(payload.text,/警戒|受击|撤离|失败/.test(payload.text)?2:0);
+ if(type==='toast')announce(payload.text,/警戒|受击|撤离|失败/.test(payload.text)?2:/完成|交付|回程|维护舱|装载/.test(payload.text)?1:0);
  if(type==='evacuation-status'){
   if(evacuationVoiceTick++%2)audio.playVoice('grok','evacuate');else audio.playVoice('hero','evacuate');
   if(payload.notice)announce(payload.notice,1);}
@@ -197,11 +202,12 @@ function worldEvent(type,payload={}){
   else if(payload.name==='alarm')audio.playVoice('claude','alert');
   else if(payload.name==='delivery')audio.playVoice('grok','pickup');
   else if(payload.name==='guard-warning')audio.playVoice('claude','careful');}
- if(type==='dialogue'&&ui.screen==='none'&&!world?.scanWarning)ui.dialogue(payload.character,payload.text);
+ if(type==='dialogue'&&['none','command'].includes(ui.screen)&&!world?.scanWarning)ui.dialogue(payload.character,payload.text);
  // A pickup changes the backpack and is not replayed by any other checkpoint,
  // so snapshot it immediately: dying before the next boat trip used to erase
  // everything collected in this room without telling the player.
  if(type==='pickup')makeCheckpoint((world?.currentRoom?.name||'房间')+' · 拾取后');
+ if(type==='checkpoint')makeCheckpoint(payload.label||'中途检查点');
  if(type==='record'){const row=normalizedRecord(payload);archive.records.push(row);archive.records=archive.records.slice(-300);}
  if(type==='command-receipt'&&(payload.training||payload.budgetSource==='training'))trainingUsed=true;
  if(type==='command-receipt'&&!payload.failed&&!chapterOrderPlayed){chapterOrderPlayed=true;audio.playVoice('hero','confirm');}
@@ -212,15 +218,17 @@ function worldEvent(type,payload={}){
  if(type==='room-change'){input.clear();makeCheckpoint(payload.room?.name||world.currentRoom?.name||'房间入口');audio.play('door');}
  if(type==='analysis-open'){
   audio.playVoice('claude','analyze');
-  input.clear();core.setPaused(true);persist();updateUI();ui.show('analysis',{vulnerability:core.vulnerabilityState()});
+  openOverlay('analysis',{vulnerability:core.vulnerabilityState()});persist();
  }
  if(type==='chapter-result'){audio.playMusic('results');audio.stopAmbience('harbor');audio.stopAmbience('alarm');audio.stopAmbience('ops');audio.playVoice('grok','cheer');input.clear();lesson?.handleEvent('chapter-result',{complete:true});archive.records=records();saveArchive(storage,archive);
   const view=core.view();if(mode!=='demo'&&contractId==='standard'&&(mode==='challenge'||settings.tacticalPause===false))best=recordBest(storage,best,view.pendingResult);
-  updateUI();ui.show('chapter-result',{core:view,result:view.pendingResult,mode});}
+  // The delivery toast is still on screen when the boat boards; drop it so it
+  // does not float over the score card in the result layout.
+  updateUI();ui.resetFeedback?.();ui.show('chapter-result',{core:view,result:view.pendingResult,mode,cooperation:payload.cooperation});}
 }
 async function startWorld({state=null,showIntro=true,resumeCheckpoint=null}={}){
  const view=core.view();if(!view.chapter){world=null;tutorial=null;lesson=null;checkpoint=null;updateUI();beginStory('epilogue',()=>{updateUI();ui.show('campaign-result',{core:core.view()});},{destination:'result'});return;}
- const request=++loadSequence;busy=true;pauseAfterLoad=mustStayPaused();input.clear();setLoading(.05,`正在展开「${view.chapter.name}」…`);
+ const request=++loadSequence;busy=true;pauseAfterLoad=mustStayPaused();input.clear();ui.resetFeedback?.();setLoading(.05,`正在展开「${view.chapter.name}」…`);
  const keys=sceneImageKeys(view.chapter);
  let recoveryNotice='';
  try{
@@ -235,7 +243,7 @@ async function startWorld({state=null,showIntro=true,resumeCheckpoint=null}={}){
     // Keep the campaign checkpoint and restart this chapter from its safe entrance.
     // A fresh room must be paired with a fresh attempt. Retaining old cargo,
     // completed commands or evacuation state would mix incompatible worlds.
-    core.retryChapter('incompatible-checkpoint');clearChapterRecords(view.chapter.id);
+    core.retryChapter('incompatible-checkpoint',{count:false});clearChapterRecords(view.chapter.id);
     if(contract.rules.qualifierLimit!==null)core.configureAttempt({qualifiers:Math.min(view.chapter.qualifiers,contract.rules.qualifierLimit)});
     state=null;resumeCheckpoint=null;
     world=new GameWorld(core,getMap(view.chapter.id),{onEvent:worldEvent,expanded:true,compilePrompt,contract,
@@ -250,6 +258,8 @@ async function startWorld({state=null,showIntro=true,resumeCheckpoint=null}={}){
   if(!checkpoint)makeCheckpoint(world.currentRoom?.name||'本章入口');
   audioScene=view.chapter.number===5?'evacuation':view.chapter.number===4?'investigation':'harbor';audio.setScene(audioScene);
   pendingChapterIntro=showIntro&&mode==='campaign';
+  if(showIntro&&mode==='campaign'&&view.chapter.number===4)announce('广播仍开着：交付更快（0.4s），但每次公开动作都会留下记录。到控制台关闭广播（交付变慢 1.6s），再设置返航信标。',1);
+  if(showIntro&&mode==='campaign'&&view.chapter.number===5)announce('先让三名队友在远端信标到齐，装载最后资料，再确认 60 秒撤离。',1);
   if(pauseAfterLoad||mustStayPaused()){core.setPaused(true);ui.show('pause');}
   else resumePlay();
  }catch(error){if(request===loadSequence){busy=false;setLoading(1);updateUI();ui.show('failure',{message:`场景准备失败：${error.message}。可重试本章或返回菜单。`});console.error(error);}}
@@ -261,9 +271,10 @@ async function resumeCampaign(){mode='campaign';contractId='standard';const expe
  core=experience?new GameCore({checkpoint:experience.campaign,storage,persist:false}):GameCore.resume({storage});
  if(experience?.current){const result=core.restoreRuntime(experience.current.core);if(result.ok){await startWorld({state:experience.current,showIntro:false,resumeCheckpoint:experience.checkpoint?{label:experience.checkpointLabel,snapshot:experience.checkpoint}:null});restoreStory(experience.story);return;}}
  await startWorld({showIntro:!experience});if(experience?.story&&experience.chapterId==='campaign-complete')restoreStory(experience.story);}
-function resetFailedChapter(){const chapter=core.view().chapter?.id;clearChapterRecords(chapter);core.retryChapter();checkpoint=null;return startWorld({showIntro:false});}
+function resetFailedChapter(){const chapter=core.view().chapter?.id;clearChapterRecords(chapter);core.retryChapter('manual',{count:false});checkpoint=null;return startWorld({showIntro:false});}
 async function retryCheckpoint(){if(!checkpoint?.snapshot){await resetFailedChapter();return;}const state=copy(checkpoint.snapshot),label=checkpoint.label;
- const restored=core.restoreRuntime(state.core,{reason:failure?.reason||'checkpoint-retry'});if(!restored.ok){await resetFailedChapter();return;}
+ if(state?.core?.attempt)state.core.attempt.health=Math.max(Number(state.core.attempt.health)||0,CHECKPOINT_HEALTH_FLOOR);
+ const restored=core.restoreRuntime(state.core);if(!restored.ok){await resetFailedChapter();return;}
  clearChapterRecords(core.view().chapter.id);await startWorld({state,showIntro:false,resumeCheckpoint:{label,snapshot:state}});persist();}
 function setPromptCondition(type){if(type==='none'||!type){world.setCondition(null);world.setConstraint(null);return;}
  const target=conditionTarget(type);if(!target){promptError='当前房间没有适合这个等待条件的对象。';return;}
@@ -300,6 +311,10 @@ async function act(action,payload={}){
   case 'lost-focus':input.reset();audio.setPaused(true);if(['none','command'].includes(ui.screen)&&world){world.cancelPreview();core.setPaused(true);persist();updateUI();ui.show('pause');}break;
   case 'resume-play':resumePlay();break;case 'retry':await resetFailedChapter();break;case 'retry-checkpoint':await retryCheckpoint();break;
   case 'continue':if(mode==='campaign'){const result=core.continueCampaign();if(result.ok){checkpoint=null;world=null;tutorial=null;lesson=null;persist();await startWorld();}}else showChapters(mode==='demo');break;
+  // The after-action report is a sub-view of the settlement screen. Rebuild the
+  // payload from the live world so the cards always match this exact run.
+  case 'battle-report-open':ui.show('chapter-result',{...ui.payload,report:true,cooperation:world?.cooperationSummary?.()||ui.payload.cooperation});break;
+  case 'battle-report-back':ui.show('chapter-result',{...ui.payload,report:false});break;
   case 'title':showTitle();break;case 'help':openOverlay('help',{from:ui.screen});break;
   case 'chapter-select':showChapters();break;case 'demo-select':showChapters(true);break;
   case 'contracts-open':selectedChapterId=payload.chapterId;contractId='standard';openOverlay('contracts',{chapterId:payload.chapterId});break;
@@ -323,6 +338,7 @@ async function act(action,payload={}){
    archive=imported.archive;
    world=null;tutorial=null;lesson=null;mode='campaign';core=new GameCore({checkpoint:result.campaign,storage,persist:false});checkpoint=null;overlayStack=[];showTitle({save:false});ui.toast('导入完成，点击继续航程。');break;}
   case 'archive-open':openOverlay('archive');break;case 'records-open':openOverlay('records');break;case 'map-open':if(world)openOverlay('map',{rooms:world.rooms});break;
+  case 'route-toggle':if(world){world.showGuidanceRoute=!world.showGuidanceRoute;updateUI();}break;
   case 'analysis-open':if(world){openOverlay('analysis',{vulnerability:core.vulnerabilityState()});}break;
   case 'analysis-analyze':{const result=core.analyzeVulnerability(payload.clueId,'summarize');if(!result.ok)ui.toast(result.reason==='insufficient-analysis-tokens'?'分析 Token 不足，请先收集证据或返回行动。':'这条证据还不能分析。');else{world?.addRecord?.('vulnerability-analysis',{clueId:payload.clueId,outcome:result.analysis?.summary||'已完成离线摘要',public:false});persist();}updateUI();ui.show('analysis',{vulnerability:core.vulnerabilityState()});break;}
   case 'analysis-repair':{const result=core.selectVulnerabilityRepair(payload.repairId);if(!result.ok)ui.toast('该修复建议尚未解锁。');else{world?.addRecord?.('vulnerability-repair',{repairId:payload.repairId,outcome:'已采用离线修复建议，AI Token +1',public:false});ui.toast('修复建议已记录，AI Token +1。');persist();}updateUI();ui.show('analysis',{vulnerability:core.vulnerabilityState()});break;}
@@ -399,7 +415,7 @@ function frame(now){requestAnimationFrame(frame);const elapsed=Math.min(.08,(now
   }
   if(storyPlayer&&ui.screen==='story'&&settings.autoDialogue&&!mustStayPaused()){
   storyPlayer.elapsed+=elapsed;const step=storyPlayer.scene.steps[storyPlayer.index];
-  const waitsForStart=storyPlayer.scene.id==='prologue'&&!storyPlayer.replay&&storyPlayer.index===storyPlayer.scene.steps.length-1;
+  const waitsForStart=(storyPlayer.scene.id==='prologue'||storyPlayer.scene.requiresStart)&&!storyPlayer.replay&&storyPlayer.index===storyPlayer.scene.steps.length-1;
   if(!waitsForStart&&(!step.choice||storyPlayer.choiceSelected)){if(storyPlayer.elapsed>=Math.max(step.duration||3,step.text.length/settings.textSpeed+1))nextStory();}}
  // The story, pause and menu layers leave the last gameplay frame intact.
  // Repainting four high-resolution canvases behind an opaque overlay made
@@ -409,7 +425,7 @@ function frame(now){requestAnimationFrame(frame);const elapsed=Math.min(.08,(now
   if(!busy&&['none','command'].includes(ui.screen)&&core.view().phase==='playing'&&!commandPaused){accumulator+=elapsed;let count=0;
    while(accumulator>=1/60&&count++<6){const before=core.view().attempt;const result=world.update(1/60,input.sample());input.consume();accumulator-=1/60;
     if(settings.interactionMode==='toggle'&&world.mustReleaseInteract)input.releaseInteraction();
-    if(result?.rebuild){tutorial?.tick(0,{failed:true});failure={reason:core.view().failuresThisChapter.at(-1)?.reason||'health-depleted',location:world.currentRoom?.name};input.clear();core.setPaused(true);updateUI();ui.show('failure',{failure});audio.playMusic('failure');audio.stopAmbience('harbor');audio.stopAmbience('alarm');audio.stopAmbience('ops');audio.setPaused(false);accumulator=0;break;}
+    if(result?.rebuild){tutorial?.tick(0,{failed:true});failure={reason:core.view().failuresThisChapter.at(-1)?.reason||'health-depleted',location:world.currentRoom?.name};input.clear();core.setPaused(true);ui.resetFeedback();updateUI();ui.show('failure',{failure});audio.playMusic('failure');audio.stopAmbience('harbor');audio.stopAmbience('alarm');audio.stopAmbience('ops');audio.setPaused(false);accumulator=0;break;}
     const afterUpdate=core.view().attempt;
     // Damage protection permits at most one real hit in a fixed update. A
     // health drop therefore counts once, including a fall back to the dock.
@@ -431,9 +447,10 @@ function frame(now){requestAnimationFrame(frame);const elapsed=Math.min(.08,(now
  if(now-lastUI>75){updateUI();lastUI=now;flushNotices(now);if(world&&['none','command'].includes(ui.screen)){const high=(core.view().attempt?.alert||0)>=70;if(high&&!audio.alertHigh)audio.playVoice('glm','warn');audio.setAlertHigh(high);}}
  if(now-lastAutosave>12000&&mode==='campaign'&&world&&core.view().phase==='playing'&&ui.screen==='none'){persist();lastAutosave=now;}
 }
-async function bootstrap(){busy=true;void preloadStoryImage({sceneId:'prologue'});
- try{setLoading(.1,'正在打开海底航图…');const url=new URL('../assets/runtime-catalog.json',import.meta.url),response=await fetch(url);if(!response.ok)throw new Error(`HTTP ${response.status}`);
-  assets=new AssetLibrary(await response.json(),url);setLoading(1);updateUI();ui.show('title',saveSummary());requestAnimationFrame(frame);
+async function bootstrap(){busy=true;
+ try{setLoading(.1,'正在打开海底航图…');const url=new URL('assets/runtime-catalog.json',document.baseURI);
+  const catalog=globalThis.__CATALOG__??await (async()=>{const response=await fetch(url);if(!response.ok)throw new Error(`HTTP ${response.status}`);return response.json();})();
+  assets=new AssetLibrary(catalog,url);setLoading(1);updateUI();ui.show('title',saveSummary());requestAnimationFrame(frame);
  }catch(error){setLoading(1);updateUI();ui.show('failure',{message:'资源读取失败，请通过启动器打开游戏。'});console.error(error);}finally{busy=false;}}
 void bootstrap();
 

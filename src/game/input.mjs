@@ -15,10 +15,10 @@ export class GameInput{
         event.preventDefault();if(!event.repeat)onAction('prompt-cycle',{direction:event.code==='ArrowRight'?1:-1});return;}
       if(screen==='command'&&event.code==='Enter'&&!event.target?.closest?.('button')){event.preventDefault();if(!event.repeat)onAction('command-confirm');return;}
       const action=this.actionFor(event.code);
-      // Movement keys must keep working even when a menu button still owns the
-      // focus (story/menu close leaves focus on a stale button). Space stays
-      // native so a focused button can still be activated by keyboard.
-      const movement=Boolean(action)&&['left','right','up','down','dash','interact'].includes(action);
+      // HUD buttons can retain focus during play. Jump must still reach the
+      // character there; Space keeps its native button action in menus.
+      const movement=Boolean(action)&&(['left','right','up','down','dash','interact'].includes(action)
+        || action==='jump'&&screen==='none');
       if(action&&(movement||!event.target?.closest?.('button'))){event.preventDefault();if(!this.keys.has(event.code))this.edges.add(action);this.keys.add(event.code);
         if(action==='interact'&&!event.repeat&&this.settings.interactionMode==='toggle')this.interactToggle=!this.interactToggle;}
       if(!event.repeat&&event.code==='Escape'){event.preventDefault();onAction('pause');}

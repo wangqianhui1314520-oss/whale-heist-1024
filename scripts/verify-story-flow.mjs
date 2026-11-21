@@ -163,7 +163,7 @@ await test('all controller scene references and all chapter briefings resolve to
 
 await test('first chapter enters hands-on teaching immediately after the confirmed opening', async () => {
   reset(); await c.startWorld();
-  assert.equal(c.player?.scene.id, 'prologue');
+  assert.equal(c.player?.scene.id, 'departure');
   assert.equal(c.core.view().phase, 'paused');
   finishCurrent(); assert.equal(c.player, null);
   assert.equal(c.ui.screen, 'none'); assert.equal(c.core.view().phase, 'playing');
@@ -288,7 +288,7 @@ await test('portrait-load pause preserves the complete first chapter introductio
   reset(); orientation.matches = true; await c.startWorld();
   assert.equal(c.ui.screen, 'pause'); assert.equal(c.player, null);
   orientation.matches = false; await c.act('resume-play');
-  assert.equal(c.player?.scene.id, 'prologue');
+  assert.equal(c.player?.scene.id, 'departure');
   finishCurrent(); assert.equal(c.player, null); assert.equal(c.ui.screen, 'none');
   assert.equal(c.core.view().phase, 'playing');
 });
@@ -304,8 +304,22 @@ await test('Grok join needs an actual first-chapter paper-window success and onl
   finishCurrent(); c.worldEvent('command-receipt', receipt); assert.equal(c.player, null);
 });
 
-await test('an interrupted first opening restores its current line, chosen keywords and direct teaching destination', async () => {
-  reset(); await c.startWorld();
+await test('the short departure resumes its second beat and exposes the optional full prologue without marking it seen', async () => {
+  reset(); await c.startWorld(); c.nextStory();
+  assert.equal(c.player.scene.id, 'departure'); assert.equal(c.player.index, 1);
+  assert.equal(experienceModule.loadExperience(memory).value.story.index, 1);
+  c.reload(); await c.act('resume');
+  assert.equal(c.player.scene.id, 'departure'); assert.equal(c.player.index, 1);
+  assert.equal(c.core.view().phase, 'paused');
+  await c.act('story-skip');
+  assert.equal(c.player, null); assert.equal(c.ui.screen, 'none');
+  assert.equal(c.core.view().phase, 'playing'); assert.equal(c.core.view().attempt.inventory.length, 0);
+  assert(c.archive.seenStories.includes('departure')); assert(!c.archive.seenStories.includes('prologue'));
+  assert.equal(c.ui.view.archive.stories.find(entry=>entry.id==='prologue').available, true);
+});
+
+await test('a legacy full opening restores its current line, chosen keywords and direct teaching destination', async () => {
+  reset(); await c.startWorld(); c.beginStory('prologue');
   for (let index = 0; index < 3; index++) c.nextStory();
   assert.equal(c.player.scene.steps[c.player.index].choice.options[0].id, 'observe');
   c.storyChoice('observe');

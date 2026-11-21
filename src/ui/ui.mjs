@@ -33,8 +33,15 @@ export class GameUI {
     this.screen = 'none';
     this.payload = {};
     this.toastTimer = null;
-    this.dialogueTimer = null;
+    this.dialogueTimer = null; this.dialogueAt = 0;
     this.commandSignature = '';
+    this.screenOpenedAt = -Infinity;
+    this.lastPointerDownAt = -Infinity;
+    // Presses that started on a HUD touch control can finish after the game
+    // opens an overlay. Their release click lands on whatever is under the
+    // finger now (often the settlement's retry button), so remember when the
+    // press began to tell those carry-over clicks apart from a real tap.
+    document.addEventListener('pointerdown', () => { this.lastPointerDownAt = performance.now(); }, true);
     this.root = document.getElementById('ui-root');
     this.menu = document.getElementById('menu-root');
     this.toasts = document.getElementById('toast-root');
@@ -53,6 +60,9 @@ export class GameUI {
     const actionHandler = (event) => {
       const element = event.target.closest('[data-action]');
       if (!element || element.disabled) return;
+      // Drop carry-over releases: the press began before this overlay existed,
+      // so the click is the end of a HUD hold, not a deliberate menu tap.
+      if (event.currentTarget === this.menu && event.detail > 0 && performance.now() - this.screenOpenedAt < 1200 && this.lastPointerDownAt < this.screenOpenedAt) return;
       if (this.v3.dispatch(element.dataset.action, element)) return;
       const payload = {};
       if (element.dataset.teammate) payload.teammate = element.dataset.teammate;
@@ -167,14 +177,18 @@ export class GameUI {
       const available = (chapter.teammates || []).includes(name);
       const remaining = Math.max(0, (attempt.readyAtMs?.[name] || 0) - (attempt.elapsedMs || 0));
       const executing = attempt.commands?.[name]?.status === 'executing';
+      const crew = (world.crew || []).find((entry) => entry.name === name);
+      const stage = crew?.stage || null;
+      const recognised = crew?.order?.stage === 'done' && Number.isFinite(crew.order.at) && Number(world.time || 0) - crew.order.at < 4;
+      const stageLabel = stage === 'waiting' ? '等待' : stage === 'travel' ? '接单' : stage === 'execute' ? '执行' : recognised ? '回执' : '';
       const button = this.root.querySelector(`[data-teammate="${name}"]`);
       button.disabled = !available;
       button.classList.toggle('is-locked', !available);
       button.classList.toggle('is-selected', world.selected === name);
-      button.classList.toggle('is-busy', remaining > 0 || executing);
-      this.fields[`cooldown-${name}`].hidden = !remaining && !executing;
-      this.#text(`cooldown-${name}`, executing ? '执行中' : `${Math.ceil(remaining / 1000)}s`);
-      this.#text(`ready-${name}`, !available ? '锁定' : executing ? '执行' : remaining > 0 ? '冷却' : '就绪');
+      button.classList.toggle('is-busy', remaining > 0 || executing || Boolean(stage));
+      this.fields[`cooldown-${name}`].hidden = !remaining && !executing && !stage;
+      this.#text(`cooldown-${name}`, stage ? stageLabel : executing ? '执行中' : `${Math.ceil(remaining / 1000)}s`);
+      this.#text(`ready-${name}`, !available ? '锁定' : stageLabel || (executing ? '执行' : remaining > 0 ? '冷却' : '就绪'));
     });
     const cooldown = Number(world.player?.dashCooldown || 0);
     this.#text('dash', cooldown > 0 ? '冷却中' : '冲刺');
@@ -189,6 +203,7 @@ export class GameUI {
   show(screen, payload = {}) {
     this.previousScreen = this.screen;
     this.screen = screen;
+    this.screenOpenedAt = performance.now();
     this.payload = payload || {};
     this.menu.className = `menu-root screen-${screen}`;
     this.root.dataset.screen = screen;
@@ -196,8 +211,20 @@ export class GameUI {
     this.dialogues.hidden = screen !== 'none';
     this.menu.hidden = screen === 'none';
     this.menu.setAttribute('aria-label', { title: '主菜单', pause: '暂停菜单', help: '操作说明', 'chapter-select': '章节选择', 'chapter-result': '章节结算', 'campaign-result': '主线结算', command: '队友指令' }[screen] || '');
-    if (screen === 'none') { this.menu.replaceChildren(); document.getElementById('game-canvas').focus({ preventScroll: true }); return; }
-    if (this.v3.screen(screen, payload)) { queueMicrotask(() => this.menu.querySelector(screen === 'command' ? '[data-command-select="prompt-target"]' : screen === 'story' ? '[data-action="story-next"]' : 'button:not(:disabled)')?.focus({ preventScroll: true })); return; }
+    if (screen === 'none') {
+      // A command is confirmed while the command panel is still open; keep the
+      // crew's reply for the moment the panel closes instead of dropping it.
+      if (this.dialogueAt && Date.now() - this.dialogueAt < 1200 && this.dialogues.innerHTML) {
+        this.dialogues.hidden = false; this.dialogues.classList.add('is-visible');
+        clearTimeout(this.dialogueTimer);
+        this.dialogueTimer = setTimeout(() => this.dialogues.classList.remove('is-visible'), 6000);
+      }
+      this.menu.replaceChildren(); document.getElementById('game-canvas').focus({ preventScroll: true }); return;
+    }
+    if (this.v3.screen(screen, payload)) { queueMicrotask(() => {
+      const focus = screen === 'command' ? this.menu.querySelector('[data-command-confirm]:not(:disabled)') || this.menu.querySelector('[data-command-select="prompt-target"]') : this.menu.querySelector(screen === 'story' ? '[data-action="story-next"]' : 'button:not(:disabled)');
+      focus?.focus({ preventScroll: true });
+    }); return; }
     if (screen === 'title') this.#renderTitle();
     else if (screen === 'pause') this.#renderPause();
     else if (screen === 'help') this.#renderHelp();
@@ -236,7 +263,7 @@ export class GameUI {
     const chapter = CHAPTERS.find((item) => item.id === result.chapterId) || core.chapter || {};
     const special = (this.payload.mode || this.view?.mode || 'campaign') !== 'campaign';
     const breakdown = result.breakdown || {};
-    this.#panel(`CHAPTER ${String(chapter.number || 1).padStart(2, '0')} COMPLETE`, esc(chapter.name || '本章完成'), `<div class="chapter-result-hero"><div class="grade-seal">${esc(result.grade || (result.score >= 90 ? 'S' : result.score >= 75 ? 'A' : 'B'))}</div><div><span>行动评分</span><strong>${result.score || 0}<small> / 100</small></strong><p>小队已登艇。数据安全归档。</p></div></div><div class="result-metrics"><span>本章用时<b>${clock(result.elapsedMs)}</b></span><span>暴露记录<b>${result.exposureDelta || 0}</b></span><span>重新出发<b>${result.failedAttempts || 0}</b></span></div><div class="score-lines"><span>任务 <b>${breakdown.required || 0}</b></span><span>探索 <b>${breakdown.optional || 0}</b></span><span>协作 <b>${breakdown.collaboration || 0}</b></span><span>低警戒 <b>${breakdown.lowAlert || 0}</b></span></div><div class="result-actions">${button('retry', '再试一次')}${button(special ? 'chapter-select' : 'continue', special ? '选择章节' : chapter.number === 5 ? '全员返航' : '下一章 →', 'primary')}</div><p class="tiny-note">${special ? '本次记录独立于主线。' : '选择继续后，本章成绩将自动保存。'}</p>`, 'results-panel');
+    this.#panel(`CHAPTER ${String(chapter.number || 1).padStart(2, '0')} COMPLETE`, esc(chapter.name || '本章完成'), `<div class="chapter-result-hero"><div class="grade-seal">${esc(result.grade || (result.score >= 90 ? 'S' : result.score >= 75 ? 'A' : 'B'))}</div><div><span>行动评分</span><strong>${result.score || 0}<small> / 100</small></strong><p>小队已登艇。数据安全归档。</p></div></div><div class="result-metrics"><span>本章用时<b>${clock(result.elapsedMs)}</b></span><span>暴露记录<b>${result.exposureDelta || 0}</b></span><span>重新出发<b>${result.failedAttempts || 0}</b></span></div><div class="score-lines"><span>任务 <b>${breakdown.required || 0}</b></span><span>探索 <b>${breakdown.optional || 0}</b></span><span>协作 <b>${breakdown.collaboration || 0}</b></span><span>低警戒 <b>${breakdown.lowAlert || 0}</b></span>${breakdown.broadcast !== undefined ? `<span>广播 <b>${breakdown.broadcast}</b></span>` : ''}</div><div class="result-actions">${button('retry', '再试一次')}${button(special ? 'chapter-select' : 'continue', special ? '选择章节' : chapter.number === 5 ? '全员返航' : '下一章 →', 'primary')}</div><p class="tiny-note">${special ? '本次记录独立于主线。' : '选择继续后，本章成绩将自动保存。'}</p>`, 'results-panel');
   }
 
   #renderCampaignResult() {
@@ -263,6 +290,12 @@ export class GameUI {
     this.menu.innerHTML = `<div class="command-dimmer"></div><section class="command-panel" role="dialog" aria-modal="true" aria-label="${esc(name)} 的指令"><div class="command-header"><img src="${portrait(name)}" alt=""><div><small>小队指令 · ${JOBS[name] || ''}</small><h2>${esc(name)}</h2></div><button type="button" class="icon-button" data-action="command-cancel" aria-label="取消指令">${icon('close')}</button></div><div class="command-target"><span>当前目标</span><strong>${esc(preview?.label || '点击场景中的高亮目标')}</strong>${preview?.description ? `<p>${esc(preview.description)}</p>` : ''}${!available && unavailableReason ? `<p class="command-warning" role="status">${esc(unavailableReason)}</p>` : ''}</div><div class="command-options"><button type="button" data-action="command-confirm" data-precise="false" ${available ? '' : 'disabled'}><span class="command-option-heading"><b>整片开路</b><em>AI Token × 1</em></span><p>${esc(defaults[0])}</p><strong>范围较宽 →</strong></button><button type="button" class="precise-option" data-action="command-confirm" data-precise="true" ${available && qualifiers > 0 ? '' : 'disabled'}><span class="command-option-heading"><b>只开此处</b><em>${icon('token')} × 1 · 限定词 × 1</em></span><p>${esc(defaults[1])}</p><strong>${qualifiers > 0 ? '范围更准 →' : '限定词不足'}</strong></button></div><p class="command-footer">${preview ? '确认前可以在场景中切换目标。' : '先选择一个目标，再确认行动。'} <span>Esc 取消</span></p></section>`;
   }
 
+  resetFeedback() {
+    clearTimeout(this.toastTimer); clearTimeout(this.dialogueTimer);
+    this.toasts.classList.remove('is-visible'); this.toasts.textContent='';
+    this.dialogues.classList.remove('is-visible'); this.dialogues.hidden=true;
+  }
+
   toast(text) {
     clearTimeout(this.toastTimer);
     this.toasts.textContent = this.v3.hint(text);
@@ -273,6 +306,7 @@ export class GameUI {
   dialogue(character, text) {
     if (['story', 'briefing'].includes(this.screen)) return;
     clearTimeout(this.dialogueTimer);
+    this.dialogueAt = Date.now();
     this.dialogues.innerHTML = `<img src="${portrait(character || 'DeepSeek')}" alt=""><div><b>${esc(character || 'DeepSeek')}</b><p>${esc(this.v3.hint(text))}</p></div><span>▼</span>`;
     this.dialogues.hidden = this.screen !== 'none';
     this.dialogues.classList.add('is-visible');

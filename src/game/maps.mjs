@@ -103,18 +103,18 @@ export const MAPS = [
       item('resume-data-3', 560, 490),
       item('resume-data-4', 755, 490),
       item('resume-data-5', 810, 380),
-      item('resume-data-6', 1070, 380),
+      item('resume-data-6', 1100, 380),
       item('resume-extra-1', 490, 380, true),
       item('resume-extra-2', 800, 270, true),
     ],
     supplies: [{ id: 'resume-qualifier', x: 570, y: 270 }],
     targets: [
-      target('patrol-east', 'Claude', 990, 380, '调开东侧巡逻', 'change-patrol'),
+      target('patrol-east', 'Claude', 990, 490, '调开东侧巡逻', 'change-patrol'),
       target('cargo-divider', 'Grok', 662, 490, '撞开货物隔板', 'break-obstacle'),
       target('patrol-west', 'Claude', 350, 490, '调开西侧巡逻', 'change-patrol'),
     ],
     guards: [
-      { id: 'resume-east-guard', x: 960, y: 380, minX: 760, maxX: 1090, speed: 54 },
+      { id: 'resume-east-guard', x: 980, y: 490, minX: 950, maxX: 1010, speed: 40 },
       { id: 'resume-west-guard', x: 350, y: 490, minX: 180, maxX: 425, speed: 42 },
     ],
     traps: [{ id: 'resume-floor-trap', x: 725, y: 592, w: 75 }],
@@ -168,6 +168,7 @@ export const MAPS = [
     supplies: [
       { id: 'review-qualifier-a', x: 470, y: 380 },
       { id: 'review-qualifier-b', x: 1080, y: 170 },
+      { id: 'review-first-aid', x: 1040, y: 600 },
     ],
     targets: [
       target('trap-bridge', 'GLM', 780, 380, '复查陷阱桥', 'review-traps'),
@@ -175,7 +176,7 @@ export const MAPS = [
       target('alarm-fan', 'GLM', 1015, 170, '复查高处警戒区', 'review-traps'),
     ],
     guards: [
-      { id: 'review-east-guard', x: 1055, y: 490, minX: 985, maxX: 1190, speed: 48 },
+      { id: 'review-east-guard', x: 990, y: 490, minX: 974, maxX: 1010, speed: 42 },
       { id: 'review-upper-guard', x: 620, y: 270, minX: 460, maxX: 850, speed: 52 },
     ],
     traps: [

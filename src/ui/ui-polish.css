@@ -124,7 +124,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .crew-button.is-selected .crew-portrait { border-color: var(--ui-gold); box-shadow: 0 0 0 3px #071827, 0 0 0 5px #f2d48e77, 0 0 22px #f2d48e55; }
 .touch-controls button { transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease; }
 .touch-controls button:hover, .touch-controls button:focus-visible { border-color: var(--ui-cyan-soft); box-shadow: 0 0 0 3px #071827, 0 0 0 5px #8eeaff77, 0 0 20px #76dbff66; }
-.touch-controls button:active { transform: scale(calc(var(--touch-size) * .93)); }
+.touch-controls button:active { transform: scale(calc(var(--touch-size, 1) * .93)); }
 
 /* Clear state colors for instruction cards. */
 .command-options>button[aria-pressed=true] { box-shadow: 0 0 0 1px #b4ecff44, inset 0 0 18px #70dff31a; }
@@ -332,6 +332,98 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   text-shadow: 0 0 8px currentColor;
 }
 .scene-label[data-interactive="true"] { cursor: pointer; }
+/* Crew callouts are complete sentences, so they wrap instead of truncating. */
+.scene-label.crew-callout {
+  max-width: min(220px, 36%);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  padding: 4px 8px;
+  text-align: center;
+  line-height: 1.4;
+  border-color: currentColor;
+  background: #062234f2;
+  box-shadow: 0 0 0 2px #071827, 0 0 14px #54d8ff44;
+  z-index: 3;
+}
+/* Result recap: what the player and the crew actually did together. */
+.cooperation-recap {
+  display: grid;
+  gap: .3cqw;
+  margin-top: .7cqw;
+  padding-top: .6cqw;
+  border-top: 1px solid #6fd6ff33;
+  text-align: center;
+}
+.cooperation-recap > span {
+  color: #8edff5;
+  font-size: max(9px, .62cqw);
+  letter-spacing: .18em;
+}
+.cooperation-recap p {
+  margin: 0;
+  color: #c7e6f2;
+  font-size: max(11px, .72cqw);
+  line-height: 1.55;
+}
+.cooperation-recap b { color: #fff3d6; }
+
+/* After-action report: three static cards that answer "who helped whom" for
+ * viewers who never watched the run. No timeline, no animation. */
+.v3-battle-report { width: 74%; }
+.battle-report-lead { display: flex; align-items: center; gap: .9cqw; padding: .2cqw 0 .8cqw; }
+.battle-report-grade {
+  display: grid; place-items: center; flex: none;
+  width: 3.4cqw; height: 3.4cqw; min-width: 42px; min-height: 42px;
+  border: 1px solid #f7df9a; border-radius: 50%;
+  background: #4c3c22cc url('../../assets/ui/ring.webp') center/100% 100% no-repeat;
+  color: #ffe7a8; font: 600 1.8cqw Georgia, serif;
+}
+.battle-report-lead p { margin: 0; color: #b6d7e4; font-size: .86cqw; line-height: 1.6; }
+.battle-report-lead b { color: #fff3d6; }
+.battle-report-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75cqw; }
+.battle-card {
+  display: grid; grid-template-rows: auto 1fr; gap: .45cqw; min-height: 0;
+  padding: .7cqw .8cqw; border: 1px solid #4f8ba377; border-radius: .5cqw;
+  background: linear-gradient(180deg, #07202fdd, #061a28ee);
+}
+.battle-card header { display: flex; align-items: center; gap: .4cqw; padding-bottom: .35cqw; border-bottom: 1px solid #4f8ba355; }
+.battle-card header b { font-size: .86cqw; color: #dff4fb; letter-spacing: .04em; }
+.battle-card header em { margin-left: auto; font-style: normal; font-size: .72cqw; color: #f3d79c; }
+.battle-card-icon { width: 1.3cqw; height: 1.3cqw; flex: none; }
+.battle-card ul { display: grid; gap: .42cqw; align-content: start; min-height: 0; margin: 0; padding: 0; list-style: none; }
+.battle-card li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .35cqw; align-items: start; }
+.battle-card li img { width: 1.35cqw; height: 1.35cqw; border-radius: 50%; object-fit: cover; border: 1px solid #7fd7ea; }
+.battle-card li > div { display: grid; gap: .05cqw; min-width: 0; }
+.battle-card li b { font-size: .76cqw; color: #e8f6fc; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.battle-card li span { font-size: .7cqw; color: #9fc3d3; line-height: 1.45; }
+.battle-card li.is-failed b { color: #e6b4a6; }
+.battle-card li.is-failed span { color: #c79c90; }
+.battle-card-empty { display: block; font-size: .74cqw; color: #8fb2c4; line-height: 1.6; padding: .3cqw 0; }
+.battle-report-mvp { margin: .8cqw 0 0; padding-top: .55cqw; border-top: 1px solid #6fd6ff33; text-align: center; color: #c7e6f2; font-size: .8cqw; }
+.battle-report-mvp b { color: #fff3d6; }
+@media (max-width: 800px), (max-height: 480px) {
+  .v3-battle-report { width: 90%; }
+  .battle-report-lead { gap: 8px; padding-bottom: 6px; }
+  .battle-report-grade { width: 38px; height: 38px; min-width: 38px; min-height: 38px; font-size: 18px; }
+  .battle-report-lead p { font-size: 10px; line-height: 1.5; }
+  .battle-report-grid { gap: 6px; }
+  .battle-card { padding: 6px; gap: 4px; }
+  .battle-card header { gap: 4px; padding-bottom: 3px; }
+  .battle-card header b { font-size: 10px; }
+  .battle-card header em { font-size: 9px; }
+  .battle-card-icon { width: 14px; height: 14px; }
+  .battle-card ul { gap: 4px; }
+  .battle-card li { gap: 4px; }
+  .battle-card li img { width: 16px; height: 16px; }
+  .battle-card li b { font-size: 9.5px; }
+  .battle-card li span { font-size: 9px; line-height: 1.35; }
+  .battle-card-empty { font-size: 9px; }
+  .battle-report-mvp { margin-top: 6px; padding-top: 5px; font-size: 9.5px; }
+}
+@media (max-height: 520px) {
+  .v3-battle-report .battle-card li:nth-child(n + 4) { display: none; }
+}
 
 /* Evacuation is a dedicated state, readable at a glance and without relying
  * on a fast flash.  The rail also communicates remaining time for colourblind

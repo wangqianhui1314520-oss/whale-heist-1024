@@ -45,7 +45,7 @@ export class GameAudio {
     this.musicId=null;this.musicNode=null;this.musicGain=null;
     this.ambience=new Map();
   }
-  urlOf(relative){return new URL('../../assets/audio/'+relative,import.meta.url).href;}
+  urlOf(relative){const path='assets/audio/'+relative;return globalThis.__ASSET_DATA__?.[path]??new URL(path,globalThis.document?.baseURI||globalThis.location?.href||'file:///').href;}
   getBuffer(url){
     if(this.buffers.has(url))return Promise.resolve(this.buffers.get(url));
     if(this.pending.has(url))return this.pending.get(url);

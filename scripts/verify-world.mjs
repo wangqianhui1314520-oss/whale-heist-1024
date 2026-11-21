@@ -335,10 +335,10 @@ test('retry rebuild restores map objects and rejects the old world instance', ()
 
 function navigate(world, destination, replans = 0) {
   assert(replans < 12, 'Too many physical route replans: ' + world.map.id);
-  const solidTop=world.player.grounded&&world.solidBodies().find(s=>
+  const solidTop=world.player.grounded&&[...world.solidBodies(),...world.platforms.filter(p=>p.kind==='lift')].find(s=>
     Math.abs(world.player.y-s.y)<1&&world.player.x+14>s.x&&world.player.x-14<s.x+s.w);
   if(solidTop){
-    // Closed gate roofs are legal support surfaces but are not ladder-graph
+    // Moving lifts and gate roofs are legal support surfaces but are not static ladder-graph
     // platforms. Walk off the roof before asking for another platform route.
     const right=destination.x>solidTop.x+solidTop.w/2&&solidTop.x+solidTop.w+30<1264;
     const edge=right?solidTop.x+solidTop.w+30:solidTop.x-30;

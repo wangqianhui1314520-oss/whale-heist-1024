@@ -1,6 +1,6 @@
 import { renderResolution } from '../render/resolution.mjs';
 import { sampleCharacterMotion, drawCharacterMotionFX } from '../render/character-motion.mjs';
-import { SCAN_WARNING_SECONDS } from '../game/world.mjs';
+import { SCAN_WARNING_SECONDS, routeFor } from '../game/world.mjs';
 
 const TAU = Math.PI * 2;
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -44,6 +44,10 @@ export class GameRenderer {
     this.contexts = Object.fromEntries(Object.entries(this.layers).map(([key, layer]) => [key, layer.getContext('2d', { alpha: key !== 'background' })]));
     this.labelRoot = doc?.getElementById('scene-labels');
     this.labelPool = []; this.labelCount = 0;
+    // The medkit cross is the only mark painted with canvas primitives (no
+    // medkit sprite exists in the catalog). Expose the count so the render
+    // regression can account for every primitive call exactly.
+    this.aidMarks = 0;
     this.assets = assets; this.width = 1280; this.height = 720; this.dpr = 1; this.quality = 'standard';
     this.resize();
     this._resizeObserver = typeof ResizeObserver === 'function' ? new ResizeObserver(() => this.resize()) : null;
@@ -143,10 +147,12 @@ export class GameRenderer {
     this.#layer('structure');
     this.#platforms(world); this.#ladders(world); this.#mechanisms(world, time);
     this.#boatAndBeacons(world, coreView, time);
+    this.#analysisStation(world, coreView);
     if (world.expanded) this.#roomExits(world);
     this.#hazards(world, time); this.#collectibles(world, time);
     this.#targetHints(world, coreView?.attempt || {}, time); this.#commandRange(world);
     if (world.tutorialMarker) this.#tutorialMarker(world);
+    else this.#playerGuidance(world);
     this.#guards(world, time);
     this.#layer('actors');
     const actors = [...world.crew.map(actor => ({ ...actor, isPlayer: false })), { ...world.player, name: 'DeepSeek', isPlayer: true, carryCount: coreView?.attempt?.inventory?.length || 0 }];
@@ -208,7 +214,9 @@ export class GameRenderer {
   }
   #mechanisms(world, time) {
     this.#sprite('scene-mfa-door-fixed', 1220, 475, { width: 60, height: 125, stretch: true, anchor: [0, 0] });
-    this.#groundLabel(1250, 435, 'MFA · 禁行', '#efb99f', 11, false, 'sealed-exit');
+    const mfaTried = world.mfaTried?.has(world.currentRoom?.id);
+    const mfaNear = world.nearby?.type === 'mfa';
+    this.#groundLabel(1250, 435, mfaTried ? 'MFA · 密钥缺失' : mfaNear ? 'MFA · 强开 2.4s' : 'MFA · 禁行', mfaTried ? '#c9a79a' : '#efb99f', 11, mfaNear, 'sealed-exit');
     for (const barrier of world.barriers) this.#sprite(barrier.broken ? 'scene-paper-barrier-broken' : 'scene-paper-barrier-intact', barrier.x, barrier.y, { width: barrier.w, height: barrier.h, stretch: true, anchor: [0, 0], opacity: barrier.broken ? .55 : 1 });
     for (const gate of world.gates) this.#sprite(gate.open ? 'scene-gate-open' : 'scene-gate-closed', gate.x - 3, gate.y, { width: gate.w + 6, height: gate.h, stretch: true, anchor: [0, 0] });
     for (const plate of world.plates) {
@@ -262,6 +270,20 @@ export class GameRenderer {
     if (coreView?.chapter?.number === 5 && (attempt.evacuationStage || attempt.evacuationStarted)) this.#route([{ x: beacon.x - 270, y: beacon.y + 4 }, { x: beacon.x, y: beacon.y + 4 }], .65, 5);
     if (world.nearby?.type === 'beacon') this.#groundLabel(beacon.x, beacon.y - 76, `E · ${world.nearby.label}`, ready ? '#a7efda' : '#b4e4f8', 11, true);
   }
+  #analysisStation(world, coreView) {
+    const station = world.map.analysisStation;
+    if (!station) return;
+    const progress = coreView?.vulnerability?.progress || {};
+    // This interaction already existed in the world, but had no scene art.
+    // A blue server terminal and holographic screen distinguish it from the
+    // smaller red broadcast switch. The base matches the interaction's feet.
+    this.ctx.save(); this.ctx.shadowColor = '#80eaff'; this.ctx.shadowBlur = 12;
+    this.#sprite('scene-server-rack', station.x, station.y, { width: 92, height: 94, stretch: true, anchor: [.5, 1] });
+    this.ctx.restore();
+    this.#sprite('fx-scan-grid-01', station.x, station.y - 59, { sourceRect: GRID, width: 66, height: 24, stretch: true, anchor: [.5, .5], opacity: .75 });
+    this.#wake(station.x, station.y + 2, 105, 14, .8);
+    this.#groundLabel(station.x, station.y - 120, `演算舱 · 线索 ${Number(progress.collected || 0)}/${Number(progress.total || 3)}`, '#bdf4ff', 12, false, 'analysis-station');
+  }
   #roomExits(world) {
     const room = world.currentRoom;
     this.#groundLabel(640, 87, room.name, '#bee9f5', 11);
@@ -269,7 +291,7 @@ export class GameRenderer {
       const destination = world.rooms.find(r => r.id === exit.to), optional = destination?.optional;
       const sealed = optional && world.core.view().attempt.evacuationStarted;
       const unlocked = world.eventFlags?.has?.(exit.requiresEvent) || world.eventFlags?.includes?.(exit.requiresEvent);
-      const locked = exit.requiresEvent && !unlocked;
+      const locked = exit.disabled || exit.requiresEvent && !unlocked;
       const closed = locked || sealed;
       // The atlas cells are almost square. Fit-to-box silently reduced the old
       // 45×85 exit to 45×45; give every room doorway an explicit, actor-sized
@@ -284,7 +306,7 @@ export class GameRenderer {
       if (!closed) this.#wake(exit.x, exit.y + 2, 92, 14, .75);
       const direction = exit.x < 140 ? '← ' : exit.x > 1100 ? '→ ' : '';
       const name = String(exit.label || destination?.name || '通道').replace(/^支线\s*[·:：]\s*/, '');
-      const text = locked ? '封闭 · 取得夹层档案开启'
+      const text = locked ? (exit.disabled ? '挑战封闭 · 原梯路可用' : exit.id === 'return-hatch' ? '返航维护舱 · 取得远端资料开启' : '封闭 · 取得夹层档案开启')
         : sealed ? '支线已封存' : direction + (optional ? '支线 · ' : '') + name;
       this.#groundLabel(exit.x, exit.y - 123, text, closed ? '#f0bd9a' : optional ? '#ffe0a0' : '#b8f4ff', 12,
         false, closed ? 'sealed-exit' : optional ? 'optional-exit' : 'room-exit');
@@ -293,8 +315,22 @@ export class GameRenderer {
   #tutorialMarker(world) {
     const marker = world.tutorialMarker;
     this.#wake(marker.x, marker.y - 2, 52, 16, .68);
-    if (world.tutorialRoute?.length) this.#route([{ x: world.player.x, y: world.player.y - 10 }, ...world.tutorialRoute.map(point => ({ x: point.x, y: point.y - 10 }))], .48, 4);
+    const route = world.showGuidanceRoute ? routeFor(world.platforms, world.map.ladders, world.player, marker) : world.tutorialRoute;
+    if (route?.length) this.#route([{ x: world.player.x, y: world.player.y - 10 }, ...route.map(point => ({ x: point.x, y: point.y - 10 }))], .65, 5);
     this.#groundLabel(marker.x, marker.y - 95, marker.label || '下一步', '#b6f5e2', 11, true);
+  }
+
+  #playerGuidance(world) {
+    const target = world.playerGuidance?.target;
+    if (!target || world.commandPreview) return;
+    const pulse = this.reduceMotion ? 1 : .9 + Math.sin(world.time * 3) * .1;
+    this.#wake(target.x, target.y - 2, 58 * pulse, 17, .78);
+    this.#sprite('prop-qualifier-token', target.x, target.y - 66, { width: 15, height: 18, opacity: .95 });
+    if (world.showGuidanceRoute) {
+      const route = routeFor(world.platforms, world.map.ladders, world.player, target);
+      if (route) this.#route([{ x: world.player.x, y: world.player.y - 8 }, ...route.map(point => ({ x: point.x, y: point.y - 8 }))], .62, 4.5);
+      this.#groundLabel(target.x, target.y - 88, target.label, '#b6f5e2', 12, true);
+    }
   }
 
   #collectibles(world, time) {
@@ -316,8 +352,14 @@ export class GameRenderer {
     for (const supply of world.supplies) {
       if (supply.collected) continue;
       const bob = Math.sin(time * 2.3 + supply.x * .02) * 2.5;
+      const heal = Number(supply.heal) || 0;
       this.#sprite('prop-qualifier-token', supply.x, supply.y - 12 + bob, { width: 28, height: 32 });
-      if (Math.hypot(supply.x - world.player.x, supply.y - world.player.y) < 95) this.#groundLabel(supply.x, supply.y - 50 + bob, '限定词', '#a9d6e9', 9);
+      // No medkit art exists in the catalog yet, so the cross is drawn in code
+      // over the existing token sprite to keep the single-file build art-free.
+      if (heal) this.#firstAidMark(supply.x, supply.y - 12 + bob);
+      if (Math.hypot(supply.x - world.player.x, supply.y - world.player.y) < 95) {
+        this.#groundLabel(supply.x, supply.y - 50 + bob, heal ? `急救 +${heal}` : '限定词', heal ? '#8fe3a8' : '#a9d6e9', 9);
+      }
     }
   }
   #hazards(world, time) {
@@ -409,6 +451,7 @@ export class GameRenderer {
           this.#groundLabel(guard.lure.x,guard.lure.y-108,arrived?`分心 ${Math.max(0,guard.luredUntil-world.time).toFixed(1)}s · 可通行`:'前往诱饵 · 可通行','#ffd08a',11,true);
         }
       }
+      if (!lured && guard.scoutedUntil > world.time) this.#groundLabel(guard.x, guard.y - 118, 'Claude 盯梢中', '#b9e6ff', 9);
     }
   }
   #actor(actor, world, time, reduceMotion) {
@@ -419,10 +462,13 @@ export class GameRenderer {
     for (const trail of motion.trail) this.assets.drawActor(ctx, actor.name, motion.pose, direction, x + trail.xOffset, y + trail.yOffset, {
       opacity: trail.opacity, rotation: motion.rotation, scaleX: motion.scaleX, scaleY: motion.scaleY,
     });
+    if (actor.isPlayer) this.#wake(actor.x, actor.y + 2, 46, 13, .68);
     this.assets.drawActor(ctx, actor.name, motion.pose, direction, x, y, {
       opacity: motion.opacity, rotation: motion.rotation, scaleX: motion.scaleX, scaleY: motion.scaleY,
     });
     drawCharacterMotionFX(ctx, actor, world, motion, this.assets);
+    if (actor.isPlayer) this.#groundLabel(actor.x, actor.y - 88, '你', '#a7efff', 10, false, 'player-marker');
+    if (!actor.isPlayer && actor.callout && actor.calloutUntil > world.time) this.#groundLabel(actor.x, actor.y - 104, actor.callout.text, '#c9f3ff', 10, true, 'crew-callout');
     if (!actor.isPlayer && world.selected === actor.name) this.#wake(actor.x, actor.y - 2, 48, 14, .7);
   }
   #effects(world) {
@@ -467,6 +513,18 @@ export class GameRenderer {
     }
   }
 
+  #firstAidMark(x, y) {
+    this.aidMarks++;
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.translate(Math.round(x), Math.round(y - 23));
+    ctx.fillStyle = 'rgba(12,36,30,.92)';
+    ctx.beginPath(); ctx.arc(0, 0, 9, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#8fe3a8';
+    ctx.fillRect(-2, -6, 4, 12);
+    ctx.fillRect(-6, -2, 12, 4);
+    ctx.restore();
+  }
   #groundLabel(x, y, text, color = '#b4d7e8', size = 10, active = false, variant = '') {
     if (this.labelRoot) {
       const index = this.labelCount++;
@@ -481,6 +539,9 @@ export class GameRenderer {
       label.classList.toggle('floor-exit', doorway && y > 400);
       label.classList.toggle('sealed-exit', variant === 'sealed-exit');
       label.classList.toggle('scan-instruction', variant === 'scan-instruction');
+      label.classList.toggle('analysis-station', variant === 'analysis-station');
+      label.classList.toggle('player-marker', variant === 'player-marker');
+      label.classList.toggle('crew-callout', variant === 'crew-callout');
       const edge = doorway && (x < 140 ? 'left' : x > 1100 ? 'right' : '');
       label.style.left = `${(edge === 'left' ? 18 : edge === 'right' ? 1262 : clamp(Math.round(x), 65, 1215)) / 12.8}%`; label.style.top = `${Math.round(y) / 7.2}%`;
       label.style.transform = `translate(${edge === 'left' ? '0' : edge === 'right' ? '-100%' : '-50%'}, -50%)`;

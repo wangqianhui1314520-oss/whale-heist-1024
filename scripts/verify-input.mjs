@@ -23,8 +23,13 @@ win.fire('blur');assert(!input.sample().dash);assert(actions.includes('lost-focu
 win.fire('keydown',{code:'KeyD',target:{closest:()=>null}});assert(input.sample().right);
 orientation.fire('change',{matches:true});assert(!input.sample().right);
 let prevented=false;
+screen='pause';
 win.fire('keydown',{code:'Space',target:{closest:selector=>selector==='button'?{}:null},preventDefault(){prevented=true;}});
 assert(!prevented&&!input.sample().jump,'Menu Space keeps its native button action');
+screen='none';
+win.fire('keydown',{code:'Space',target:{closest:selector=>selector==='button'?{}:null},preventDefault(){prevented=true;}});
+assert(prevented&&input.sample().jump&&input.sample().jumpPressed,'Focused HUD buttons cannot swallow gameplay jump');
+win.fire('keyup',{code:'Space'});input.consume();
 win.fire('keydown',{code:'KeyD',ctrlKey:true,target:{closest:()=>null}});assert(!input.sample().right);
 console.log('PASS simultaneous touch holds, independent release/cancel, blur/rotation clearing and native menu/browser shortcuts.');
 
